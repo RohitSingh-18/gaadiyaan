@@ -1,0 +1,485 @@
+<div class="profile-container">
+   
+
+    <!-- Profile Form -->
+    <div class="profile-content">
+        <form class="profile-form" id="profileForm">
+            <!-- Personal Information -->
+            <div class="form-section">
+                <h2>Personal Information</h2>
+                <div class="dealer-id-container">
+                    <div class="dealer-id">
+                        <span class="label">Dealer ID:</span>
+                        <span class="id-value" id="dealerId">GD2024001</span>
+                        <button type="button" class="copy-btn" id="copyDealerIdBtn" title="Copy ID">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <span class="id-hint">This is your unique dealer identification number</span>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="dealerName">Full Name</label>
+                        <input type="text" id="dealerName" name="dealerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealerEmail">
+                            Email Address 
+                            <span class="text-muted">(Primary Contact)</span>
+                        </label>
+                        <div class="input-group">
+                            <input 
+                                type="email" 
+                                id="dealerEmail" 
+                                name="dealerEmail" 
+                                class="form-control" 
+                                placeholder="Enter your business email"
+                                required
+                            >
+                            <div class="input-group-append">
+                                <button 
+                                    class="btn btn-outline-secondary" 
+                                    type="button" 
+                                    onclick="verifyEmail()"
+                                >
+                                    <i class="fas fa-check-circle"></i> Verify
+                                </button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">
+                            This email will be used for important communications
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealerPhone">Phone Number</label>
+                        <input type="tel" id="dealerPhone" name="dealerPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealershipName">
+                            Dealership Name 
+                            <span class="text-muted">(Business Identity)</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="dealershipName" 
+                            name="dealershipName" 
+                            class="form-control" 
+                            placeholder="Enter your dealership's official name"
+                            required
+                        >
+                        <small class="form-text text-muted">
+                            This name will appear on your business profile and listings
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Information -->
+            <div class="form-section">
+                <h2>Business Information</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="dealerAddress">Business Address</label>
+                        <textarea id="dealerAddress" name="dealerAddress" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealerCity">City</label>
+                        <input type="text" id="dealerCity" name="dealerCity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealerState">State</label>
+                        <input type="text" id="dealerState" name="dealerState" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealerPincode">Pincode</label>
+                        <input type="text" id="dealerPincode" name="dealerPincode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gstNumber">GST Number</label>
+                        <input type="text" id="gstNumber" name="gstNumber" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Change -->
+            <div class="form-section">
+                <h2>Change Password <span style="font-size: 0.8em; color: #64748b;">(Optional)</span></h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" name="currentPassword">
+                        <small style="color: #64748b;">Leave blank if you don't want to change your password</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="resetForm()">Cancel Changes</button>
+                <button type="submit" class="btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Success</h2>
+            <button class="modal-close" onclick="closeSuccessModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-icon">
+            <i class="fas fa-check-circle" style="color: #059669;"></i>
+        </div>
+        <div class="modal-body">
+            <p>Your profile has been updated successfully!</p>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-primary" onclick="closeSuccessModal()">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- Avatar Update Success Modal -->
+<div id="avatarSuccessModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Success</h2>
+            <button class="modal-close" onclick="closeAvatarModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-icon">
+            <i class="fas fa-check-circle" style="color: #059669;"></i>
+        </div>
+        <div class="modal-body">
+            <p>Profile photo updated successfully!</p>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-primary" onclick="closeAvatarModal()">OK</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.dealer-id-container {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.dealer-id {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.dealer-id .label {
+    font-weight: 500;
+    color: #64748b;
+}
+
+.dealer-id .id-value {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #0f172a;
+    background: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+}
+
+.dealer-id .copy-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.dealer-id .copy-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.id-hint {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+/* Update Toast Notification styles */
+.toast {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.toast.show {
+    animation: fadeIn 0.3s ease forwards,
+               fadeOut 0.3s ease forwards 2.7s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<!-- Update the toast HTML - Move it outside the style tag -->
+<div class="toast" id="copyToast" style="position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 10px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; z-index: 9999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; min-width: 200px; justify-content: center;">
+    <i class="fas fa-check-circle" style="margin-right: 8px; font-size: 1.2em;"></i>
+    <span style="font-weight: 500;">Dealer ID copied!</span>
+</div>
+
+<script>
+// Simplified and corrected script
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Loading profile page...');
+    
+    // Get user data from localStorage
+    const userDataStr = localStorage.getItem('userProfile');
+    console.log('Raw user data from storage:', userDataStr);
+    
+    if (!userDataStr) {
+        console.error('No user data found');
+        window.location.href = '../../../auth/login.html';
+        return;
+    }
+
+    const userData = JSON.parse(userDataStr);
+    console.log('Parsed user data:', userData);
+
+    // Fill in the form fields
+    const fields = {
+        'dealerEmail': userData.email,
+        'dealerName': userData.full_name,
+        'dealershipName': userData.dealership_name,
+        'dealerId': userData.dealer_id
+    };
+
+    // Update each field if it exists
+    Object.entries(fields).forEach(([id, value]) => {
+        const element = document.getElementById(id);
+        if (element) {
+            if (element.tagName === 'INPUT') {
+                element.value = value || '';
+            } else {
+                element.textContent = value || '';
+            }
+            console.log(`Updated ${id} with value:`, value);
+        } else {
+            console.warn(`Element with id ${id} not found`);
+        }
+    });
+
+    // Get elements
+    const copyBtn = document.getElementById('copyDealerIdBtn');
+    const dealerIdElement = document.getElementById('dealerId');
+    const toast = document.getElementById('copyToast');
+
+    // Initialize dealer ID if needed
+    if (!localStorage.getItem('dealerId')) {
+        const newId = generateDealerId();
+        localStorage.setItem('dealerId', newId);
+        dealerIdElement.textContent = newId;
+    } else {
+        dealerIdElement.textContent = localStorage.getItem('dealerId');
+    }
+
+    // Copy button click handler
+    copyBtn.addEventListener('click', async function() {
+        const textToCopy = dealerIdElement.textContent;
+        
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+            showToast();
+        } catch (err) {
+            console.error('Clipboard API failed:', err);
+            fallbackCopy(textToCopy);
+        }
+    });
+
+    // Helper functions
+    function fallbackCopy(text) {
+        const tempInput = document.createElement('input');
+        tempInput.style.position = 'absolute';
+        tempInput.style.left = '-9999px';
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        
+        try {
+            document.execCommand('copy');
+            showToast();
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+        } finally {
+            document.body.removeChild(tempInput);
+        }
+    }
+
+    function showToast() {
+        // Remove existing show class
+        toast.classList.remove('show');
+        
+        // Force reflow
+        void toast.offsetWidth;
+        
+        // Add show class
+        toast.classList.add('show');
+        
+        // Remove show class after animation
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // Profile Update Function
+    async function updateProfile(event) {
+        event.preventDefault();
+        
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in again');
+            return;
+        }
+
+        // Get current values
+        const username = document.getElementById('dealerName').value;
+        const email = document.getElementById('dealerEmail').value;
+        const dealershipName = document.getElementById('dealershipName').value;
+        const phone = document.getElementById('dealerPhone').value;
+
+        // Validate inputs
+        if (!username) {
+            alert('Username cannot be empty');
+            return;
+        }
+
+        const formData = {
+            username,
+            email,
+            dealershipName,
+            phone
+        };
+
+        console.log('Sending profile update:', formData);
+
+        try {
+            const response = await fetch('http://localhost:3000/api/users/profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+            console.log('Profile update response:', result);
+
+            if (response.ok) {
+                // Success
+                document.getElementById('successModal').classList.add('show');
+                console.log('Profile updated successfully:', result);
+                
+                // Optional: Update local storage or UI elements
+                if (result.user) {
+                    localStorage.setItem('userProfile', JSON.stringify(result.user));
+                }
+            } else {
+                // Error
+                console.error('Profile update error:', result);
+                alert(result.message || 'Profile update failed: ' + JSON.stringify(result));
+            }
+        } catch (error) {
+            console.error('Network or unexpected error:', error);
+            alert('An unexpected error occurred: ' + error.message);
+        }
+    }
+
+    // Attach update function to form submission
+    document.getElementById('profileForm').addEventListener('submit', updateProfile);
+});
+
+// Generate Dealer ID function
+function generateDealerId() {
+    const year = new Date().getFullYear();
+    let lastNumber = parseInt(localStorage.getItem('lastDealerId') || '0');
+    lastNumber++;
+    localStorage.setItem('lastDealerId', lastNumber.toString());
+    return `GD${year}${lastNumber.toString().padStart(3, '0')}`;
+}
+
+// Keep these functions in global scope as they're used by HTML onclick handlers
+function resetForm() {
+    document.getElementById('profileForm').reset();
+    document.getElementById('avatarPreview').src = '../../../assets/media/dealers/default-avatar.jpg';
+}
+
+function closeSuccessModal() {
+    document.getElementById('successModal').classList.remove('show');
+}
+
+function closeAvatarModal() {
+    document.getElementById('avatarSuccessModal').classList.remove('show');
+}
+
+// Email Verification Function
+function verifyEmail() {
+    const emailInput = document.getElementById('dealerEmail');
+    const email = emailInput.value.trim();
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
+        emailInput.focus();
+        return;
+    }
+
+    // TODO: Implement actual email verification logic
+    // This could involve sending a verification code or link
+    alert('Verification email sent to ' + email);
+}
+</script> 

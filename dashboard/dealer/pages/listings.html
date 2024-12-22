@@ -1,0 +1,123 @@
+<div class="listings-container">
+    <!-- Filters Section -->
+    <section class="filters-section">
+        <div class="search-bar">
+            <input type="text" placeholder="Search listings...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="filter-options">
+            <select>
+                <option value="">All Categories</option>
+                <option value="sedan">Sedan</option>
+                <option value="suv">SUV</option>
+                <option value="luxury">Luxury</option>
+            </select>
+            <select>
+                <option value="">Status</option>
+                <option value="active">Active</option>
+                <option value="pending">Pending</option>
+                <option value="sold">Sold</option>
+            </select>
+            <button class="add-listing-btn">
+                <i class="fas fa-plus"></i> Add New Listing
+            </button>
+        </div>
+    </section>
+
+    <div class="content-wrapper">
+        <!-- Empty State -->
+        <div class="empty-state" style="display: none;">
+            <div class="empty-state-icon">
+                <i class="fas fa-calendar-times"></i>
+            </div>
+            <h2>No Listings Yet</h2>
+            <p>You haven't added any listings yet.</p>
+        </div>
+
+        <!-- Listings Grid -->
+        <section class="listings-grid">
+            <div class="listing-card">
+                <div class="listing-image">
+                    <img src="../../../assets/media/content/b-goods/360x260/1.4.jpg" alt="Car">
+                    <span class="status active">Active</span>
+                </div>
+                <div class="listing-details">
+                    <h3>2020 Toyota Camry</h3>
+                    <p class="price">₹25,00,000</p>
+                    <div class="specs">
+                        <span><i class="fas fa-tachometer-alt"></i> 25,000 km</span>
+                        <span><i class="fas fa-gas-pump"></i> Petrol</span>
+                        <span><i class="fas fa-cog"></i> Automatic</span>
+                    </div>
+                    <div class="listing-actions">
+                        <button class="edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="delete-listing-btn" data-listing-id="123">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="listing-card">
+                <div class="listing-image">
+                    <img src="../../../assets/media/content/b-goods/360x260/1.4.jpg" alt="Car">
+                    <span class="status active">Active</span>
+                </div>
+                <div class="listing-details">
+                    <h3>2020 Toyota Camry</h3>
+                    <p class="price">₹25,00,000</p>
+                    <div class="specs">
+                        <span><i class="fas fa-tachometer-alt"></i> 25,000 km</span>
+                        <span><i class="fas fa-gas-pump"></i> Petrol</span>
+                        <span><i class="fas fa-cog"></i> Automatic</span>
+                    </div>
+                    <div class="listing-actions">
+                        <button class="edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="delete-listing-btn" data-listing-id="124">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
+        <div class="page-numbers">
+            <span class="active">1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>...</span>
+            <span>10</span>
+        </div>
+        <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Delete Listing</h2>
+            <button class="modal-close" onclick="closeDeleteModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-icon delete-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this listing?</p>
+            <p>This action cannot be undone.</p>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
+</div> 

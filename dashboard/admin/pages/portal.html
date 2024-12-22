@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/css/admin-dashboard.css">
+    
+    <!-- Page Specific CSS -->
+    <link rel="stylesheet" href="../assets/css/dealers.css">
+    <link rel="stylesheet" href="../assets/css/performance.css">
+    <link rel="stylesheet" href="../assets/css/content.css">
+    <link rel="stylesheet" href="../assets/css/support.css">
+    <link rel="stylesheet" href="../assets/css/settings.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+
+    <!-- Chart.js for Performance Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/performance.js" defer></script>
+    
+    <!-- Core Scripts -->
+    <script src="../assets/js/dealers.js" defer></script>
+    <script src="../assets/js/settings.js" defer></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../../assets/media/general/mobile_logo.png" alt="Gaadiyaan Logo" class="logo">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    
+                    <li class="active" data-page="dealers">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Dealer Management</span>
+                        </a>
+                    </li>
+                    <li data-page="callbacks">
+                        <a href="callbacks.html" class="nav-link">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>Callbacks</span>
+                        </a>
+                    </li>
+                    <li data-page="content">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-tasks"></i>
+                            <span>Content Review</span>
+                        </a>
+                    </li>
+                    <li data-page="support">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-headset"></i>
+                            <span>Support</span>
+                        </a>
+                    </li>
+                    <li data-page="settings">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class="nav-link" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <h1 class="header-title" id="pageTitle">Dealer Management</h1>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="admin-profile">
+                        <img src="../../../assets/media/general/logo.png" alt="Admin">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="mainContent"></div>
+        </main>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../assets/js/shared-functions.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script>
+        // Function to load page content
+        function loadPage(page) {
+            const mainContent = document.getElementById('mainContent');
+            const pageTitle = document.getElementById('pageTitle');
+            
+            // Show loader
+            showLoader();
+            
+            // Update active state in sidebar
+            document.querySelectorAll('.sidebar-nav li').forEach(item => {
+                item.classList.remove('active');
+                if(item.dataset.page === page) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Update page title
+            pageTitle.textContent = page.charAt(0).toUpperCase() + page.slice(1);
+
+            // Load page content
+            fetch(`${page}.html`)
+                .then(response => response.text())
+                .then(html => {
+                    mainContent.innerHTML = html;
+                    
+                    // Initialize page specific scripts
+                    if(page === 'settings') {
+                        initializeSettings();
+                    }
+                    if(page === 'dealers') {
+                        // Re-initialize dealers page functionality
+                        if (typeof initializeDealers === 'function') {
+                            initializeDealers();
+                        }
+                    }
+                    if(page === 'performance') {
+                        // Initialize charts after content is loaded
+                        if (typeof initializeCharts === 'function') {
+                            setTimeout(() => {
+                                initializeCharts();
+                            }, 100);
+                        }
+                    }
+                    
+                    // Hide loader after content is loaded
+                    setTimeout(hideLoader, 500);
+                })
+                .catch(error => {
+                    console.error('Error loading page:', error);
+                    mainContent.innerHTML = '<p>Error loading content</p>';
+                    hideLoader();
+                });
+        }
+
+        // Initialize settings page functionality
+        function initializeSettings() {
+            const script = document.createElement('script');
+            script.src = '../assets/js/settings.js';
+            document.body.appendChild(script);
+        }
+
+        // Load default page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for page parameter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageParam = urlParams.get('page');
+            
+            // Load specified page or default to dealers
+            loadPage(pageParam || 'dealers');
+
+            // Add click handlers to sidebar navigation
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.closest('li').dataset.page;
+                    if(page) {
+                        // Update URL without reloading
+                        const newUrl = `${window.location.pathname}?page=${page}`;
+                        window.history.pushState({ page }, '', newUrl);
+                        loadPage(page);
+                    }
+                });
+            });
+        });
+
+        // Add popstate event listener to handle browser back/forward
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.page) {
+                loadPage(event.state.page);
+            } else {
+                loadPage('dealers');
+            }
+        });
+
+        // Show modal with animation
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Hide modal with animation
+        function hideModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+        }
+
+        // Updated logout functions
+        function logout() {
+            showModal('logoutModal');
+        }
+
+        function closeLogoutModal() {
+            hideModal('logoutModal');
+        }
+
+        function confirmLogout() {
+            // Add loading state
+            const confirmButton = document.querySelector('.modal-actions .btn-primary');
+            confirmButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+            confirmButton.disabled = true;
+
+            // Simulate logout process
+            setTimeout(() => {
+                // Clear session/local storage
+                sessionStorage.clear();
+                localStorage.clear();
+                
+                // Redirect to login page
+                window.location.href = '../../../auth/login.html';
+            }, 1000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                hideModal(event.target.id);
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const visibleModal = document.querySelector('.modal[style*="display: block"]');
+                if (visibleModal) {
+                    hideModal(visibleModal.id);
+                }
+            }
+        });
+
+        // Add this to your existing script
+        function showLoader() {
+            const loader = document.querySelector('.loader-container');
+            loader.classList.add('loading');
+        }
+
+        function hideLoader() {
+            const loader = document.querySelector('.loader-container');
+            loader.classList.remove('loading');
+        }
+    </script>
+
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Logout</h2>
+                <button class="modal-close" onclick="closeLogoutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-icon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+                <p>You will be redirected to the login page.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeLogoutModal()">
+                    <i class="fas fa-times"></i> No, Stay
+                </button>
+                <button class="btn-primary" onclick="confirmLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Yes, Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="loader-container">
+        <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- Add this before the closing body tag -->
+    <script src="../assets/js/mobile-nav.js"></script>
+</body>
+</html>

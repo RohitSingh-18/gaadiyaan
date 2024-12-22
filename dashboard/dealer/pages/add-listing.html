@@ -1,0 +1,123 @@
+<div class="add-listing-container">
+    <form class="add-listing-form">
+        <div class="form-section">
+            <h2>Basic Information</h2>
+            <div class="form-group">
+                <label for="carTitle">Car Title</label>
+                <input type="text" id="carTitle" required placeholder="e.g., 2020 Toyota Camry">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price">Price (₹)</label>
+                    <input type="number" id="price" required>
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" required min="1900" max="2024">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Vehicle Details</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="make">Make</label>
+                    <input type="text" id="make" required>
+                </div>
+                <div class="form-group">
+                    <label for="model">Model</label>
+                    <input type="text" id="model" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="registrationYear">Registration Year</label>
+                    <input type="number" id="registrationYear" required min="1900" max="2024">
+                </div>
+                <div class="form-group">
+                    <label for="insurance">Insurance</label>
+                    <input type="text" id="insurance" required placeholder="e.g., Comprehensive">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fuelType">Fuel Type</label>
+                    <select id="fuelType" required>
+                        <option value="">Select Fuel Type</option>
+                        <option value="petrol">Petrol</option>
+                        <option value="diesel">Diesel</option>
+                        <option value="cng">CNG</option>
+                        <option value="electric">Electric</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="seats">Seats</label>
+                    <input type="number" id="seats" required min="1" max="50">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="kmsDriven">Kms Driven</label>
+                    <input type="number" id="kmsDriven" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="rto">RTO</label>
+                    <input type="text" id="rto" required placeholder="e.g., MH02">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ownership">Ownership</label>
+                    <select id="ownership" required>
+                        <option value="">Select Ownership</option>
+                        <option value="1">1st Owner</option>
+                        <option value="2">2nd Owner</option>
+                        <option value="3">3rd Owner</option>
+                        <option value="4+">4+ Owner</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="engineDisplacement">Engine Displacement (cc)</label>
+                    <input type="number" id="engineDisplacement" required min="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="transmission">Transmission</label>
+                    <select id="transmission" required>
+                        <option value="">Select Transmission</option>
+                        <option value="manual">Manual</option>
+                        <option value="automatic">Automatic</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="manufactureYear">Year of Manufacture</label>
+                    <input type="number" id="manufactureYear" required min="1900" max="2024">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Images</h2>
+            <div class="image-upload-container">
+                <input type="file" multiple accept="image/*">
+                <div class="upload-placeholder">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & Drop images or click to upload</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn-secondary">Save as Draft</button>
+            <button type="submit" class="btn-primary">Publish Listing</button>
+        </div>
+    </form>
+</div> 

@@ -1,0 +1,153 @@
+/* Modal Base Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.7);
+    z-index: 1100;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+/* Modal Content */
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 {
+    color: #1e293b;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+    color: #1e293b;
+}
+
+/* Modal Body */
+.modal-body {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.modal-body p {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Modal Icon */
+.modal-icon {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.modal-icon i {
+    font-size: 3rem;
+    color: #ef4444;
+}
+
+/* Modal Actions */
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 0.5rem;
+}
+
+.modal-actions button {
+    min-width: 120px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+.btn-primary {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #dc2626;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+    .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .modal-header {
+        padding-bottom: 1.25rem;
+    }
+
+    .modal-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+        padding-top: 1.25rem;
+    }
+
+    .modal-actions button {
+        width: 100%;
+        min-width: unset;
+    }
+} 

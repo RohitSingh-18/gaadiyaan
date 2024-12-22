@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealer Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/dealer-dashboard.css">
+    <link rel="stylesheet" href="../assets/css/listings.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/loading.css">
+    <style>
+        /* Header and Hamburger Styles */
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .hamburger-menu {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            margin: 5px 0;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease-in-out;
+            transform-origin: center;
+        }
+
+        .hamburger-menu.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 80%;
+                max-width: 300px;
+                z-index: 1000;
+                background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #128C7E;
+            color: #FFF;
+            transform: translateY(-3px);
+            box-shadow: 2px 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-float i {
+            margin-top: 0;
+        }
+
+        /* Mobile Styles */
+        @media screen and (max-width: 768px) {
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 25px;
+            }
+        }
+
+        /* Support System Nav Item Styles */
+        .sidebar-nav li[data-page="support"] .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav li[data-page="support"].active .nav-link {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- <script>
+        // Check if user is logged in
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userType = localStorage.getItem('userType');
+            
+            if (!isLoggedIn || userType !== 'dealer') {
+                window.location.href = '../../../auth/login.html';
+            }
+        }
+        
+        // Check auth on page load
+        checkAuth();
+    </script> -->
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../../assets/media/general/mobile_logo.png" alt="Gaadiyaan Logo" class="logo">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active" data-page="listings">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-car"></i>
+                            <span>My Listings</span>
+                        </a>
+                    </li>
+                    <li data-page="add-listing">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add Listing</span>
+                        </a>
+                    </li>
+                    <li data-page="profile">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-user-cog"></i>
+                            <span>Profile Settings</span>
+                        </a>
+                    </li>
+                    <li data-page="support">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-headset"></i>
+                            <span>Support System</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class="nav-link" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <button class="hamburger-menu" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <h1 class="header-title" id="pageTitle">My Listings</h1>
+            </header>
+
+            <div id="mainContent"></div>
+        </main>
+    </div>
+
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Logout</h2>
+                <button class="modal-close" onclick="closeLogoutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-icon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+                <p>You will be redirected to the login page.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeLogoutModal()">No, Stay</button>
+                <button class="btn-primary" onclick="confirmLogout()">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        // Toggle sidebar and hamburger animation
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+
+        // Close sidebar
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            menuToggle.classList.remove('active');
+        }
+
+        // Handle menu toggle click
+        menuToggle.addEventListener('click', toggleSidebar);
+
+        // Function to load page content
+        async function loadPage(pageName) {
+            const mainContent = document.getElementById('mainContent');
+            const pageTitle = document.getElementById('pageTitle');
+            
+            try {
+                mainContent.innerHTML = `
+                    <div class="loading-container">
+                        <div>
+                            <div class="progress-bar"></div>
+                            <div class="loading-text">Loading...</div>
+                        </div>
+                    </div>`;
+
+                const response = await fetch(`./${pageName}.html`);
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${pageName}.html`);
+                }
+                const content = await response.text();
+                mainContent.innerHTML = content;
+
+                // Execute scripts for profile page
+                if (pageName === 'profile') {
+                    // Get elements
+                    const copyBtn = document.getElementById('copyDealerIdBtn');
+                    const dealerIdElement = document.getElementById('dealerId');
+                    const toast = document.getElementById('copyToast');
+                    
+                    // Get dealer details from localStorage
+                    const dealerName = localStorage.getItem('dealerName') || '';
+                    const dealerEmail = localStorage.getItem('dealerEmail') || '';
+                    
+                    // Auto-populate form fields
+                    document.getElementById('dealerName').value = dealerName;
+                    document.getElementById('dealerEmail').value = dealerEmail;
+                    document.getElementById('dealershipName').value = dealerName; // Same as full name
+                    document.getElementById('dealerEmail').readOnly = true; // Make email read-only
+                    document.getElementById('dealershipName').readOnly = true; // Make dealership name read-only
+
+                    // Initialize dealer ID if needed
+                    if (!localStorage.getItem('dealerId')) {
+                        const newId = generateDealerId();
+                        localStorage.setItem('dealerId', newId);
+                        dealerIdElement.textContent = newId;
+                    } else {
+                        dealerIdElement.textContent = localStorage.getItem('dealerId');
+                    }
+
+                    // Copy button click handler
+                    copyBtn.addEventListener('click', async function() {
+                        const textToCopy = dealerIdElement.textContent;
+                        try {
+                            await navigator.clipboard.writeText(textToCopy);
+                            showToast();
+                        } catch (err) {
+                            console.error('Clipboard API failed:', err);
+                            fallbackCopy(textToCopy);
+                        }
+                    });
+                }
+
+                // If we're on the listings page, add event listeners for the buttons
+                if (pageName === 'listings') {
+                    setupListingButtons();
+                    // Always show the listing grid and hide empty state on fresh load
+                    document.querySelector('.empty-state').style.display = 'none';
+                    document.querySelector('.listings-grid').style.display = 'grid';
+                }
+                
+                // Update page title
+                const titles = {
+                    'listings': 'My Listings',
+                    'add-listing': 'Add New Listing',
+                    'profile': 'Profile Settings',
+                    'support': 'Support System'
+                };
+                pageTitle.textContent = titles[pageName] || 'My Listings';
+                
+                // Update active state in sidebar
+                document.querySelectorAll('.sidebar-nav li').forEach(li => {
+                    li.classList.remove('active');
+                    if (li.dataset.page === pageName) {
+                        li.classList.add('active');
+                    }
+                });
+
+                // Close sidebar on mobile after navigation
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
+                }
+            } catch (error) {
+                console.error('Error loading page:', error);
+                mainContent.innerHTML = `<div class="error">Error loading ${pageName}.html: ${error.message}</div>`;
+            }
+        }
+
+        // Function to setup listing buttons
+        function setupListingButtons() {
+            // Add Listing button functionality
+            const addListingBtn = document.querySelector('.add-listing-btn');
+            if (addListingBtn) {
+                addListingBtn.addEventListener('click', () => {
+                    loadPage('add-listing');
+                });
+            }
+
+            // Delete buttons functionality
+            const deleteButtons = document.querySelectorAll('.delete-listing-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const listingId = this.getAttribute('data-listing-id');
+                    showDeleteModal(listingId);
+                });
+            });
+        }
+
+        // Add click handlers to sidebar navigation
+        document.querySelectorAll('.sidebar-nav li[data-page]').forEach(li => {
+            li.addEventListener('click', () => {
+                loadPage(li.dataset.page);
+            });
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnHamburger = menuToggle.contains(event.target);
+                
+                if (!isClickInsideSidebar && !isClickOnHamburger && sidebar.classList.contains('active')) {
+                    closeSidebar();
+                }
+            }
+        });
+
+        // Load default page
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPage('listings');
+        });
+
+        // Logout functions
+        function logout() {
+            console.log('Logging out...');
+            
+            // Clear all localStorage data
+            localStorage.clear();
+            
+            // Double-check specific items are removed
+            localStorage.removeItem('token');
+            localStorage.removeItem('userType');
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userProfile');
+            
+            console.log('LocalStorage cleared');
+            
+            // Force reload before redirect to ensure clean state
+            window.location.replace('../../../auth/login.html');
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('show');
+        }
+
+        function confirmLogout() {
+            // Clear session storage
+            sessionStorage.clear();
+            window.location.href = '../../../auth/login.html';
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('logoutModal');
+            if (event.target === modal) {
+                closeLogoutModal();
+            }
+        });
+
+        // Prevent modal close when clicking inside modal content
+        document.querySelector('.modal-content').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+
+        let listingToDelete = null;
+
+        function showDeleteModal(listingId) {
+            listingToDelete = listingId;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            listingToDelete = null;
+        }
+
+        function confirmDelete() {
+            if (listingToDelete) {
+                // Remove the listing card
+                const listingCard = document.querySelector(`[data-listing-id="${listingToDelete}"]`).closest('.listing-card');
+                if (listingCard) {
+                    listingCard.remove();
+                    
+                    // Check if there are any listings left
+                    const remainingListings = document.querySelectorAll('.listing-card');
+                    if (remainingListings.length === 0) {
+                        // Show empty state
+                        document.querySelector('.empty-state').style.display = 'block';
+                        document.querySelector('.listings-grid').style.display = 'none';
+                    }
+                }
+            }
+            closeDeleteModal();
+        }
+
+        // Add event listener for clicking outside delete modal
+        document.addEventListener('click', function(event) {
+            const deleteModal = document.getElementById('deleteModal');
+            if (event.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+
+        // Add this function to get dealer info from localStorage
+        function getDealerInfo() {
+            return {
+                name: localStorage.getItem('dealerName') || '[Your Name]',
+                id: localStorage.getItem('dealerId') || '[Your ID]'
+            };
+        }
+
+        // Add this function to create the WhatsApp link
+        function createWhatsAppLink() {
+            const dealer = getDealerInfo();
+            const message = encodeURIComponent(
+                `Hello! I'm a dealer on Gaadiyaan.\n\n` +
+                `I need assistance with my dealer account.\n\n` +
+                `Dealer Name: ${dealer.name}\n` +
+                `Account ID: ${dealer.id}\n\n` +
+                `Query: `
+            );
+            
+            // Check if it's a mobile device
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            // Use appropriate WhatsApp link based on device
+            const baseUrl = isMobile ? 'whatsapp://' : 'https://web.whatsapp.com/send?phone=919583528458&text=';
+            
+            return `${baseUrl}send?phone=919583528458&text=${message}`;
+        }
+
+        // Add this function to update the WhatsApp link
+        function updateWhatsAppLink() {
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            whatsappFloat.href = createWhatsAppLink();
+        }
+
+        // Call this when page loads
+        document.addEventListener('DOMContentLoaded', updateWhatsAppLink);
+
+        // Add these helper functions at the global scope
+        function generateDealerId() {
+            const year = new Date().getFullYear();
+            let lastNumber = parseInt(localStorage.getItem('lastDealerId') || '0');
+            lastNumber++;
+            localStorage.setItem('lastDealerId', lastNumber.toString());
+            return `GD${year}${lastNumber.toString().padStart(3, '0')}`;
+        }
+
+        function showToast() {
+            const toast = document.getElementById('copyToast');
+            toast.classList.remove('show');
+            void toast.offsetWidth;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function fallbackCopy(text) {
+            const tempInput = document.createElement('input');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+    </script>
+
+    <script>
+        // Prefill form with existing data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve user data from local storage
+            const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            
+            // Prefill email
+            const emailInput = document.getElementById('dealerEmail');
+            if (emailInput && userProfile.email) {
+                emailInput.value = userProfile.email;
+                // Remove readonly attribute to make it editable
+                emailInput.removeAttribute('');
+                emailInput.classList.remove('bg-light');
+            }
+
+            // Prefill dealership name
+            const dealershipInput = document.getElementById('dealershipName');
+            if (dealershipInput && userProfile.dealershipName) {
+                dealershipInput.value = userProfile.dealershipName;
+            }
+        });
+    </script>
+
+    <a class="whatsapp-float" target="_blank" title="Contact Support via WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

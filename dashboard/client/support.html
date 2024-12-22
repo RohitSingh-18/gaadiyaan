@@ -1,0 +1,152 @@
+<div class="support-section">
+  <div class="section-header">
+    <h2>Support</h2>
+    <button class="primary-btn new-ticket-btn">
+      <i class="fas fa-plus"></i> New Support Ticket
+    </button>
+  </div>
+
+  <div class="tickets-container">
+    <!-- Empty state -->
+    <div class="empty-state" style="display: flex;">
+      <i class="fas fa-ticket-alt"></i>
+      <h3>No Support Tickets</h3>
+      <p>You haven't created any support tickets yet.</p>
+      <button class="primary-btn new-ticket-btn">Create New Ticket</button>
+    </div>
+
+    <!-- Tickets will be listed here -->
+    <div class="tickets-list" style="display: none;">
+      <!-- Sample ticket card -->
+      <div class="ticket-card">
+        <div class="ticket-header">
+          <span class="ticket-id">#1234</span>
+          <span class="ticket-status pending">Pending</span>
+        </div>
+        <h3 class="ticket-subject">Payment Issue</h3>
+        <p class="ticket-preview">I'm having trouble with my payment processing...</p>
+        <div class="ticket-footer">
+          <span class="ticket-date">Created: 2024-03-20</span>
+          <button class="view-ticket-btn">View Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Ticket Modal -->
+  <div class="modal" id="newTicketModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-ticket-alt"></i> Create Support Ticket</h3>
+        <button class="close-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="supportTicketForm">
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input 
+              type="text" 
+              id="subject" 
+              name="subject" 
+              placeholder="Brief description of your issue"
+              required
+            >
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+              <option value="">Select a category</option>
+              <option value="technical">Technical Issue</option>
+              <option value="payment">Payment Issue</option>
+              <option value="booking">Booking Issue</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea 
+              id="description" 
+              name="description" 
+              rows="5" 
+              placeholder="Please provide detailed information about your issue..."
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="attachment">
+              <i class="fas fa-paperclip"></i> Attachment (optional)
+            </label>
+            <input 
+              type="file" 
+              id="attachment" 
+              name="attachment"
+              accept="image/*,.pdf,.doc,.docx"
+            >
+            <small class="file-hint">Supported formats: Images, PDF, DOC (Max 5MB)</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary-btn" id="cancelTicket">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="modal-btn primary-btn" id="submitTicket">
+          <i class="fas fa-paper-plane"></i> Submit Ticket
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container">
+    <!-- Toasts will be added here dynamically -->
+  </div>
+
+  <div class="modal ticket-details-modal" id="ticketDetailsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-ticket-alt"></i> Ticket Details</h3>
+        <button class="close-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="ticket-details">
+          <span class="status-badge pending">Pending</span>
+          <div class="ticket-info">
+            <div class="ticket-info-item">
+              <span class="ticket-info-label">Ticket ID</span>
+              <span class="ticket-info-value" id="ticketId">#1234</span>
+            </div>
+            <div class="ticket-info-item">
+              <span class="ticket-info-label">Subject</span>
+              <span class="ticket-info-value" id="ticketSubject">Payment Issue</span>
+            </div>
+            <div class="ticket-info-item">
+              <span class="ticket-info-label">Category</span>
+              <span class="ticket-info-value" id="ticketCategory">Payment</span>
+            </div>
+            <div class="ticket-info-item">
+              <span class="ticket-info-label">Created</span>
+              <span class="ticket-info-value" id="ticketDate">2024-03-20</span>
+            </div>
+            <div class="ticket-info-item">
+              <span class="ticket-info-label">Status</span>
+              <span class="ticket-info-value" id="ticketStatus">Pending</span>
+            </div>
+          </div>
+          <h4>Description</h4>
+          <div class="ticket-description">
+            <p id="ticketDescription">I'm having trouble with my payment processing...</p>
+          </div>
+          <div class="ticket-actions">
+            <button class="edit-ticket-btn">
+              <i class="fas fa-edit"></i> Edit Ticket
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
