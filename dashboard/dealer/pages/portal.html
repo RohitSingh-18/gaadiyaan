@@ -113,6 +113,7 @@
             justify-content: center;
             text-decoration: none !important;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .whatsapp-float:hover {
@@ -122,8 +123,62 @@
             box-shadow: 2px 5px 10px rgba(0,0,0,0.2);
         }
 
-        .whatsapp-float i {
-            margin-top: 0;
+        /* WhatsApp Menu Styles */
+        .whatsapp-menu {
+            position: fixed;
+            bottom: 110px;
+            right: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 10px 0;
+            width: 250px;
+            display: none;
+            z-index: 99;
+        }
+
+        .whatsapp-menu.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            color: #1e293b;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+
+        .whatsapp-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .whatsapp-menu-item i {
+            margin-right: 12px;
+            color: #FF3B30;
+            font-size: 18px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .whatsapp-menu {
+                width: 220px;
+                right: 20px;
+                bottom: 90px;
+            }
         }
 
         /* Mobile Styles */
@@ -189,12 +244,12 @@
                             <span>Profile Settings</span>
                         </a>
                     </li>
-                    <li data-page="support">
+                    <!-- <li data-page="support">
                         <a href="javascript:void(0)" class="nav-link">
                             <i class="fas fa-headset"></i>
                             <span>Support System</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="javascript:void(0)" class="nav-link" onclick="logout()">
                             <i class="fas fa-sign-out-alt"></i>
@@ -559,6 +614,60 @@
                 document.body.removeChild(tempInput);
             }
         }
+
+        // Add these functions for WhatsApp menu functionality
+        function toggleWhatsAppMenu() {
+            const menu = document.getElementById('whatsappMenu');
+            menu.classList.toggle('show');
+        }
+
+        function sendWhatsAppMessage(type) {
+            const dealer = getDealerInfo();
+            let messagePrefix = '';
+            
+            switch(type) {
+                case 'query':
+                    messagePrefix = 'I have a general query regarding';
+                    break;
+                case 'complaint':
+                    messagePrefix = 'I want to report a complaint about';
+                    break;
+                case 'issue':
+                    messagePrefix = 'I am facing a technical issue with';
+                    break;
+                case 'feedback':
+                    messagePrefix = 'I want to provide feedback about';
+                    break;
+            }
+
+            const message = encodeURIComponent(
+                `Hello! I'm a dealer on Gaadiyaan.\n\n` +
+                `${messagePrefix} the platform.\n\n` +
+                `Dealer Name: ${dealer.name}\n` +
+                `Account ID: ${dealer.id}\n\n` +
+                `Details: `
+            );
+            
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const baseUrl = isMobile ? 'whatsapp://' : 'https://web.whatsapp.com/';
+            const whatsappUrl = `${baseUrl}send?phone=919583528458&text=${message}`;
+            
+            // Close the menu
+            document.getElementById('whatsappMenu').classList.remove('show');
+            
+            // Open WhatsApp in a new tab
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Close WhatsApp menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('whatsappMenu');
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            
+            if (!menu.contains(event.target) && !whatsappFloat.contains(event.target)) {
+                menu.classList.remove('show');
+            }
+        });
     </script>
 
     <script>
@@ -584,8 +693,27 @@
         });
     </script>
 
-    <a class="whatsapp-float" target="_blank" title="Contact Support via WhatsApp">
+    <div class="whatsapp-menu" id="whatsappMenu">
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('query')">
+            <i class="fas fa-question-circle"></i>
+            <span>I have a query</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('complaint')">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>I have a complaint</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('issue')">
+            <i class="fas fa-bug"></i>
+            <span>I have a technical issue</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('feedback')">
+            <i class="fas fa-comment-dots"></i>
+            <span>I want to give feedback</span>
+        </a>
+    </div>
+
+    <div class="whatsapp-float" onclick="toggleWhatsAppMenu()" title="Contact Support via WhatsApp">
         <i class="fab fa-whatsapp"></i>
-    </a>
+    </div>
 </body>
 </html>

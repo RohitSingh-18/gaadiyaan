@@ -13,6 +13,105 @@
     <link rel="stylesheet" href="./styles/settings.css">
     <link rel="stylesheet" href="./styles/loading.css">
     <link rel="stylesheet" href="./styles/support.css">
+    <style>
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #128C7E;
+            color: #FFF;
+            transform: translateY(-3px);
+            box-shadow: 2px 5px 10px rgba(0,0,0,0.2);
+        }
+
+        /* WhatsApp Menu Styles */
+        .whatsapp-menu {
+            position: fixed;
+            bottom: 110px;
+            right: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 10px 0;
+            width: 250px;
+            display: none;
+            z-index: 99;
+        }
+
+        .whatsapp-menu.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            color: #1e293b;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+
+        .whatsapp-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .whatsapp-menu-item i {
+            margin-right: 12px;
+            color: #FF3B30;
+            font-size: 18px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .whatsapp-menu {
+                width: 220px;
+                right: 20px;
+                bottom: 90px;
+            }
+        }
+
+        /* Mobile Styles */
+        @media screen and (max-width: 768px) {
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 25px;
+            }
+        }
+    </style>
   </head>
   <body>
     <div class="loading-bar"></div>
@@ -41,14 +140,14 @@
               <span>Home</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
+          <!-- <li class="nav-item">
+            <a href="#" class="nav-link ">
               <i class="fas fa-calendar-check"></i>
               <span>My Appointments</span>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link active">
               <i class="fas fa-heart"></i>
               <span>My Wishlist</span>
             </a>
@@ -59,12 +158,12 @@
               <span>Account Settings</span>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-headset"></i>
               <span>Support</span>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-sign-out-alt"></i>
@@ -548,13 +647,13 @@
         });
       });
 
-      // Load appointments page by default and initialize modal
+      // Load wishlist page by default and initialize modal
       document.addEventListener('DOMContentLoaded', () => {
         // Show loading bar
         document.body.classList.remove('loaded');
         
-        loadPage('appointments').then(() => {
-          initializeAppointmentModals();
+        loadPage('wishlist').then(() => {
+          initializeWishlistFunctionality();
           // Hide loading bar after content is loaded
           setTimeout(() => {
             document.body.classList.add('loaded');
@@ -606,6 +705,91 @@
       document.getElementById('logoutYes').addEventListener('click', () => {
         window.location.href = '../../auth/login.html';
       });
+
+      // Add this function to get user info from localStorage
+      function getUserInfo() {
+          return {
+              name: localStorage.getItem('userName') || '[Your Name]',
+              id: localStorage.getItem('userId') || '[Your ID]'
+          };
+      }
+
+      // Add this function to create the WhatsApp link with menu functionality
+      function toggleWhatsAppMenu() {
+          const menu = document.getElementById('whatsappMenu');
+          menu.classList.toggle('show');
+      }
+
+      function sendWhatsAppMessage(type) {
+          const user = getUserInfo();
+          let messagePrefix = '';
+          
+          switch(type) {
+              case 'query':
+                  messagePrefix = 'I have a general query regarding';
+                  break;
+              case 'complaint':
+                  messagePrefix = 'I want to report a complaint about';
+                  break;
+              case 'issue':
+                  messagePrefix = 'I am facing a technical issue with';
+                  break;
+              case 'feedback':
+                  messagePrefix = 'I want to provide feedback about';
+                  break;
+          }
+
+          const message = encodeURIComponent(
+              `Hello! I'm a user on Gaadiyaan.\n\n` +
+              `${messagePrefix} the platform.\n\n` +
+              `User Name: ${user.name}\n` +
+              `Account ID: ${user.id}\n\n` +
+              `Details: `
+          );
+          
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+          const baseUrl = isMobile ? 'whatsapp://' : 'https://web.whatsapp.com/';
+          const whatsappUrl = `${baseUrl}send?phone=919583528458&text=${message}`;
+          
+          // Close the menu
+          document.getElementById('whatsappMenu').classList.remove('show');
+          
+          // Open WhatsApp in a new tab
+          window.open(whatsappUrl, '_blank');
+      }
+
+      // Close WhatsApp menu when clicking outside
+      document.addEventListener('click', function(event) {
+          const menu = document.getElementById('whatsappMenu');
+          const whatsappFloat = document.querySelector('.whatsapp-float');
+          
+          if (!menu.contains(event.target) && !whatsappFloat.contains(event.target)) {
+              menu.classList.remove('show');
+          }
+      });
     </script>
+
+    <div class="whatsapp-menu" id="whatsappMenu">
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('query')">
+            <i class="fas fa-question-circle"></i>
+            <span>I have a query</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('complaint')">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>I have a complaint</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('issue')">
+            <i class="fas fa-bug"></i>
+            <span>I have a technical issue</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('feedback')">
+            <i class="fas fa-comment-dots"></i>
+            <span>I want to give feedback</span>
+        </a>
+    </div>
+
+    <div class="whatsapp-float" onclick="toggleWhatsAppMenu()" title="Contact Support via WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </div>
   </body>
 </html>
