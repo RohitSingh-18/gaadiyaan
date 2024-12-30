@@ -740,6 +740,144 @@
                   </div>
                 </div>
 
+                <!-- Location Filter -->
+                <div class="filter-group">
+                  <label class="filter-label">Location</label>
+                  <div class="location-search">
+                    <input type="text" class="form-control" id="locationSearch" placeholder="Search location in Odisha..." style="margin-bottom: 10px;">
+                    <div class="location-results" id="locationResults" style="display: none; max-height: 200px; overflow-y: auto; background: white; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                  </div>
+                  <div class="selected-locations" id="selectedLocations" style="margin-top: 10px;"></div>
+                </div>
+
+                <style>
+                .location-search {
+                    position: relative;
+                }
+
+                .location-results {
+                    position: absolute;
+                    width: 100%;
+                    z-index: 1000;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+
+                .location-item {
+                    padding: 8px 12px;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                }
+
+                .location-item:hover {
+                    background-color: #f5f5f5;
+                }
+
+                .selected-location {
+                    display: inline-block;
+                    background: #f0f0f0;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    margin: 4px;
+                    font-size: 14px;
+                }
+
+                .selected-location .remove-location {
+                    margin-left: 6px;
+                    cursor: pointer;
+                    color: #666;
+                }
+
+                .selected-location .remove-location:hover {
+                    color: #d01818;
+                }
+                </style>
+
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const locations = [
+                        "Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur",
+                        "Puri", "Balasore", "Bhadrak", "Baripada", "Jharsuguda",
+                        "Angul", "Balangir", "Jeypore", "Barbil", "Kendujhar",
+                        "Dhenkanal", "Paradip", "Jajpur", "Rayagada", "Koraput"
+                    ];
+
+                    const locationSearch = document.getElementById('locationSearch');
+                    const locationResults = document.getElementById('locationResults');
+                    const selectedLocations = document.getElementById('selectedLocations');
+                    let selectedLocationsList = new Set();
+
+                    function showResults(searchText) {
+                        locationResults.innerHTML = '';
+                        if (!searchText) {
+                            locationResults.style.display = 'none';
+                            return;
+                        }
+
+                        const filteredLocations = locations.filter(location => 
+                            location.toLowerCase().includes(searchText.toLowerCase()) &&
+                            !selectedLocationsList.has(location)
+                        );
+
+                        if (filteredLocations.length === 0) {
+                            locationResults.style.display = 'none';
+                            return;
+                        }
+
+                        filteredLocations.forEach(location => {
+                            const div = document.createElement('div');
+                            div.className = 'location-item';
+                            div.textContent = location;
+                            div.onclick = () => addLocation(location);
+                            locationResults.appendChild(div);
+                        });
+
+                        locationResults.style.display = 'block';
+                    }
+
+                    function addLocation(location) {
+                        if (selectedLocationsList.has(location)) return;
+                        
+                        selectedLocationsList.add(location);
+                        const locationElement = document.createElement('span');
+                        locationElement.className = 'selected-location';
+                        locationElement.innerHTML = `${location}<span class="remove-location">×</span>`;
+                        
+                        locationElement.querySelector('.remove-location').onclick = () => {
+                            selectedLocationsList.delete(location);
+                            locationElement.remove();
+                            showResults(locationSearch.value);
+                        };
+                        
+                        selectedLocations.appendChild(locationElement);
+                        locationSearch.value = '';
+                        locationResults.style.display = 'none';
+                    }
+
+                    locationSearch.addEventListener('input', (e) => {
+                        showResults(e.target.value);
+                    });
+
+                    // Close results when clicking outside
+                    document.addEventListener('click', (e) => {
+                        if (!locationSearch.contains(e.target) && !locationResults.contains(e.target)) {
+                            locationResults.style.display = 'none';
+                        }
+                    });
+
+                    // Prevent form submission on enter
+                    locationSearch.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const firstResult = locationResults.querySelector('.location-item');
+                            if (firstResult) {
+                                addLocation(firstResult.textContent);
+                            }
+                        }
+                    });
+                });
+                </script>
+
                 <!-- Price Range -->
                 <div class="filter-group">
                   <label class="filter-label">Price Range</label>
@@ -832,7 +970,7 @@
                             </div>
 
                             <!-- Year Range -->
-                            <div class="b-filter__row row">
+                            <!-- <div class="b-filter__row row">
                               <div class="b-filter__item col-md-6 col-lg-12 col-xl-6">
                                 <select class="selectpicker" data-width="100%" title="From" data-style="ui-select">
                                   <option value="">From</option>
@@ -853,7 +991,7 @@
                                   <option>2020</option>
                                 </select>
                               </div>
-                            </div>
+                            </div> -->
 
                             <!-- Transmission -->
                             <div class="b-filter__row">
@@ -875,19 +1013,181 @@
                                 <option>Hybrid</option>
                               </select>
                             </div>
-                          </div>
 
-                          <!-- Price Range -->
+                            <!-- Location Filter Desktop -->
+                            <div class="b-filter__row">
+                              <!-- <div class="filter-label mb-2">Location</div> -->
+                              <div class="location-search-desktop">
+                                <input type="text" class="ui-select" id="locationSearchDesktop" placeholder="Search location in Odisha...">
+                                <div class="location-results" id="locationResultsDesktop"></div>
+                              </div>
+                              <div class="selected-locations" id="selectedLocationsDesktop"></div>
+                            </div>
+
+                            <style>
+                            .location-search-desktop {
+                                position: relative;
+                                margin-bottom: 15px;
+                            }
+
+                            #locationSearchDesktop {
+                                width: 100%;
+                                padding: 8px 12px;
+                                border: 1px solid #ddd;
+                                border-radius: 4px;
+                                margin-bottom: 5px;
+                            }
+
+                            #locationResultsDesktop {
+                                display: none;
+                                position: absolute;
+                                width: 100%;
+                                max-height: 200px;
+                                overflow-y: auto;
+                                background: white;
+                                border: 1px solid #ddd;
+                                border-radius: 4px;
+                                z-index: 1000;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                            }
+
+                            .location-item-desktop {
+                                padding: 8px 12px;
+                                cursor: pointer;
+                                transition: background-color 0.2s;
+                                background: white;
+                            }
+
+                            .location-item-desktop:hover {
+                                background-color: #f5f5f5;
+                            }
+
+                            .selected-location-desktop {
+                                display: inline-block;
+                                background: #f0f0f0;
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                                margin: 4px;
+                                font-size: 14px;
+                            }
+
+                            .selected-location-desktop .remove-location {
+                                margin-left: 6px;
+                                cursor: pointer;
+                                color: #666;
+                            }
+
+                            .selected-location-desktop .remove-location:hover {
+                                color: #d01818;
+                            }
+                            </style>
+
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const locationsDesktop = [
+                                    "Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur",
+                                    "Puri", "Balasore", "Bhadrak", "Baripada", "Jharsuguda",
+                                    "Angul", "Balangir", "Jeypore", "Barbil", "Kendujhar",
+                                    "Dhenkanal", "Paradip", "Jajpur", "Rayagada", "Koraput"
+                                ];
+
+                                const locationSearchDesktop = document.getElementById('locationSearchDesktop');
+                                const locationResultsDesktop = document.getElementById('locationResultsDesktop');
+                                const selectedLocationsDesktop = document.getElementById('selectedLocationsDesktop');
+                                let selectedLocationsListDesktop = new Set();
+
+                                function showResultsDesktop(searchText) {
+                                    locationResultsDesktop.innerHTML = '';
+                                    if (!searchText) {
+                                        locationResultsDesktop.style.display = 'none';
+                                        return;
+                                    }
+
+                                    const filteredLocations = locationsDesktop.filter(location => 
+                                        location.toLowerCase().includes(searchText.toLowerCase()) &&
+                                        !selectedLocationsListDesktop.has(location)
+                                    );
+
+                                    if (filteredLocations.length === 0) {
+                                        locationResultsDesktop.style.display = 'none';
+                                        return;
+                                    }
+
+                                    filteredLocations.forEach(location => {
+                                        const div = document.createElement('div');
+                                        div.className = 'location-item-desktop';
+                                        div.textContent = location;
+                                        div.onclick = () => addLocationDesktop(location);
+                                        locationResultsDesktop.appendChild(div);
+                                    });
+
+                                    locationResultsDesktop.style.display = 'block';
+                                }
+
+                                function addLocationDesktop(location) {
+                                    if (selectedLocationsListDesktop.has(location)) return;
+                                    
+                                    selectedLocationsListDesktop.add(location);
+                                    const locationElement = document.createElement('span');
+                                    locationElement.className = 'selected-location-desktop';
+                                    locationElement.innerHTML = `${location}<span class="remove-location">×</span>`;
+                                    
+                                    locationElement.querySelector('.remove-location').onclick = (e) => {
+                                        e.stopPropagation();
+                                        selectedLocationsListDesktop.delete(location);
+                                        locationElement.remove();
+                                        showResultsDesktop(locationSearchDesktop.value);
+                                    };
+                                    
+                                    selectedLocationsDesktop.appendChild(locationElement);
+                                    locationSearchDesktop.value = '';
+                                    locationResultsDesktop.style.display = 'none';
+                                }
+
+                                locationSearchDesktop.addEventListener('input', (e) => {
+                                    showResultsDesktop(e.target.value);
+                                });
+
+                                // Close results when clicking outside
+                                document.addEventListener('click', (e) => {
+                                    if (!locationSearchDesktop.contains(e.target) && !locationResultsDesktop.contains(e.target)) {
+                                        locationResultsDesktop.style.display = 'none';
+                                    }
+                                });
+
+                                // Prevent form submission on enter
+                                locationSearchDesktop.addEventListener('keypress', (e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        const firstResult = locationResultsDesktop.querySelector('.location-item-desktop');
+                                        if (firstResult) {
+                                            addLocationDesktop(firstResult.textContent);
+                                        }
+                                    }
+                                });
+
+                                // Add to reset filters functionality
+                                const existingResetFunction = window.resetFilters || function() {};
+                                window.resetFilters = function() {
+                                    existingResetFunction();
+                                    selectedLocationsListDesktop.clear();
+                                    selectedLocationsDesktop.innerHTML = '';
+                                    locationSearchDesktop.value = '';
+                                };
+                            });
+                            </script>
+
+                          </div>
                           <div class="b-filter-slider ui-filter-slider">
                             <div class="b-filter-slider__title">Price Range</div>
                             <div class="b-filter-slider__main">
                               <div id="filterPrice"></div>
                               <div class="b-filter__row row">
                                 <div class="b-filter__item col-md-6 col-lg-12 col-xl-6">
-                                  <input class="ui-select" id="input-with-keypress-0" placeholder="₹ 2,000"/>
+                                  <input class="ui-select" id="input-with-keypress-0" placeholder="₹ 2,00,000"/>
                                 </div>
                                 <div class="b-filter__item col-md-6 col-lg-12 col-xl-6">
-                                  <input class="ui-select" id="input-with-keypress-1" placeholder="₹ 45,000"/>
+                                  <input class="ui-select" id="input-with-keypress-1" placeholder="₹ 10,00,000"/>
                                 </div>
                               </div>
                             </div>

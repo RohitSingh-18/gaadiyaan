@@ -11,7 +11,7 @@
     <meta content="telephone=no" name="format-detection">
     <meta name="HandheldFriendly" content="true">
     <link rel="stylesheet" href="assets/css/master.css">
-    <link rel="stylesheet" href="./assets/css/search.css">l̥
+    <link rel="stylesheet" href="./assets/css/search.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -705,7 +705,7 @@
                     </div>
 
                     <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 20px;">
-                        <button class="btn btn-primary" style="background-color: #d01818 !important; border: none !important; padding: 10px 20px; border-radius: 5px; font-size: 16px; font-weight: 600;">Book An Appointment</button>
+                        <button class="btn btn-primary" onclick="openAppointmentModal()" style="background-color: #d01818 !important; border: none !important; padding: 10px 20px; border-radius: 5px; font-size: 16px; font-weight: 600;">Book An Appointment</button>
                         <button class="wishlist-btn">
                             <i class="far fa-heart"></i>
                         </button>
@@ -990,6 +990,10 @@
                                             <div class="car-top">
                                                 <h4 class="car-name">Honda City 2020</h4>
                                                 <div class="car-price">₹7.5 Lakh</div>
+                                                <div class="car-location">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <span>Cuttack</span>
+                                                </div>
                                             </div>
                                             <a href="#" class="view-details-btn">
                                                 View Details
@@ -1018,6 +1022,10 @@
                                             <div class="car-top">
                                                 <h4 class="car-name">Maruti Swift 2019</h4>
                                                 <div class="car-price">₹5.8 Lakh</div>
+                                                <div class="car-location">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <span>Bhubaneswar</span>
+                                                </div>
                                             </div>
                                             <a href="#" class="view-details-btn">
                                                 View Details
@@ -1045,7 +1053,11 @@
                                             <div class="car-top">
                                                 <h4 class="car-name">Toyota Innova 2021</h4>
                                                 <div class="car-price">₹12.5 Lakh</div>
-                            </div>
+                                                <div class="car-location">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <span>Puri</span>
+                                                </div>
+                                            </div>
                                             <a href="#" class="view-details-btn">
                                                 View Details
                                                 <i class="fas fa-arrow-right"></i>
@@ -1072,6 +1084,10 @@
                                             <div class="car-top">
                                                 <h4 class="car-name">Hyundai Creta 2022</h4>
                                                 <div class="car-price">₹14.2 Lakh</div>
+                                                <div class="car-location">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <span>Rourkela</span>
+                                                </div>
                                             </div>
                                             <a href="#" class="view-details-btn">
                                                 View Details
@@ -1099,6 +1115,10 @@
                                             <div class="car-top">
                                                 <h4 class="car-name">Tata Nexon 2023</h4>
                                                 <div class="car-price">₹11.8 Lakh</div>
+                                                <div class="car-location">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <span>Sambalpur</span>
+                                                </div>
                                             </div>
                                             <a href="#" class="view-details-btn">
                                                 View Details
@@ -2014,6 +2034,28 @@
                 min-width: 140px;
             }
         }
+
+        .car-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .car-location i {
+            color: #d01818;
+            font-size: 14px;
+        }
+
+        .car-location span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #555;
+            font-weight: 500;
+        }
     </style>
 
     <!-- Add this before the closing body tag -->
@@ -2191,6 +2233,195 @@
             icon.classList.toggle('far');
             icon.classList.toggle('fas');
         });
+    </script>
+
+    <!-- Add the appointment modal -->
+    <div class="modal" id="appointmentModal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #D01818; color: white; padding: 1rem; border-radius: 8px 8px 0 0;">
+                <h3 style="margin: 0; font-weight: 600;">Book An Appointment</h3>
+                <button class="close-modal" onclick="closeAppointmentModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem;">
+                <form id="appointmentForm" onsubmit="handleAppointmentSubmit(event)">
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="appointmentName" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Full Name*</label>
+                        <input type="text" id="appointmentName" required 
+                               placeholder="Enter your full name"
+                               style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="appointmentPhone" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Phone Number*</label>
+                        <input type="tel" id="appointmentPhone" required 
+                               placeholder="Enter your phone number"
+                               maxlength="10"
+                               style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="appointmentDate" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Preferred Date*</label>
+                        <input type="date" id="appointmentDate" required 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="appointmentTime" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Preferred Time*</label>
+                        <input type="time" id="appointmentTime" required 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="appointmentMessage" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Message (Optional)</label>
+                        <textarea id="appointmentMessage" rows="3" 
+                                  placeholder="Any specific requirements or questions?"
+                                  style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" 
+                            style="width: 100%; background: #D01818 !important; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 500; margin-top: 1rem;">
+                        Book Appointment
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Form Styles */
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #D01818;
+        box-shadow: 0 0 0 2px rgba(208, 24, 24, 0.1);
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .modal-content {
+            width: 95%;
+            margin: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+    }
+    </style>
+
+    <script>
+    function openAppointmentModal() {
+        document.getElementById('appointmentModal').classList.add('active');
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('appointmentDate').min = today;
+    }
+
+    function closeAppointmentModal() {
+        document.getElementById('appointmentModal').classList.remove('active');
+    }
+
+    function handleAppointmentSubmit(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('appointmentName').value;
+        const phone = document.getElementById('appointmentPhone').value;
+        const date = document.getElementById('appointmentDate').value;
+        const time = document.getElementById('appointmentTime').value;
+        const message = document.getElementById('appointmentMessage').value;
+        
+        // Get car details
+        const carMake = document.querySelector('.spec-item:nth-child(1) .spec-value').textContent;
+        const carModel = document.querySelector('.spec-item:nth-child(2) .spec-value').textContent;
+        const carId = document.querySelector('.dealer-id').textContent;
+        const carFullName = `${carMake} ${carModel} (${carId})`;
+        
+        // Get current page URL
+        const carPageLink = window.location.href;
+        
+        // Format the date
+        const formattedDate = new Date(date).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Format the time
+        const formattedTime = new Date(`2000/01/01 ${time}`).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+        
+        // Create WhatsApp message
+        const whatsappMessage = `Hello, I would like to book an appointment for the car viewing.\n\n` +
+            `Car Details: ${carFullName}\n` +
+            `Car Link: ${carPageLink}\n\n` +
+            `Name: ${name}\n` +
+            `Phone: ${phone}\n` +
+            `Date: ${formattedDate}\n` +
+            `Time: ${formattedTime}\n` +
+            (message ? `Message: ${message}\n` : '');
+        
+        // Encode the message for WhatsApp URL
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        
+        // WhatsApp number (replace with your actual number)
+        const whatsappNumber = '918249393960';
+        
+        // Close the modal
+        closeAppointmentModal();
+        
+        // Open WhatsApp
+        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('appointmentModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAppointmentModal();
+        }
+    });
+
+    // Validate phone number
+    document.getElementById('appointmentPhone').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 10) {
+            this.value = this.value.slice(0, 10);
+        }
+    });
     </script>
 </body>
 
