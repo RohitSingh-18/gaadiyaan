@@ -26,7 +26,7 @@
             <div class="dealer-actions">
                
                 <button class="btn-warning" onclick="confirmRemoveAllListings()">
-                    <i class="fas fa-trash-alt"></i> Remove All Listings
+                    <i class="fas fa-ban"></i> Hold Dealer
                 </button>
                 <button class="btn-danger" onclick="confirmRemoveDealer()">
                     <i class="fas fa-trash"></i> Remove Dealer
@@ -39,21 +39,20 @@
 
         <!-- Listings Filter Section -->
         <div class="listings-filter">
-            <div class="search-box">
+            <!-- <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" placeholder="Search listings...">
-            </div>
+            </div> -->
             <div class="filter-options">
-                <select class="filter-select">
+                <!-- <select class="filter-select">
                     <option value="all">All Categories</option>
                     <option value="sedan">Sedan</option>
                     <option value="suv">SUV</option>
                     <option value="luxury">Luxury</option>
-                </select>
+                </select> -->
                 <select class="filter-select">
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
-                    <option value="pending">Pending</option>
                     <option value="sold">Sold</option>
                 </select>
                 <select class="filter-select">
@@ -84,12 +83,9 @@
                     </div>
                     <div class="listing-meta">
                         <span class="listing-date"><i class="far fa-clock"></i> Listed 2 days ago</span>
-                        <span class="listing-views"><i class="far fa-eye"></i> 245 views</span>
+                        
                     </div>
                     <div class="listing-actions">
-                        <button class="btn-outline btn-sm" onclick="editListing(this)" data-listing-id="${listing.id}">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
                         <button class="btn-danger btn-sm" onclick="showListingRemoveModal(this)">
                             <i class="fas fa-trash"></i> Remove
                         </button>
@@ -115,12 +111,9 @@
                     </div>
                     <div class="listing-meta">
                         <span class="listing-date"><i class="far fa-clock"></i> Listed 5 days ago</span>
-                        <span class="listing-views"><i class="far fa-eye"></i> 189 views</span>
+                        
                     </div>
                     <div class="listing-actions">
-                        <button class="btn-outline btn-sm" onclick="editListing(this)" data-listing-id="${listing.id}">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
                         <button class="btn-danger btn-sm" onclick="showListingRemoveModal(this)">
                             <i class="fas fa-trash"></i> Remove
                         </button>
@@ -145,12 +138,8 @@
                     </div>
                     <div class="listing-meta">
                         <span class="listing-date"><i class="far fa-clock"></i> Sold 1 week ago</span>
-                        <span class="listing-views"><i class="far fa-eye"></i> 432 views</span>
-                    </div>
+                        </div>
                     <div class="listing-actions">
-                        <button class="btn-outline btn-sm" onclick="editListing(this)" data-listing-id="${listing.id}">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
                         <button class="btn-danger btn-sm" onclick="showListingRemoveModal(this)">
                             <i class="fas fa-trash"></i> Remove
                         </button>
