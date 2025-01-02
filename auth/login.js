@@ -1,61 +1,117 @@
-document.querySelector('#loginForm').addEventListener('submit', async function(e) {
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
+import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyCwnuce6MccySFnJSpJO4XzAGzwY2wRTmE",
+    authDomain: "gaadyaan.firebaseapp.com",
+    projectId: "gaadyaan",
+    storageBucket: "gaadyaan.firebasestorage.app",
+    messagingSenderId: "525025701510",
+    appId: "1:525025701510:web:f863fbe1e2cd2f4b986b07"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Modal elements
+const modal = document.getElementById('forgotPasswordModal');
+const modalClose = modal.querySelector('.modal-close');
+const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+const sendResetLink = document.getElementById('sendResetLink');
+const resetEmail = document.getElementById('resetEmail');
+const resetError = document.getElementById('resetError');
+const resetSuccess = document.getElementById('resetSuccess');
+
+// Show modal
+forgotPasswordLink.addEventListener('click', (e) => {
     e.preventDefault();
+    modal.style.display = 'block';
+    resetEmail.value = '';
+    resetError.style.display = 'none';
+    resetSuccess.style.display = 'none';
+});
+
+// Close modal
+modalClose.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Handle password reset
+sendResetLink.addEventListener('click', async () => {
+    const email = resetEmail.value;
+    resetError.style.display = 'none';
+    resetSuccess.style.display = 'none';
     
-    const email = document.querySelector('input[type="email"]').value;
-    const password = document.querySelector('input[type="password"]').value;
+    if (!email) {
+        resetError.textContent = 'Please enter your email address';
+        resetError.style.display = 'block';
+        return;
+    }
 
     try {
-        console.log('Login attempt with email:', email);
-
-        const response = await fetch('http://localhost:3000/api/users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-        console.log('Raw server response:', data);
-
-        if (response.ok) {
-            // First, clear old data
-            console.log('Clearing old data from localStorage');
-            localStorage.removeItem('userProfile');
-            localStorage.removeItem('token');
-            localStorage.removeItem('userType');
-            localStorage.removeItem('isLoggedIn');
-
-            console.log('Setting new user data:', data.user);
-            
-            // Store the complete user object as is
-            localStorage.setItem('userProfile', JSON.stringify(data.user));
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('userType', data.user.role);
-            localStorage.setItem('isLoggedIn', 'true');
-
-            console.log('Stored user profile:', localStorage.getItem('userProfile'));
-
-            // Redirect based on role
-            switch(data.user.role) {
-                case 'dealer':
-                    window.location.href = '../dashboard/dealer/pages/portal.html';
-                    break;
-                case 'client':
-                    window.location.href = '../dashboard/client/user.html';
-                    break;
-                case 'admin':
-                    window.location.href = '../dashboard/admin/pages/portal.html';
-                    break;
-                default:
-                    console.error('Unknown role:', data.user.role);
-            }
-        } else {
-            console.error('Login failed:', data.message);
-            alert(data.message || 'Login failed');
-        }
+        sendResetLink.disabled = true;
+        sendResetLink.textContent = 'Sending...';
+        
+        await sendPasswordResetEmail(auth, email);
+        
+        resetSuccess.textContent = 'Password reset link sent! Check your email.';
+        resetSuccess.style.display = 'block';
+        
+        // Close modal after 3 seconds
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 3000);
     } catch (error) {
-        console.error('Login error:', error);
-        alert('Login failed. Please try again.');
+        console.error('Password reset error:', error);
+        let errorMessage = 'Failed to send reset link. Please try again.';
+        
+        if (error.code === 'auth/user-not-found') {
+            errorMessage = 'No account found with this email address.';
+        } else if (error.code === 'auth/invalid-email') {
+            errorMessage = 'Please enter a valid email address.';
+        }
+        
+        resetError.textContent = errorMessage;
+        resetError.style.display = 'block';
+    } finally {
+        sendResetLink.disabled = false;
+        sendResetLink.textContent = 'Send Reset Link';
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // Your existing Firebase login code here
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            
+            // Set login state in localStorage
+            localStorage.setItem('isLoggedIn', 'true');
+            
+            // Redirect to home page
+            window.location.href = '../index.html';
+        } catch (error) {
+            console.error('Login error:', error);
+            document.getElementById('loginError').textContent = error.message;
+            document.getElementById('loginError').style.display = 'block';
+        }
+    });
 });

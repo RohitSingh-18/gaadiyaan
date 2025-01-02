@@ -6,6 +6,60 @@
     <title>Login - Gaadiyaan</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="login.css">
+    <style>
+        /* Add styles for the forgot password modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+
+        .success-message {
+            color: #28a745;
+            display: none;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="bg-glow"></div>
@@ -19,18 +73,20 @@
             <p>Sign in to continue your journey</p>
         </div>
 
+        <div id="loginError" style="color: #D01818; margin-bottom: 15px; text-align: center; display: none;"></div>
+
         <form id="loginForm">
             <div class="form-group">
-                <input type="email" placeholder="Email address" required>
+                <input type="email" id="email" placeholder="Email address" required>
             </div>
             <div class="form-group">
-                <input type="password" placeholder="Password" required>
+                <input type="password" id="password" placeholder="Password" required>
             </div>
 
             <button type="submit" class="auth-button">Sign In</button>
 
             <div class="auth-links">
-                <a href="#">Forgot password?</a>
+                <a href="#" id="forgotPasswordLink">Forgot password?</a>
                 <a href="signup.html">Create account</a>
             </div>
         </form>
@@ -41,7 +97,28 @@
         </div>
     </div>
 
-    <script src="login.js"></script>
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reset Password</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Enter your email address and we'll send you a link to reset your password.</p>
+                <div class="form-group">
+                    <input type="email" id="resetEmail" placeholder="Email address" required>
+                </div>
+                <div id="resetError" style="color: #D01818; margin-top: 10px; display: none;"></div>
+                <div id="resetSuccess" class="success-message"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="auth-button" id="sendResetLink">Send Reset Link</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="login.js"></script>
 </body>
 </html>
 
