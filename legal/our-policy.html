@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T&C</title>
+    <link rel="stylesheet" href="css/legal-styles.css">
+    <style>
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .tab-btn {
+            flex: 0 1 200px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .tab-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .tab-navigation {
+                flex-direction: row;
+                padding: 0 20px;
+            }
+            
+            .tab-btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn" onclick="showContent('user')">For Clients</button>
+            <button class="tab-btn" onclick="showContent('dealer')">For Dealers</button>
+        </div>
+
+        <!-- Content Container -->
+        <div class="content-container">
+            <!-- User Content -->
+            <div class="tab-content" id="user">
+                <h2>T&C For Clients</h2>
+                <div class="legal-grid">
+                    <!-- <div class="legal-card">
+                        <h3>Terms of Service</h3>
+                        <p>User terms and conditions for using our platform</p>
+                        <button onclick="window.location.href='client/terms-of-service.html' " class="view-btn">View Terms</button>
+                    </div> -->
+                    <div class="legal-card">
+                        <h3>Privacy Policy</h3>
+                        <p>How we handle and protect user data</p>
+                        <button onclick="window.open('client/privacy-policy.html', '_blank')" class="view-btn">View Policy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dealer Content -->
+            <div class="tab-content" id="dealer">
+                <h2>T&C For Dealers</h2>
+                <div class="legal-grid">
+                    <div class="legal-card">
+                        <h3>Terms of Service</h3>
+                        <p>Dealer terms and conditions for platform partnership</p>
+                        <button onclick="window.open('dealer/terms-of-service.html', '_blank')" class="view-btn">View Terms</button>
+                    </div>
+                    <div class="legal-card">
+                        <h3>Privacy Policy</h3>
+                        <p>How we handle and protect dealer information</p>
+                        <button onclick="window.open('dealer/privacy-policy.html', '_blank')" class="view-btn">View Policy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/legal.js"></script>
+</body>
+</html>

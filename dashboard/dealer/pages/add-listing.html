@@ -1,0 +1,329 @@
+<div class="add-listing-container">
+    <form class="add-listing-form">
+        <div class="form-section">
+            <h2>Basic Information</h2>
+            <div class="form-group">
+                <label for="carTitle">Car Title</label>
+                <input type="text" id="carTitle" required placeholder="e.g., 2020 Toyota Camry">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price">Price (₹)</label>
+                    <input type="number" id="price" required>
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" required min="1900" max="2024">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Vehicle Details</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="make">Make</label>
+                    <input type="text" id="make" required>
+                </div>
+                <div class="form-group">
+                    <label for="model">Model</label>
+                    <input type="text" id="model" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="registrationYear">Registration Year</label>
+                    <input type="number" id="registrationYear" required min="1900" max="2024">
+                </div>
+                <div class="form-group">
+                    <label for="insurance">Insurance</label>
+                    <input type="text" id="insurance" required placeholder="e.g., Comprehensive">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fuelType">Fuel Type</label>
+                    <select id="fuelType" required>
+                        <option value="">Select Fuel Type</option>
+                        <option value="petrol">Petrol</option>
+                        <option value="diesel">Diesel</option>
+                        <option value="cng">CNG</option>
+                        <option value="electric">Electric</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="seats">Seats</label>
+                    <input type="number" id="seats" required min="1" max="50">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="kmsDriven">Kms Driven</label>
+                    <input type="number" id="kmsDriven" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="rto">Location</label>
+                    <input type="text" id="rto" required placeholder="e.g., Bhubaneswar     ">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ownership">Ownership</label>
+                    <select id="ownership" required>
+                        <option value="">Select Ownership</option>
+                        <option value="1">1st Owner</option>
+                        <option value="2">2nd Owner</option>
+                        <option value="3">3rd Owner</option>
+                        <option value="4+">4+ Owner</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="engineDisplacement">Engine Displacement (cc)</label>
+                    <input type="number" id="engineDisplacement" required min="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="transmission">Transmission</label>
+                    <select id="transmission" required>
+                        <option value="">Select Transmission</option>
+                        <option value="manual">Manual</option>
+                        <option value="automatic">Automatic</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="manufactureYear">Year of Manufacture</label>
+                    <input type="number" id="manufactureYear" required min="1900" max="2024">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Specifications</h2>
+            <div class="specifications-container">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="specName">Specification Name</label>
+                        <input type="text" id="specName" placeholder="e.g., Engine Type">
+                    </div>
+                    <div class="form-group">
+                        <label for="specValue">Value</label>
+                        <input type="text" id="specValue" placeholder="e.g., V6 DOHC">
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <button type="button" class="btn-primary" id="addSpec">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+                <div id="specificationsList" class="added-items">
+                    <!-- Dynamic specifications will be added here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Features</h2>
+            <div class="features-container">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="featureCategory">Category</label>
+                        <input type="text" id="featureCategory" placeholder="e.g., Safety">
+                    </div>
+                    <div class="form-group">
+                        <label for="featureName">Feature Name</label>
+                        <input type="text" id="featureName" placeholder="e.g., ABS">
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <button type="button" class="btn-primary" id="addFeature">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+                <div id="featuresList" class="added-items">
+                    <!-- Dynamic features will be added here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Images</h2>
+            <div class="image-upload-container">
+                <input type="file" multiple accept="image/*">
+                <div class="upload-placeholder">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & Drop images or click to upload</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn-secondary">Save as Draft</button>
+            <button type="submit" class="btn-primary">Publish Listing</button>
+        </div>
+    </form>
+</div> 
+
+<style>
+    .added-items {
+        margin-top: 20px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 15px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .added-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        margin-bottom: 8px;
+    }
+
+    .added-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .item-content {
+        flex-grow: 1;
+    }
+
+    .delete-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        cursor: pointer;
+        padding: 5px;
+        margin-left: 10px;
+    }
+
+    .delete-btn:hover {
+        color: #bd2130;
+    }
+
+    .feature-category {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 5px;
+    }
+
+    .feature-name {
+        color: #6c757d;
+    }
+
+    .spec-name {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .spec-value {
+        color: #6c757d;
+        margin-left: 10px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const specifications = [];
+        const features = {};
+
+        // Specifications handling
+        document.getElementById('addSpec').addEventListener('click', function() {
+            const specName = document.getElementById('specName').value.trim();
+            const specValue = document.getElementById('specValue').value.trim();
+
+            if (specName && specValue) {
+                specifications.push({ name: specName, value: specValue });
+                updateSpecificationsList();
+                
+                // Clear inputs
+                document.getElementById('specName').value = '';
+                document.getElementById('specValue').value = '';
+            }
+        });
+
+        function updateSpecificationsList() {
+            const list = document.getElementById('specificationsList');
+            list.innerHTML = specifications.map((spec, index) => `
+                <div class="added-item">
+                    <div class="item-content">
+                        <span class="spec-name">${spec.name}:</span>
+                        <span class="spec-value">${spec.value}</span>
+                    </div>
+                    <button class="delete-btn" onclick="deleteSpecification(${index})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        window.deleteSpecification = function(index) {
+            specifications.splice(index, 1);
+            updateSpecificationsList();
+        };
+
+        // Features handling
+        document.getElementById('addFeature').addEventListener('click', function() {
+            const category = document.getElementById('featureCategory').value.trim();
+            const featureName = document.getElementById('featureName').value.trim();
+
+            if (category && featureName) {
+                if (!features[category]) {
+                    features[category] = [];
+                }
+                features[category].push(featureName);
+                updateFeaturesList();
+                
+                // Clear inputs
+                document.getElementById('featureCategory').value = '';
+                document.getElementById('featureName').value = '';
+            }
+        });
+
+        function updateFeaturesList() {
+            const list = document.getElementById('featuresList');
+            list.innerHTML = Object.entries(features).map(([category, items]) => `
+                <div class="added-item">
+                    <div class="item-content">
+                        <div class="feature-category">${category}</div>
+                        <div class="feature-name">${items.join(', ')}</div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteFeatureCategory('${category}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        window.deleteFeatureCategory = function(category) {
+            delete features[category];
+            updateFeaturesList();
+        };
+
+        // Add to form submission
+        document.querySelector('.add-listing-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Add specifications and features to form data
+            const formData = new FormData(this);
+            formData.append('specifications', JSON.stringify(specifications));
+            formData.append('features', JSON.stringify(features));
+            
+            // Here you would handle the form submission
+            console.log('Form submitted with:', {
+                specifications,
+                features
+            });
+        });
+    });
+</script> 
