@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments - Gaadiyaan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./styles/common.css">
+    <link rel="stylesheet" href="./styles/appointments.css">
+</head>
+<body>
+    <div class="appointments-section">
+        <div class="appointments-header">
+            <h1 class="appointments-title">My Appointments</h1>
+            <button class="schedule-btn">
+                <i class="fas fa-plus"></i>
+                Schedule Appointment
+            </button>
+        </div>
+
+        <div class="appointments-container">
+            <!-- Sample Appointment Card -->
+            <div class="appointment-card">
+                <div class="appointment-header">
+                    <div class="car-details">
+                        <h3 class="car-name">2022 BMW 3 Series</h3>
+                        <div class="info-row">
+                            <div class="link-status-wrapper">
+                                <a href="#" class="dealer-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Visit Car
+                                </a>
+                                <span class="appointment-status status-confirmed">CONFIRMED</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="appointment-details">
+                    <div class="detail-item">
+                        <i class="fas fa-calendar"></i>
+                        <div>
+                            <div class="detail-label">Date</div>
+                            <div class="detail-value">March 15, 2024</div>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <div class="detail-label">Time</div>
+                            <div class="detail-value">2:30 PM</div>
+                        </div>
+                    </div>
+                    <!-- <div class="detail-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <div class="detail-label">Location</div>
+                            <div class="detail-value">Showroom</div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="appointment-actions">
+                    <button class="action-button reschedule-btn">
+                        <i class="fas fa-calendar-alt"></i>
+                        Reschedule
+                    </button>
+                    <button class="action-button cancel-btn">
+                        Cancel Appointment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State (shown when no appointments) -->
+            <div class="empty-state" style="display: none;">
+                <i class="fas fa-calendar-times"></i>
+                <h3>No Appointments Yet</h3>
+                <h5>You haven't scheduled any appointments yet.</h5>
+            </div>
+        </div>
+
+        <!-- Add this right after the appointments-container div -->
+        <div class="modal" id="cancelModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Cancel Appointment</h3>
+                    <button class="close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <i class="fas fa-exclamation-circle warning-icon"></i>
+                    <p>Are you sure you want to cancel your appointment for <span id="carName"></span>?</p>
+                    <p class="modal-subtitle">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn secondary-btn" id="cancelNo">No, Keep it</button>
+                    <button class="modal-btn primary-btn" id="cancelYes">Yes, Cancel it</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add this modal for scheduling appointments -->
+        <div class="modal" id="scheduleModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Schedule Appointment</h3>
+                    <button class="close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="scheduleForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required placeholder="Enter your phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Preferred Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Preferred Time</label>
+                            <input type="time" id="time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="query">Query Details</label>
+                            <textarea id="query" rows="3" placeholder="Please describe your requirements"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn secondary-btn" id="cancelSchedule">Cancel</button>
+                    <button class="modal-btn primary-btn" id="confirmSchedule">Schedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('cancelModal');
+        const carNameSpan = document.getElementById('carName');
+        let currentCard = null;
+
+        // Handle cancel button click
+        document.querySelectorAll('.cancel-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentCard = this.closest('.appointment-card');
+                const carName = currentCard.querySelector('.car-name').textContent;
+                carNameSpan.textContent = carName;
+                modal.classList.add('active');
+            });
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Close modal with X button
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        // Handle No button
+        document.getElementById('cancelNo').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        // Handle Yes button
+        document.getElementById('cancelYes').addEventListener('click', () => {
+            if (currentCard) {
+                currentCard.remove();
+                // Check if there are any remaining appointments
+                const remainingCards = document.querySelectorAll('.appointment-card');
+                if (remainingCards.length === 0) {
+                    document.querySelector('.empty-state').style.display = 'block';
+                }
+            }
+            modal.classList.remove('active');
+        });
+
+        // Sample JavaScript for appointment actions
+        document.querySelectorAll('.action-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const action = this.classList.contains('reschedule-btn') ? 'reschedule' : 'cancel';
+                const appointmentCard = this.closest('.appointment-card');
+                const carName = appointmentCard.querySelector('.car-name').textContent;
+                
+                if (action === 'reschedule') {
+                    // Handle reschedule logic
+                    console.log(`Rescheduling appointment for ${carName}`);
+                } else {
+                    // Handle cancel logic
+                    if (confirm(`Are you sure you want to cancel your appointment for ${carName}?`)) {
+                        console.log(`Cancelling appointment for ${carName}`);
+                        // Add API call to cancel appointment
+                    }
+                }
+            });
+        });
+
+        // Function to toggle empty state
+        function toggleEmptyState(hasAppointments) {
+            const emptyState = document.querySelector('.empty-state');
+            const appointmentCards = document.querySelectorAll('.appointment-card');
+            
+            emptyState.style.display = hasAppointments ? 'none' : 'block';
+            appointmentCards.forEach(card => {
+                card.style.display = hasAppointments ? 'block' : 'none';
+            });
+        }
+
+        // Example usage:
+        // toggleEmptyState(false); // Show empty state
+        // toggleEmptyState(true);  // Show appointments
+
+        // Add this to your existing script
+        function initializeScheduleModal() {
+            const scheduleModal = document.getElementById('scheduleModal');
+            const scheduleBtn = document.querySelector('.schedule-btn');
+
+            // Open modal when clicking Schedule Appointment button
+            scheduleBtn.addEventListener('click', () => {
+                scheduleModal.classList.add('active');
+            });
+
+            // Close modal when clicking outside
+            scheduleModal.addEventListener('click', (e) => {
+                if (e.target === scheduleModal) {
+                    scheduleModal.classList.remove('active');
+                }
+            });
+
+            // Close modal with X button
+            scheduleModal.querySelector('.close-modal').addEventListener('click', () => {
+                scheduleModal.classList.remove('active');
+            });
+
+            // Handle Cancel button
+            document.getElementById('cancelSchedule').addEventListener('click', () => {
+                scheduleModal.classList.remove('active');
+            });
+
+            // Handle Schedule button
+            document.getElementById('confirmSchedule').addEventListener('click', () => {
+                const form = document.getElementById('scheduleForm');
+                if (form.checkValidity()) {
+                    // Here you would typically send the data to your backend
+                    alert('Appointment scheduled successfully!');
+                    scheduleModal.classList.remove('active');
+                    form.reset();
+                } else {
+                    form.reportValidity();
+                }
+            });
+        }
+
+        // Call this function when initializing appointments
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeScheduleModal();
+        });
+    </script>
+</body>
+</html> 

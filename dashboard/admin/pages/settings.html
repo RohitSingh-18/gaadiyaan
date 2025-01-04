@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Admin Dashboard</title>
+    <link rel="stylesheet" href="../assets/css/settings.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="settings-container">
+        <div class="settings-page">
+            <!-- Settings Navigation -->
+            <div class="settings-nav">
+                <!-- Mobile Dropdown Trigger -->
+                <div class="settings-dropdown-trigger">
+                    <button type="button" class="active-tab-button">
+                        <i class="fas fa-cog"></i>
+                        <span>General Settings</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                </div>
+
+                <!-- Settings Tabs -->
+                <div class="settings-tabs">
+                    <!-- <button type="button" class="settings-tab active" data-tab="general">
+                        <i class="fas fa-cog"></i>
+                        General Settings
+                    </button> -->
+                    <button type="button" class="settings-tab active" data-tab="security">
+                        <i class="fas fa-shield-alt"></i>
+                        Security
+                    </button>
+                    <!-- <button type="button" class="settings-tab" data-tab="notifications">
+                        <i class="fas fa-bell"></i>
+                        Notifications
+                    </button>
+                    <button type="button" class="settings-tab" data-tab="permissions">
+                        <i class="fas fa-user-lock"></i>
+                        Permissions
+                    </button>
+                    <button type="button" class="settings-tab" data-tab="integrations">
+                        <i class="fas fa-plug"></i>
+                        Integrations
+                    </button> -->
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+                <!-- General Settings -->
+                <div class="settings-section " id="general">
+                    <div class="section-header">
+                        <h2>General Settings</h2>
+                        <p>Manage your dashboard preferences and basic configurations</p>
+                    </div>
+
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Dashboard Name</label>
+                            <input type="text" value="Gaadiyaan Admin" placeholder="Enter dashboard name">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Time Zone</label>
+                            <select>
+                                <option value="IST">India Standard Time (IST)</option>
+                                <option value="UTC">UTC</option>
+                                <option value="EST">Eastern Time</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Language</label>
+                            <select>
+                                <option value="en">English</option>
+                                <option value="hi">Hindi</option>
+                                <option value="mr">Marathi</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date Format</label>
+                            <select>
+                                <option value="dd/mm/yyyy">DD/MM/YYYY</option>
+                                <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                                <option value="yyyy/mm/dd">YYYY/MM/DD</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select>
+                                <option value="INR">Indian Rupee (₹)</option>
+                                <option value="USD">US Dollar ($)</option>
+                                <option value="EUR">Euro (€)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group switch-group">
+                            <label>Enable Dark Mode</label>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-outline">Reset to Default</button>
+                            <button class="btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="settings-section active" id="security">
+                    <div class="section-header">
+                        <h2>Security Settings</h2>
+                        <!-- <p>Manage your account security and authentication preferences</p> -->
+                    </div>
+
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <input type="password" placeholder="Enter current password">
+                        </div>
+
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" placeholder="Enter new password">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" placeholder="Confirm new password">
+                        </div>
+
+                        <!-- <div class="form-group switch-group">
+                            <label>Two-Factor Authentication</label>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group switch-group">
+                            <label>Login Notifications</label>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div> -->
+
+                        <div class="form-actions">
+                            <button class="btn-primary">Update Security Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other sections will be shown/hidden via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Font Awesome if not already loaded -->
+    <script>
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+            const fontAwesome = document.createElement('link');
+            fontAwesome.rel = 'stylesheet';
+            fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+            document.head.appendChild(fontAwesome);
+        }
+    </script>
+
+    <!-- Load settings.js if not already loaded -->
+    <script>
+        if (!document.querySelector('script[src*="settings.js"]')) {
+            const settingsScript = document.createElement('script');
+            settingsScript.src = '../assets/js/settings.js';
+            document.body.appendChild(settingsScript);
+        }
+    </script>
+</body>
+</html> 

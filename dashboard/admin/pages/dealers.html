@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealers - Admin Dashboard</title>
+    <link rel="stylesheet" href="../assets/css/dealers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="../assets/js/dealers.js" defer></script>
+</head>
+<body>
+    <div class="dealers-page">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Dealers</h3>
+                    <div class="stat-value">156</div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i> 12% this month
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Live Users</h3>
+                    <div class="stat-value">12,345</div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i> 5% this month
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Listings</h3>
+                    <div class="stat-value">2,456</div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i> 15% this month
+                    </div>
+                </div>
+            </div>
+
+           
+
+            <!-- <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Pending Approval</h3>
+                    <div class="stat-value">8</div>
+                    <div class="stat-trend neutral">
+                        <i class="fas fa-minus"></i> No change
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- Dealers List Section -->
+        <div class="dealers-list-section">
+            <div class="section-header">
+                <h2>All Dealers</h2>
+                <div class="search-filter">
+                    <input type="text" placeholder="Search dealers..." id="dealerSearch">
+                    <select id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="pending">On Hold</option>
+                        <option value="inactive">Terminated</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="dealers-table-container">
+                <table class="dealers-table">
+                    <thead>
+                        <tr>
+                            <th>Dealer Name</th>
+                            <th>Location</th>
+                            <th>Total Listings</th>
+                            <th>Status</th>
+                            <th>Join Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dealersTableBody">
+                        <tr data-dealer-id="1" class="dealer-row">
+                            <td data-label="Dealer Name">
+                                <div class="dealer-info">
+                                    <img src="https://via.placeholder.com/50" alt="Dealer Avatar">
+                                    <div>
+                                        <h4>AutoMax Motors</h4>
+                                        <span>John Smith</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td data-label="Location">Mumbai, Maharashtra</td>
+                            <td data-label="Total Listings">24 cars</td>
+                            <td data-label="Status"><span class="status-badge active">Active</span></td>
+                            <td data-label="Join Date">Jan 15, 2024</td>
+                            <td data-label="Actions">
+                                <div class="action-buttons">
+                                    <button class="btn-view-listings" onclick="viewDealerListings(1)">
+                                        <i class="fas fa-car"></i> View Listings
+                                    </button>
+                                    <button class="btn-remove" onclick="showDealerRemoveModal(this)">
+                                        <i class="fas fa-trash"></i> Terminate
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-dealer-id="2" class="dealer-row">
+                            <td data-label="Dealer Name">
+                                <div class="dealer-info">
+                                    <img src="https://via.placeholder.com/50" alt="Dealer Avatar">
+                                    <div>
+                                        <h4>Premium Cars</h4>
+                                        <span>Raj Patel</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td data-label="Location">Delhi, NCR</td>
+                            <td data-label="Total Listings">18 cars</td>
+                            <td data-label="Status"><span class="status-badge pending">Pending</span></td>
+                            <td data-label="Join Date">Feb 1, 2024</td>
+                            <td data-label="Actions">
+                                <div class="action-buttons">
+                                    <button class="btn-view-listings" onclick="viewDealerListings(2)">
+                                        <i class="fas fa-car"></i> View Listings
+                                    </button>
+                                    <button class="btn-remove" onclick="showDealerRemoveModal(this)">
+                                        <i class="fas fa-trash"></i> Terminate
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="prev-page" aria-label="Previous page">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="page-numbers">
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                </div>
+                <button class="next-page" aria-label="Next page">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dealer Remove Confirmation Modal -->
+        <div class="modal" id="dealerRemoveModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Remove Dealer</h3>
+                    <button class="close-modal" onclick="closeDealerRemoveModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="dealer-preview">
+                        <img id="dealerPreviewImage" src="" alt="Dealer Avatar">
+                        <div class="dealer-preview-details">
+                            <h4 id="dealerPreviewName"></h4>
+                            <p id="dealerPreviewLocation"></p>
+                        </div>
+                    </div>
+                    <div class="warning-message">
+                        <p>Are you sure you want to remove this dealer?</p>
+                        <div class="warning-list">
+                            <div class="warning-item">
+                                <i class="fas fa-trash-alt"></i>
+                                <span>Delete all their car listings</span>
+                            </div>
+                            <div class="warning-item">
+                                <i class="fas fa-user-times"></i>
+                                <span>Remove their dealer account</span>
+                            </div>
+                            <div class="warning-item">
+                                <i class="fas fa-ban"></i>
+                                <span>Cancel any pending transactions</span>
+                            </div>
+                        </div>
+                        <p class="text-danger">This action cannot be undone!</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-outline" onclick="closeDealerRemoveModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button class="btn-danger" onclick="confirmDealerRemoval()">
+                        <i class="fas fa-trash"></i> Remove Dealer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
