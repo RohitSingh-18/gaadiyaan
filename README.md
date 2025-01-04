@@ -122,7 +122,7 @@ All API responses follow the structure:
 ## Support and Contact
 For technical support or inquiries:
 - Email: support@gaadiyaan.com
-- WhatsApp: Available through in-app support
+- WhatsApp: Available through in-app support.
 
 
 ## License
