@@ -1,329 +1,634 @@
-<div class="add-listing-container">
-    <form class="add-listing-form">
-        <div class="form-section">
-            <h2>Basic Information</h2>
-            <div class="form-group">
-                <label for="carTitle">Car Title</label>
-                <input type="text" id="carTitle" required placeholder="e.g., 2020 Toyota Camry">
-            </div>
-            <div class="form-row">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Vehicle Listing - Gaadiyaan Dealer Portal</title>
+    <link rel="stylesheet" href="../css/notifications.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Load the external JavaScript file -->
+    <script src="../js/add-listing.js" defer></script>
+</head>
+<body>
+    <div class="add-listing-container">
+        <form id="addListingForm" class="add-listing-form" enctype="multipart/form-data" onsubmit="return false;">
+            <div class="form-section">
+                <h2>Basic Information</h2>
                 <div class="form-group">
-                    <label for="price">Price (₹)</label>
-                    <input type="number" id="price" required>
+                    <label for="carTitle">Car Title</label>
+                    <input type="text" id="carTitle" required placeholder="e.g., 2020 Toyota Camry">
                 </div>
-                <div class="form-group">
-                    <label for="year">Year</label>
-                    <input type="number" id="year" required min="1900" max="2024">
-                </div>
-            </div>
-        </div>
-
-        <div class="form-section">
-            <h2>Vehicle Details</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="make">Make</label>
-                    <input type="text" id="make" required>
-                </div>
-                <div class="form-group">
-                    <label for="model">Model</label>
-                    <input type="text" id="model" required>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="registrationYear">Registration Year</label>
-                    <input type="number" id="registrationYear" required min="1900" max="2024">
-                </div>
-                <div class="form-group">
-                    <label for="insurance">Insurance</label>
-                    <input type="text" id="insurance" required placeholder="e.g., Comprehensive">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="fuelType">Fuel Type</label>
-                    <select id="fuelType" required>
-                        <option value="">Select Fuel Type</option>
-                        <option value="petrol">Petrol</option>
-                        <option value="diesel">Diesel</option>
-                        <option value="cng">CNG</option>
-                        <option value="electric">Electric</option>
-                        <option value="hybrid">Hybrid</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="seats">Seats</label>
-                    <input type="number" id="seats" required min="1" max="50">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="kmsDriven">Kms Driven</label>
-                    <input type="number" id="kmsDriven" required min="0">
-                </div>
-                <div class="form-group">
-                    <label for="rto">Location</label>
-                    <input type="text" id="rto" required placeholder="e.g., Bhubaneswar     ">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="ownership">Ownership</label>
-                    <select id="ownership" required>
-                        <option value="">Select Ownership</option>
-                        <option value="1">1st Owner</option>
-                        <option value="2">2nd Owner</option>
-                        <option value="3">3rd Owner</option>
-                        <option value="4+">4+ Owner</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="engineDisplacement">Engine Displacement (cc)</label>
-                    <input type="number" id="engineDisplacement" required min="0">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="transmission">Transmission</label>
-                    <select id="transmission" required>
-                        <option value="">Select Transmission</option>
-                        <option value="manual">Manual</option>
-                        <option value="automatic">Automatic</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="manufactureYear">Year of Manufacture</label>
-                    <input type="number" id="manufactureYear" required min="1900" max="2024">
-                </div>
-            </div>
-        </div>
-
-        <div class="form-section">
-            <h2>Specifications</h2>
-            <div class="specifications-container">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="specName">Specification Name</label>
-                        <input type="text" id="specName" placeholder="e.g., Engine Type">
+                        <label for="price">Price (₹)</label>
+                        <input type="number" id="price" required>
                     </div>
                     <div class="form-group">
-                        <label for="specValue">Value</label>
-                        <input type="text" id="specValue" placeholder="e.g., V6 DOHC">
+                        <label for="year">Year</label>
+                        <input type="number" id="year" required min="1900" max="2024">
                     </div>
-                    <div class="form-group" style="align-self: flex-end;">
-                        <button type="button" class="btn-primary" id="addSpec">
-                            <i class="fas fa-plus"></i> Add
-                        </button>
-                    </div>
-                </div>
-                <div id="specificationsList" class="added-items">
-                    <!-- Dynamic specifications will be added here -->
                 </div>
             </div>
-        </div>
 
-        <div class="form-section">
-            <h2>Features</h2>
-            <div class="features-container">
+            <div class="form-section">
+                <h2>Vehicle Details</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="featureCategory">Category</label>
-                        <input type="text" id="featureCategory" placeholder="e.g., Safety">
+                        <label for="make">Make</label>
+                        <input type="text" id="make" required>
                     </div>
                     <div class="form-group">
-                        <label for="featureName">Feature Name</label>
-                        <input type="text" id="featureName" placeholder="e.g., ABS">
-                    </div>
-                    <div class="form-group" style="align-self: flex-end;">
-                        <button type="button" class="btn-primary" id="addFeature">
-                            <i class="fas fa-plus"></i> Add
-                        </button>
+                        <label for="model">Model</label>
+                        <input type="text" id="model" required>
                     </div>
                 </div>
-                <div id="featuresList" class="added-items">
-                    <!-- Dynamic features will be added here -->
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="registrationYear">Registration Year</label>
+                        <input type="number" id="registrationYear" required min="1900" max="2024">
+                    </div>
+                    <div class="form-group">
+                        <label for="insurance">Insurance</label>
+                        <input type="text" id="insurance" required placeholder="e.g., Comprehensive">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fuelType">Fuel Type</label>
+                        <select id="fuelType" required>
+                            <option value="">Select Fuel Type</option>
+                            <option value="petrol">Petrol</option>
+                            <option value="diesel">Diesel</option>
+                            <option value="cng">CNG</option>
+                            <option value="electric">Electric</option>
+                            <option value="hybrid">Hybrid</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="seats">Seats</label>
+                        <input type="number" id="seats" required min="1" max="50">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="kmsDriven">Kms Driven</label>
+                        <input type="number" id="kmsDriven" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="rto">Location</label>
+                        <input type="text" id="rto" required placeholder="e.g., Bhubaneswar     ">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ownership">Ownership</label>
+                        <select id="ownership" required>
+                            <option value="">Select Ownership</option>
+                            <option value="1">1st Owner</option>
+                            <option value="2">2nd Owner</option>
+                            <option value="3">3rd Owner</option>
+                            <option value="4+">4+ Owner</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="engineDisplacement">Engine Displacement (cc)</label>
+                        <input type="number" id="engineDisplacement" required min="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="transmission">Transmission</label>
+                        <select id="transmission" required>
+                            <option value="">Select Transmission</option>
+                            <option value="manual">Manual</option>
+                            <option value="automatic">Automatic</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="manufactureYear">Year of Manufacture</label>
+                        <input type="number" id="manufactureYear" required min="1900" max="2024">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-section">
-            <h2>Images</h2>
-            <div class="image-upload-container">
-                <input type="file" multiple accept="image/*">
-                <div class="upload-placeholder">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Drag & Drop images or click to upload</p>
+            <div class="form-section">
+                <h2>Specifications</h2>
+                <div class="specifications-container">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="specName">Specification Name</label>
+                            <input type="text" id="specName" placeholder="e.g., Engine Type">
+                        </div>
+                        <div class="form-group">
+                            <label for="specValue">Value</label>
+                            <input type="text" id="specValue" placeholder="e.g., V6 DOHC">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn-primary" id="addSpec" onclick="handleSpecification()">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                    <div id="specificationsList" class="added-items">
+                        <!-- Dynamic specifications will be added here -->
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-actions">
-            <button type="button" class="btn-secondary">Save as Draft</button>
-            <button type="submit" class="btn-primary">Publish Listing</button>
-        </div>
-    </form>
-</div> 
-
-<style>
-    .added-items {
-        margin-top: 20px;
-        border: 1px solid #eee;
-        border-radius: 8px;
-        padding: 15px;
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-    .added-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        background: #f8f9fa;
-        border-radius: 6px;
-        margin-bottom: 8px;
-    }
-
-    .added-item:last-child {
-        margin-bottom: 0;
-    }
-
-    .item-content {
-        flex-grow: 1;
-    }
-
-    .delete-btn {
-        background: none;
-        border: none;
-        color: #dc3545;
-        cursor: pointer;
-        padding: 5px;
-        margin-left: 10px;
-    }
-
-    .delete-btn:hover {
-        color: #bd2130;
-    }
-
-    .feature-category {
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 5px;
-    }
-
-    .feature-name {
-        color: #6c757d;
-    }
-
-    .spec-name {
-        font-weight: 600;
-        color: #495057;
-    }
-
-    .spec-value {
-        color: #6c757d;
-        margin-left: 10px;
-    }
-</style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const specifications = [];
-        const features = {};
-
-        // Specifications handling
-        document.getElementById('addSpec').addEventListener('click', function() {
-            const specName = document.getElementById('specName').value.trim();
-            const specValue = document.getElementById('specValue').value.trim();
-
-            if (specName && specValue) {
-                specifications.push({ name: specName, value: specValue });
-                updateSpecificationsList();
-                
-                // Clear inputs
-                document.getElementById('specName').value = '';
-                document.getElementById('specValue').value = '';
-            }
-        });
-
-        function updateSpecificationsList() {
-            const list = document.getElementById('specificationsList');
-            list.innerHTML = specifications.map((spec, index) => `
-                <div class="added-item">
-                    <div class="item-content">
-                        <span class="spec-name">${spec.name}:</span>
-                        <span class="spec-value">${spec.value}</span>
+            <div class="form-section">
+                <h2>Features</h2>
+                <div class="features-container">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="featureCategory">Category</label>
+                            <input type="text" id="featureCategory" placeholder="e.g., Safety">
+                        </div>
+                        <div class="form-group">
+                            <label for="featureName">Feature Name</label>
+                            <input type="text" id="featureName" placeholder="e.g., ABS">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn-primary" id="addFeature" onclick="handleFeature()">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
                     </div>
-                    <button class="delete-btn" onclick="deleteSpecification(${index})">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div id="featuresList" class="added-items">
+                        <!-- Dynamic features will be added here -->
+                    </div>
                 </div>
-            `).join('');
+            </div>
+
+            <div class="form-section">
+                <h2>Images</h2>
+                <div class="image-upload-container">
+                    <input type="file" id="imageInput" name="images" multiple accept="image/*" style="display: none;">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & Drop images or click to upload</p>
+                    </div>
+                    <div id="imagePreviewContainer" class="image-preview-container">
+                        <!-- Image previews will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <button type="button" class="btn-primary" id="submitButton">
+                    <i class="fas fa-plus"></i> Create Listing
+                </button>
+            </div>
+        </form>
+    </div> 
+
+    <style>
+        /* Form Layout Styles */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: flex-end;
         }
 
-        window.deleteSpecification = function(index) {
-            specifications.splice(index, 1);
-            updateSpecificationsList();
-        };
-
-        // Features handling
-        document.getElementById('addFeature').addEventListener('click', function() {
-            const category = document.getElementById('featureCategory').value.trim();
-            const featureName = document.getElementById('featureName').value.trim();
-
-            if (category && featureName) {
-                if (!features[category]) {
-                    features[category] = [];
-                }
-                features[category].push(featureName);
-                updateFeaturesList();
-                
-                // Clear inputs
-                document.getElementById('featureCategory').value = '';
-                document.getElementById('featureName').value = '';
-            }
-        });
-
-        function updateFeaturesList() {
-            const list = document.getElementById('featuresList');
-            list.innerHTML = Object.entries(features).map(([category, items]) => `
-                <div class="added-item">
-                    <div class="item-content">
-                        <div class="feature-category">${category}</div>
-                        <div class="feature-name">${items.join(', ')}</div>
-                    </div>
-                    <button class="delete-btn" onclick="deleteFeatureCategory('${category}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `).join('');
+        .form-group {
+            flex: 1;
+            min-width: 0; /* Prevents flex items from overflowing */
         }
 
-        window.deleteFeatureCategory = function(category) {
-            delete features[category];
-            updateFeaturesList();
-        };
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+            font-weight: 500;
+        }
 
-        // Add to form submission
-        document.querySelector('.add-listing-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            outline: none;
+        }
+
+        /* Input validation styles */
+        .form-group input[style*="border-color: rgb(220, 53, 69)"] {
+            background-color: #fff8f8;
+        }
+
+        .form-group input[style*="border-color: rgb(220, 53, 69)"]:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220,53,69,0.1);
+        }
+
+        /* Remove default validation popup */
+        input:invalid {
+            box-shadow: none;
+        }
+
+        input:-moz-ui-invalid {
+            box-shadow: none;
+        }
+
+        /* Specifications and Features Input Styles */
+        .specifications-container .form-row,
+        .features-container .form-row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr;
+            gap: 15px;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .specifications-container .form-group,
+        .features-container .form-group {
+            margin: 0;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            height: 41px; /* Match input height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary i {
+            font-size: 12px;
+        }
+
+        /* Mobile Responsive Adjustments */
+        @media screen and (max-width: 767px) {
+            .specifications-container .form-row,
+            .features-container .form-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            .btn-primary {
+                margin-top: 5px;
+            }
+        }
+
+        /* Tablet Responsive Adjustments */
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .specifications-container .form-row,
+            .features-container .form-row {
+                grid-template-columns: 2fr 2fr 1fr;
+                gap: 12px;
+            }
+        }
+
+        .added-items {
+            margin-top: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            background: #fff;
+        }
+
+        .added-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            border: 1px solid #eee;
+        }
+
+        .added-item:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .item-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            padding: 5px;
+            margin-left: 10px;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            color: #bd2130;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .spec-name, .feature-category {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.85em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .spec-value, .feature-name {
+            color: #6c757d;
+            font-size: 0.8em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Mobile Layout */
+        @media screen and (max-width: 767px) {
+            .added-items {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .added-item {
+                padding: 8px;
+            }
+
+            .spec-name, .feature-category {
+                font-size: 0.8em;
+            }
+
+            .spec-value, .feature-name {
+                font-size: 0.75em;
+            }
+        }
+
+        /* Tablet Layout */
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .added-items {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        .added-items::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .added-items::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .added-items::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .added-items::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Image Preview Styles */
+        .image-preview-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-preview {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #dc3545;
+            padding: 0;
+            line-height: 1;
+            transition: all 0.2s ease;
+        }
+
+        .remove-image:hover {
+            background: rgba(255, 255, 255, 1);
+            color: #bd2130;
+            transform: scale(1.1);
+        }
+
+        .image-upload-container {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
+        }
+
+        .image-upload-container:hover,
+        .image-upload-container.dragover {
+            border-color: #007bff;
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        .upload-placeholder {
+            padding: 30px;
+            color: #6c757d;
+        }
+
+        .upload-placeholder i {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .upload-placeholder p {
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .image-preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-preview {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview.loading {
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .image-preview.removing {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #dc3545;
+            padding: 0;
+            line-height: 1;
+            transition: all 0.2s ease;
+        }
+
+        .remove-image:hover {
+            background: rgba(255, 255, 255, 1);
+            color: #bd2130;
+            transform: scale(1.1);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Styles for Image Upload */
+        @media screen and (max-width: 768px) {
+            .image-preview-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .upload-placeholder {
+                padding: 20px;
+            }
+
+            .upload-placeholder i {
+                font-size: 2em;
+            }
+
+            .upload-placeholder p {
+                font-size: 1em;
+            }
+
+            .remove-image {
+                width: 22px;
+                height: 22px;
+                font-size: 16px;
+            }
+        }
+
+        /* Tablet Styles */
+        @media screen and (min-width: 769px) and (max-width: 1024px) {
+            .image-preview-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize form handlers
+            initializeFormHandlers();
             
-            // Add specifications and features to form data
-            const formData = new FormData(this);
-            formData.append('specifications', JSON.stringify(specifications));
-            formData.append('features', JSON.stringify(features));
-            
-            // Here you would handle the form submission
-            console.log('Form submitted with:', {
-                specifications,
-                features
-            });
+            // Initialize event listeners
+            initializeEventListeners();
         });
-    });
-</script> 
+    </script>
+</body>
+</html> 

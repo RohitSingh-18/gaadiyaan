@@ -1,0 +1,278 @@
+// Global configuration
+window.API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000/api';
+window.ASSETS_BASE_URL = window.ASSETS_BASE_URL || 'http://localhost:3000';
+
+// Module variables
+let currentView = 'grid';
+let currentPage = 1;
+let currentFilters = {};
+
+// Initialize listings page
+async function initializeListings() {
+    setupEventListeners();
+    await loadListings();
+    populateYearFilter();
+}
+
+// Setup all event listeners
+function setupEventListeners() {
+    // View toggle
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.dataset.view;
+            toggleView(view);
+        });
+    });
+
+    // Search
+    const searchInput = document.getElementById('searchInput');
+    let searchTimeout;
+    searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            currentFilters.search = searchInput.value;
+            loadListings();
+        }, 500);
+    });
+
+    // Filters
+    document.getElementById('applyFilters').addEventListener('click', () => {
+        currentFilters = {
+            minPrice: document.getElementById('minPrice').value,
+            maxPrice: document.getElementById('maxPrice').value,
+            year: document.getElementById('yearFilter').value,
+            fuelType: document.getElementById('fuelTypeFilter').value,
+            transmission: document.getElementById('transmissionFilter').value
+        };
+        loadListings();
+    });
+
+    // Reset filters
+    document.getElementById('resetFilters').addEventListener('click', () => {
+        document.querySelectorAll('.filter-group input, .filter-group select').forEach(el => {
+            el.value = '';
+        });
+        currentFilters = {};
+        loadListings();
+    });
+
+    // Sorting
+    document.getElementById('sortBy').addEventListener('change', (e) => {
+        currentFilters.sortBy = e.target.value;
+        loadListings();
+    });
+}
+
+// Toggle between grid and list view
+function toggleView(view) {
+    const container = document.getElementById('listingsContainer');
+    const buttons = document.querySelectorAll('.view-btn');
+    
+    buttons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+    });
+    
+    container.className = `listings-${view}`;
+    currentView = view;
+}
+
+// Load listings with filters and pagination
+async function loadListings() {
+    const container = document.getElementById('listingsContainer');
+    const totalListings = document.getElementById('totalListings');
+    
+    try {
+        container.innerHTML = '<div class="loading">Loading...</div>';
+        
+        // Build query parameters
+        const params = new URLSearchParams({
+            page: currentPage,
+            limit: 12,
+            ...currentFilters
+        });
+        
+        const response = await fetch(`${window.API_BASE_URL}/vehicles?${params}`);
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.message);
+        }
+        
+        // Update total count
+        totalListings.textContent = data.pagination.total;
+        
+        // Render listings
+        if (data.data.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-car"></i>
+                    <h3>No Listings Found</h3>
+                    <p>Try adjusting your filters or add a new listing</p>
+                    <button class="btn-primary" onclick="loadPage('add-listing')">
+                        Add New Listing
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = data.data.map(listing => createListingCard(listing)).join('');
+        
+        // Setup pagination
+        setupPagination(data.pagination);
+        
+    } catch (error) {
+        console.error('Error loading listings:', error);
+        container.innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>Error Loading Listings</h3>
+                <p>${error.message}</p>
+                <button class="btn-primary" onclick="loadListings()">Try Again</button>
+            </div>
+        `;
+    }
+}
+
+// Create HTML for a listing card
+function createListingCard(listing) {
+    if (!listing) {
+        console.error('Invalid listing data received');
+        return '';
+    }
+
+    // Handle images - check if it's already parsed or needs parsing
+    let images = [];
+    try {
+        images = listing.images ? (
+            typeof listing.images === 'string' ? 
+            JSON.parse(listing.images) : 
+            listing.images
+        ) : [];
+    } catch (error) {
+        console.error('Error parsing images:', error);
+        images = [];
+    }
+    
+    const mainImage = images && images.length > 0 ? images[0] : `${window.ASSETS_BASE_URL}/assets/images/no-image.jpg`;
+    
+    return `
+        <div class="listing-card" data-id="${listing.id || ''}">
+            <div class="listing-image">
+                <img src="${mainImage}" alt="${listing.car_title || 'Vehicle'}" onerror="this.src='${window.ASSETS_BASE_URL}/assets/images/no-image.jpg'">
+            </div>
+            <div class="listing-content">
+                <h3 class="listing-title">${listing.car_title || 'Untitled Vehicle'}</h3>
+                <div class="listing-price">₹${(listing.price || 0).toLocaleString('en-IN')}</div>
+                <div class="listing-details">
+                    <span class="year">${listing.year || 'N/A'}</span>
+                    <span class="mileage">${(listing.kms_driven || 0).toLocaleString('en-IN')} km</span>
+                    <span class="fuel-type">${listing.fuel_type || 'N/A'}</span>
+                    <span class="transmission">${listing.transmission || 'N/A'}</span>
+                </div>
+                <div class="listing-actions">
+                    <button class="btn-edit" onclick="editListing(${listing.id})">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn-delete" onclick="deleteListing(${listing.id})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Setup pagination controls
+function setupPagination(pagination) {
+    const paginationContainer = document.getElementById('pagination');
+    const { currentPage, totalPages } = pagination;
+    
+    let paginationHTML = '';
+
+    // Previous button
+    paginationHTML += `
+        <button class="page-btn" 
+                onclick="changePage(${currentPage - 1})"
+                ${currentPage === 1 ? 'disabled' : ''}>
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    `;
+
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+            paginationHTML += `
+                <button class="page-btn ${i === currentPage ? 'active' : ''}"
+                        onclick="changePage(${i})">
+                    ${i}
+                </button>
+            `;
+        } else if (i === currentPage - 3 || i === currentPage + 3) {
+            paginationHTML += '<span class="page-dots">...</span>';
+        }
+    }
+
+    // Next button
+    paginationHTML += `
+        <button class="page-btn" 
+                onclick="changePage(${currentPage + 1})"
+                ${currentPage === totalPages ? 'disabled' : ''}>
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+    
+    paginationContainer.innerHTML = paginationHTML;
+}
+
+// Change page
+function changePage(page) {
+    currentPage = page;
+    loadListings();
+    window.scrollTo(0, 0);
+}
+
+// Populate year filter
+function populateYearFilter() {
+    const yearFilter = document.getElementById('yearFilter');
+    const currentYear = new Date().getFullYear();
+    
+    for (let year = currentYear; year >= 1900; year--) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearFilter.appendChild(option);
+    }
+}
+
+// Edit listing
+function editListing(id) {
+    // Store the ID in sessionStorage
+    sessionStorage.setItem('editListingId', id);
+    // Navigate to edit page
+    loadPage('edit-listing');
+}
+
+// Delete listing
+function deleteListing(id) {
+    if (confirm('Are you sure you want to delete this listing?')) {
+        fetch(`${window.API_BASE_URL}/vehicles/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadListings();
+            } else {
+                alert('Error deleting listing: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error deleting listing');
+        });
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', initializeListings); 

@@ -71,10 +71,20 @@ async function loadPage(page) {
         updatePageTitle(page);
         const activeNav = document.querySelector(`.sidebar-nav li[data-page="${page}"]`);
         if (activeNav) updateActiveNav(activeNav);
+
+        // Initialize form handlers and event listeners for add-listing page
+        if (page === 'add-listing') {
+            if (typeof initializeFormHandlers === 'function') {
+                initializeFormHandlers();
+            }
+            if (typeof initializeEventListeners === 'function') {
+                initializeEventListeners();
+            }
+        }
         
     } catch (error) {
-        mainContent.innerHTML = '<div class="error">Error loading page content</div>';
         console.error('Error loading page:', error);
+        mainContent.innerHTML = '<div class="error">Error loading page content</div>';
     }
 }
 

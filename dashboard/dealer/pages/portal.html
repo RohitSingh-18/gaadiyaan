@@ -340,54 +340,59 @@
                 const content = await response.text();
                 mainContent.innerHTML = content;
 
-                // Execute scripts for profile page
-                if (pageName === 'profile') {
-                    // Get elements
-                    const copyBtn = document.getElementById('copyDealerIdBtn');
-                    const dealerIdElement = document.getElementById('dealerId');
-                    const toast = document.getElementById('copyToast');
-                    
-                    // Get dealer details from localStorage
-                    const dealerName = localStorage.getItem('dealerName') || '';
-                    const dealerEmail = localStorage.getItem('dealerEmail') || '';
-                    
-                    // Auto-populate form fields
-                    document.getElementById('dealerName').value = dealerName;
-                    document.getElementById('dealerEmail').value = dealerEmail;
-                    document.getElementById('dealershipName').value = dealerName; // Same as full name
-                    document.getElementById('dealerEmail').readOnly = true; // Make email read-only
-                    document.getElementById('dealershipName').readOnly = true; // Make dealership name read-only
-
-                    // Initialize dealer ID if needed
-                    if (!localStorage.getItem('dealerId')) {
-                        const newId = generateDealerId();
-                        localStorage.setItem('dealerId', newId);
-                        dealerIdElement.textContent = newId;
-                    } else {
-                        dealerIdElement.textContent = localStorage.getItem('dealerId');
+                // Special handling for listings page
+                if (pageName === 'listings') {
+                    // Remove any existing listings.js script
+                    const existingScript = document.querySelector('script[src="../js/listings.js"]');
+                    if (existingScript) {
+                        existingScript.remove();
                     }
 
-                    // Copy button click handler
-                    copyBtn.addEventListener('click', async function() {
-                        const textToCopy = dealerIdElement.textContent;
-                        try {
-                            await navigator.clipboard.writeText(textToCopy);
-                            showToast();
-                        } catch (err) {
-                            console.error('Clipboard API failed:', err);
-                            fallbackCopy(textToCopy);
-                        }
-                    });
+                    // Create and append the listings.js script
+                    const script = document.createElement('script');
+                    script.src = '../js/listings.js';
+                    script.defer = true;
+                    
+                    // Wait for DOM to be ready before initializing
+                    script.onload = function() {
+                        // Ensure elements exist before initializing
+                        setTimeout(() => {
+                            if (typeof initializeListings === 'function') {
+                                initializeListings();
+                            }
+                            setupListingsEventListeners();
+                        }, 100); // Small delay to ensure DOM is ready
+                    };
+                    document.body.appendChild(script);
+                }
+                // Special handling for add-listing page
+                else if (pageName === 'add-listing') {
+                    // Remove any existing add-listing.js script
+                    const existingScript = document.querySelector('script[src="../js/add-listing.js"]');
+                    if (existingScript) {
+                        existingScript.remove();
+                    }
+
+                    // Create and append the add-listing.js script
+                    const script = document.createElement('script');
+                    script.src = '../js/add-listing.js';
+                    script.defer = true;
+                    
+                    // Wait for DOM to be ready before initializing
+                    script.onload = function() {
+                        // Ensure elements exist before initializing
+                        setTimeout(() => {
+                            if (typeof initializeFormHandlers === 'function') {
+                                initializeFormHandlers();
+                            }
+                            if (typeof initializeEventListeners === 'function') {
+                                initializeEventListeners();
+                            }
+                        }, 100); // Small delay to ensure DOM is ready
+                    };
+                    document.body.appendChild(script);
                 }
 
-                // If we're on the listings page, add event listeners for the buttons
-                if (pageName === 'listings') {
-                    setupListingButtons();
-                    // Always show the listing grid and hide empty state on fresh load
-                    document.querySelector('.empty-state').style.display = 'none';
-                    document.querySelector('.listings-grid').style.display = 'grid';
-                }
-                
                 // Update page title
                 const titles = {
                     'listings': 'My Listings',
@@ -396,7 +401,7 @@
                     'support': 'Support System'
                 };
                 pageTitle.textContent = titles[pageName] || 'My Listings';
-                
+
                 // Update active state in sidebar
                 document.querySelectorAll('.sidebar-nav li').forEach(li => {
                     li.classList.remove('active');
@@ -405,10 +410,6 @@
                     }
                 });
 
-                // Close sidebar on mobile after navigation
-                if (window.innerWidth <= 768) {
-                    closeSidebar();
-                }
             } catch (error) {
                 console.error('Error loading page:', error);
                 mainContent.innerHTML = `<div class="error">Error loading ${pageName}.html: ${error.message}</div>`;
@@ -668,6 +669,104 @@
                 menu.classList.remove('show');
             }
         });
+
+        // Add this new function to setup listings event listeners
+        function setupListingsEventListeners() {
+            // Wait for elements to be available
+            setTimeout(() => {
+                // Search functionality
+                const searchInput = document.getElementById('searchInput');
+                const searchBtn = document.getElementById('searchBtn');
+                if (searchInput && searchBtn) {
+                    searchBtn.addEventListener('click', () => {
+                        const searchTerm = searchInput.value.toLowerCase();
+                        filterListings(searchTerm);
+                    });
+
+                    searchInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            const searchTerm = searchInput.value.toLowerCase();
+                            filterListings(searchTerm);
+                        }
+                    });
+                }
+
+                // Sort functionality
+                const sortSelect = document.getElementById('sortBy');
+                if (sortSelect) {
+                    sortSelect.addEventListener('change', () => {
+                        const sortValue = sortSelect.value;
+                        sortListings(sortValue);
+                    });
+                }
+
+                // View toggle functionality
+                const viewButtons = document.querySelectorAll('.view-btn');
+                if (viewButtons.length > 0) {
+                    viewButtons.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            viewButtons.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            const view = btn.dataset.view;
+                            toggleListingView(view);
+                        });
+                    });
+                }
+
+                // Filter functionality
+                const applyFiltersBtn = document.getElementById('applyFilters');
+                const resetFiltersBtn = document.getElementById('resetFilters');
+                
+                if (applyFiltersBtn) {
+                    applyFiltersBtn.addEventListener('click', applyFilters);
+                }
+                
+                if (resetFiltersBtn) {
+                    resetFiltersBtn.addEventListener('click', resetFilters);
+                }
+            }, 200); // Add a small delay to ensure DOM elements are loaded
+        }
+
+        // Helper functions for listings
+        function filterListings(searchTerm) {
+            // Implement your filtering logic here
+            console.log('Filtering listings with term:', searchTerm);
+        }
+
+        function sortListings(sortValue) {
+            // Implement your sorting logic here
+            console.log('Sorting listings by:', sortValue);
+        }
+
+        function toggleListingView(view) {
+            const listingsContainer = document.getElementById('listingsContainer');
+            if (listingsContainer) {
+                listingsContainer.className = `listings-${view}`;
+            }
+        }
+
+        function applyFilters() {
+            // Implement your filter application logic here
+            const minPrice = document.getElementById('minPrice').value;
+            const maxPrice = document.getElementById('maxPrice').value;
+            const year = document.getElementById('yearFilter').value;
+            const fuelType = document.getElementById('fuelTypeFilter').value;
+            const transmission = document.getElementById('transmissionFilter').value;
+
+            console.log('Applying filters:', { minPrice, maxPrice, year, fuelType, transmission });
+        }
+
+        function resetFilters() {
+            // Reset all filter inputs
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('yearFilter').value = '';
+            document.getElementById('fuelTypeFilter').value = '';
+            document.getElementById('transmissionFilter').value = '';
+            
+            // Reload listings with no filters
+            // Implement your reset logic here
+        }
     </script>
 
     <script>

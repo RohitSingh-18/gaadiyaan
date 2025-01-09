@@ -1,593 +1,126 @@
-<div class="listings-container">
-    <!-- Filters Section -->
-    <section class="filters-section">
-        <div class="search-bar">
-            <input type="text" placeholder="Search listings...">
-            <button><i class="fas fa-search"></i></button>
-        </div>
-        <div class="filter-options">
-            <select>
-                <option value="">All Categories</option>
-                <option value="sedan">Sedan</option>
-                <option value="suv">SUV</option>
-                <option value="luxury">Luxury</option>
-            </select>
-            <select>
-                <option value="">Status</option>
-                <option value="active">Active</option>
-                <option value="pending">Pending</option>
-                <option value="sold">Sold</option>
-            </select>
-            <button class="add-listing-btn">
-                <i class="fas fa-plus"></i> Add New Listing
-            </button>
-        </div>
-    </section>
-
-    <div class="content-wrapper">
-        <!-- Empty State -->
-        <div class="empty-state" style="display: none;">
-            <div class="empty-state-icon">
-                <i class="fas fa-calendar-times"></i>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Listings - Gaadiyaan Dealer Portal</title>
+    <link rel="stylesheet" href="../css/notifications.css">
+    <link rel="stylesheet" href="../css/listings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="listings-container">
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by title, make, or model...">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
             </div>
-            <h2>No Listings Yet</h2>
-            <p>You haven't added any listings yet.</p>
+            
+            <div class="filter-groups">
+                <div class="filter-group">
+                    <label>Price Range</label>
+                    <div class="range-inputs">
+                        <input type="number" id="minPrice" placeholder="Min">
+                        <span>to</span>
+                        <input type="number" id="maxPrice" placeholder="Max">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>Year</label>
+                    <select id="yearFilter">
+                        <option value="">All Years</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Fuel Type</label>
+                    <select id="fuelTypeFilter">
+                        <option value="">All Types</option>
+                        <option value="petrol">Petrol</option>
+                        <option value="diesel">Diesel</option>
+                        <option value="cng">CNG</option>
+                        <option value="electric">Electric</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Transmission</label>
+                    <select id="transmissionFilter">
+                        <option value="">All</option>
+                        <option value="manual">Manual</option>
+                        <option value="automatic">Automatic</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button id="applyFilters" class="btn-primary">Apply Filters</button>
+                <button id="resetFilters" class="btn-secondary">Reset</button>
+            </div>
+        </div>
+
+        <!-- Listings Header -->
+        <div class="listings-header">
+            <div class="listings-count">
+                <span id="totalListings">0</span> Listings Found
+            </div>
+            <div class="view-controls">
+                <button class="view-btn active" data-view="grid">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button class="view-btn" data-view="list">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
+            <div class="sort-control">
+                <select id="sortBy">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                </select>
+            </div>
         </div>
 
         <!-- Listings Grid -->
-        <section class="listings-grid">
-            <div class="listing-card">
-                <div class="listing-image">
-                    <img src="../../../assets/media/content/b-goods/360x260/1.4.jpg" alt="Car">
-                    <span class="status active">Active</span>
-                </div>
-                <div class="listing-details">
-                    <h3>2020 Toyota Camry</h3>
-                    <p class="price">₹25,00,000</p>
-                    <div class="listing-actions">
-                        <a href="edit-listing.html?id=123" class="edit-btn"><i class="fas fa-edit"></i><span> Edit</span></a>
-                        <button class="delete-listing-btn" data-listing-id="123">
-                            <i class="fas fa-trash"></i><span> Delete</span>
-                        </button>
-                        <button class="sold-btn">
-                            <i class="fas fa-check"></i> Mark as Sold
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="listing-card">
-                <div class="listing-image">
-                    <img src="../../../assets/media/content/b-goods/360x260/1.4.jpg" alt="Car">
-                    <span class="status active">Active</span>
-                </div>
-                <div class="listing-details">
-                    <h3>2020 Toyota Camry</h3>
-                    <p class="price">₹25,00,000</p>
-                    <div class="listing-actions">
-                        <a href="edit-listing.html?id=124" class="edit-btn"><i class="fas fa-edit"></i><span> Edit</span></a>
-                        <button class="delete-listing-btn" data-listing-id="124">
-                            <i class="fas fa-trash"></i><span> Delete</span>
-                        </button>
-                        <button class="sold-btn">
-                            <i class="fas fa-check"></i> Mark as Sold
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="listing-card">
-                <div class="listing-image">
-                    <img src="../../../assets/media/content/b-goods/360x260/1.2.jpg" alt="Car">
-                    <span class="status active">Active</span>
-                </div>
-                <div class="listing-details">
-                    <h3>2021 Honda City</h3>
-                    <p class="price">₹18,50,000</p>
-                    <div class="listing-actions">
-                        <a href="edit-listing.html?id=125" class="edit-btn"><i class="fas fa-edit"></i><span> Edit</span></a>
-                        <button class="delete-listing-btn" data-listing-id="125">
-                            <i class="fas fa-trash"></i><span> Delete</span>
-                        </button>
-                        <button class="sold-btn">
-                            <i class="fas fa-check"></i> Mark as Sold
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="listing-card">
-                <div class="listing-image">
-                    <img src="../../../assets/media/content/b-goods/360x260/1.3.jpg" alt="Car">
-                    <span class="status active">Active</span>
-                </div>
-                <div class="listing-details">
-                    <h3>2022 Hyundai Creta</h3>
-                    <p class="price">₹21,75,000</p>
-                    <div class="listing-actions">
-                        <a href="edit-listing.html?id=126" class="edit-btn"><i class="fas fa-edit"></i><span> Edit</span></a>
-                        <button class="delete-listing-btn" data-listing-id="126">
-                            <i class="fas fa-trash"></i><span> Delete</span>
-                        </button>
-                        <button class="sold-btn">
-                            <i class="fas fa-check"></i> Mark as Sold
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="listing-card">
-                <div class="listing-image">
-                    <img src="../../../assets/media/content/b-goods/360x260/1.5.jpg" alt="Car">
-                    <span class="status active">Active</span>
-                </div>
-                <div class="listing-details">
-                    <h3>2021 Kia Seltos</h3>
-                    <p class="price">₹19,90,000</p>
-                    <div class="listing-actions">
-                        <a href="edit-listing.html?id=127" class="edit-btn"><i class="fas fa-edit"></i><span> Edit</span></a>
-                        <button class="delete-listing-btn" data-listing-id="127">
-                            <i class="fas fa-trash"></i><span> Delete</span>
-                        </button>
-                        <button class="sold-btn">
-                            <i class="fas fa-check"></i> Mark as Sold
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="listing-card">
-                <div class="listing-image">
-                    <img src="../../../assets/media/content/b-goods/360x260/1.6.jpg" alt="Car">
-                    <span class="status active">Active</span>
-                </div>
-                <div class="listing-details">
-                    <h3>2022 Tata Nexon</h3>
-                    <p class="price">₹16,80,000</p>
-                    <div class="listing-actions">
-                        <a href="edit-listing.html?id=128" class="edit-btn"><i class="fas fa-edit"></i><span> Edit</span></a>
-                        <button class="delete-listing-btn" data-listing-id="128">
-                            <i class="fas fa-trash"></i><span> Delete</span>
-                        </button>
-                        <button class="sold-btn">
-                            <i class="fas fa-check"></i> Mark as Sold
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-        </section>
-    </div>
-
-    <!-- Pagination -->
-    <div class="pagination">
-        <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
-        <div class="page-numbers">
-            <span class="active">1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>...</span>
-            <span>10</span>
+        <div class="listings-grid" id="listingsContainer">
+            <!-- Listings will be dynamically added here -->
         </div>
-        <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
-    </div>
-</div>
 
-<!-- Delete Confirmation Modal -->
-<style>
-.listing-actions .sold-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-.listing-actions .sold-btn:hover {
-    background-color: #218838;
-}
-
-.listing-actions .sold-btn i {
-    margin-right: 5px;
-}
-
-/* When listing is marked as sold */
-.listing-actions .sold-btn.active {
-    background-color: #6c757d;
-}
-
-.listing-actions .sold-btn.active:hover {
-    background-color: #5a6268;
-}
-
-/* Fix delete button hover styles */
-.listing-actions .delete-listing-btn {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-.listing-actions .delete-listing-btn:hover {
-    background-color: #c82333;
-    color: white;
-}
-
-.listing-actions .delete-listing-btn i {
-    margin-right: 5px;
-}
-
-/* Mobile responsive styles */
-@media screen and (max-width: 768px) {
-    .listing-actions {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 10px;
-    }
-
-    .listing-actions .edit-btn,
-    .listing-actions .delete-listing-btn {
-        width: 100%;
-        padding: 8px;
-        font-size: 1rem;
-        min-height: 40px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .listing-actions .edit-btn span,
-    .listing-actions .delete-listing-btn span {
-        display: none;
-    }
-
-    .listing-actions .sold-btn {
-        grid-column: 1 / -1;
-        padding: 8px;
-        font-size: 1rem;
-        min-height: 40px;
-        border-radius: 8px;
-    }
-
-    .listing-actions button i {
-        font-size: 1.1rem;
-        margin: 0;
-    }
-
-    .listing-actions .edit-btn,
-    .listing-actions .delete-listing-btn,
-    .listing-actions .sold-btn {
-        margin: 0;
-    }
-
-    .listing-card {
-        margin-bottom: 20px;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .listing-details {
-        padding: 20px;
-    }
-
-    .listing-details h3 {
-        font-size: 1.4rem;
-        margin-bottom: 10px;
-    }
-
-    .listing-details .price {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 15px;
-    }
-
-    .specs {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .specs span {
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 4px 0;
-    }
-
-    .specs span i {
-        width: 20px;
-        text-align: center;
-        font-size: 1.1rem;
-        color: #4a5568;
-    }
-
-    .listing-details {
-        padding: 15px;
-    }
-
-    .listing-details h3 {
-        font-size: 1.2rem;
-        margin-bottom: 8px;
-    }
-
-    .listing-details .price {
-        font-size: 1.1rem;
-        margin-bottom: 12px;
-    }
-}
-
-/* Desktop Grid Layout */
-@media screen and (min-width: 769px) {
-    .listings-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        padding: 20px;
-    }
-
-    .listing-card {
-        width: 100%;
-        margin-bottom: 0;
-    }
-
-    .listing-details {
-        padding: 15px;
-    }
-
-    .specs {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        margin-bottom: 20px;
-    }
-
-    .specs span {
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .specs span i {
-        font-size: 1.2rem;
-        color: #4a5568;
-    }
-}
-
-/* Add styles for edit button to match others */
-.listing-actions .edit-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background-color: #4b5563;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-}
-
-.listing-actions .edit-btn:hover {
-    background-color: #374151;
-}
-
-.listing-actions .edit-btn i {
-    margin-right: 5px;
-}
-
-/* Common styles for both mobile and desktop */
-.listing-card {
-    display: flex;
-    flex-direction: column;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    background: #fff;
-    height: 100%;
-}
-
-.listing-image {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 aspect ratio */
-    overflow: hidden;
-}
-
-.listing-image img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.listing-image .status {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    background: rgba(16, 185, 129, 0.9);
-    color: white;
-}
-
-.listing-details {
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    flex: 1;
-}
-
-.listing-details h3 {
-    font-size: 1.2rem;
-    margin: 0 0 8px 0;
-    line-height: 1.4;
-    height: 1.7em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.listing-details .price {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #2d3748;
-    margin: 0 0 12px 0;
-}
-
-/* Mobile styles */
-@media screen and (max-width: 768px) {
-    .listing-card {
-        margin-bottom: 20px;
-    }
-
-    .specs {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .specs span {
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 4px 0;
-    }
-
-    .specs span i {
-        width: 20px;
-        text-align: center;
-        font-size: 1.1rem;
-        color: #4a5568;
-    }
-}
-
-/* Desktop styles */
-@media screen and (min-width: 769px) {
-    .listings-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        padding: 20px;
-    }
-
-    .specs {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-
-    .specs span {
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .specs span i {
-        font-size: 1.1rem;
-        color: #4a5568;
-        width: 20px;
-        text-align: center;
-    }
-}
-
-/* Update specs styling */
-.specs span {
-    font-size: 1rem;
-    color: #4a5568;
-}
-
-@media screen and (max-width: 768px) {
-    .specs {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .specs span {
-        padding: 4px 0;
-        font-size: 1rem;
-        color: #4a5568;
-    }
-}
-
-@media screen and (min-width: 769px) {
-    .specs {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-
-    .specs span {
-        font-size: 1rem;
-        color: #4a5568;
-    }
-}
-</style>
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Delete Listing</h2>
-            <button class="modal-close" onclick="closeDeleteModal()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-icon delete-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-        </div>
-        <div class="modal-body">
-            <p>Are you sure you want to delete this listing?</p>
-            <p>This action cannot be undone.</p>
-        </div>
-        <div class="modal-actions">
-            <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-            <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be dynamically added here -->
         </div>
     </div>
-</div> 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Handle edit button clicks
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                const listingCard = this.closest('.listing-card');
-                const listingId = listingCard.querySelector('.delete-listing-btn').dataset.listingId;
-                window.location.href = `edit-listing.html?id=${listingId}`;
-            });
-        });
+    <template id="listingTemplate">
+        <div class="listing-card">
+            <div class="listing-image">
+                <img src="" alt="Vehicle Image">
+                <div class="listing-badges">
+                    <span class="badge-featured">Featured</span>
+                </div>
+            </div>
+            <div class="listing-content">
+                <h3 class="listing-title"></h3>
+                <div class="listing-price"></div>
+                <div class="listing-details">
+                    <span class="year"></span>
+                    <span class="mileage"></span>
+                    <span class="fuel-type"></span>
+                    <span class="transmission"></span>
+                </div>
+                <div class="listing-actions">
+                    <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </template>
 
-        // Handle back button clicks
-        document.querySelectorAll('.back-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'listings.html';
-            });
-        });
-    });
-</script> 
+    <script src="../js/listings.js"></script>
+</body>
+</html> 
