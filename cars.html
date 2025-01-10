@@ -730,7 +730,7 @@
                     </div>
 
                     <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 20px;">
-                        <button class="btn btn-primary" style="background-color: #d01818 !important; border: none !important; padding: 10px 20px; border-radius: 5px; font-size: 16px; font-weight: 600;">Book An Appointment</button>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#bookingModal" style="background-color: #d01818 !important; border: none !important; padding: 10px 20px; border-radius: 5px; font-size: 16px; font-weight: 600;">Book An Appointment</button>
                         <button class="wishlist-btn">
                             <i class="far fa-heart"></i>
                         </button>
@@ -2066,6 +2066,182 @@
             icon.classList.toggle('far');
             icon.classList.toggle('fas');
         });
+    </script>
+
+    <!-- Add the Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #D01818; color: white; padding: 1rem; border-radius: 8px 8px 0 0;">
+                    <h3 style="margin: 0; font-weight: 600;">Book An Appointment</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 1;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 1.5rem;">
+                    <form id="bookingForm" onsubmit="handleAppointmentSubmit(event)">
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="bookingName" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Full Name*</label>
+                            <input type="text" id="bookingName" class="form-control" required 
+                                   placeholder="Enter your full name"
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="bookingPhone" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Phone Number*</label>
+                            <input type="tel" id="bookingPhone" class="form-control" required 
+                                   placeholder="Enter your phone number"
+                                   maxlength="10"
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="bookingDate" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Preferred Date*</label>
+                            <input type="date" id="bookingDate" class="form-control" required 
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="bookingTime" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Preferred Time*</label>
+                            <input type="time" id="bookingTime" class="form-control" required 
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="bookingMessage" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Message (Optional)</label>
+                            <textarea id="bookingMessage" class="form-control" rows="3" 
+                                    placeholder="Any specific requirements or questions?"
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; resize: vertical;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" 
+                                style="width: 100%; background: #D01818 !important; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 500; margin-top: 1rem;">
+                            Book Appointment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Booking Modal Styles -->
+    <style>
+    #bookingModal {
+        z-index: 1050 !important;
+    }
+
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+
+    #bookingModal .modal-dialog {
+        z-index: 1051 !important;
+    }
+
+    #bookingModal .modal-content {
+        background: white;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        position: relative;
+    }
+
+    #bookingModal .form-control {
+        height: auto;
+        background: white !important;
+        position: relative;
+        z-index: 1052 !important;
+    }
+
+    #bookingModal .form-control:focus {
+        outline: none;
+        border-color: #D01818;
+        box-shadow: 0 0 0 2px rgba(208, 24, 24, 0.1);
+    }
+
+    #bookingModal label {
+        position: relative;
+        z-index: 1052 !important;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        #bookingModal .modal-dialog {
+            margin: 1rem;
+            width: calc(100% - 2rem);
+            max-width: none;
+        }
+    }
+    </style>
+
+    <!-- Add Booking Modal Script -->
+    <script>
+    function handleAppointmentSubmit(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('bookingName').value;
+        const phone = document.getElementById('bookingPhone').value;
+        const date = document.getElementById('bookingDate').value;
+        const time = document.getElementById('bookingTime').value;
+        const message = document.getElementById('bookingMessage').value;
+        
+        // Get car details
+        const carMake = document.querySelector('.spec-item:nth-child(1) .spec-value').textContent;
+        const carModel = document.querySelector('.spec-item:nth-child(2) .spec-value').textContent;
+        const dealerId = document.querySelector('.dealer-id').textContent.trim(); // Get dealer ID
+        const carId = dealerId.replace('ID: ', ''); // Remove 'ID: ' prefix
+        const carFullName = `${carMake} ${carModel}`;
+        
+        // Get current page URL
+        const carPageLink = window.location.href;
+        
+        // Format the date
+        const formattedDate = new Date(date).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Format the time
+        const formattedTime = new Date(`2000/01/01 ${time}`).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+        
+        // Create WhatsApp message with dealer ID
+        const whatsappMessage = `Hello, I would like to book an appointment for the car viewing.\n\n` +
+            `Car Details: ${carFullName}\n` +
+            `ID: ${carId}\n` +  // Changed from "Dealer ID:" to "ID:"
+            `Car Link: ${carPageLink}\n\n` +
+            `Name: ${name}\n` +
+            `Phone: ${phone}\n` +
+            `Date: ${formattedDate}\n` +
+            `Time: ${formattedTime}\n` +
+            (message ? `Message: ${message}\n` : '');
+        
+        // Encode the message for WhatsApp URL
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        
+        // WhatsApp number
+        const whatsappNumber = '918249393960';
+        
+        // Close the modal
+        $('#bookingModal').modal('hide');
+        
+        // Open WhatsApp
+        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+    }
+
+    // Set minimum date to today when modal opens
+    $('#bookingModal').on('shown.bs.modal', function () {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('bookingDate').min = today;
+    });
+
+    // Validate phone number
+    document.getElementById('bookingPhone').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 10) {
+            this.value = this.value.slice(0, 10);
+        }
+    });
     </script>
 </body>
 
