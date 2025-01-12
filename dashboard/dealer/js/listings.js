@@ -154,12 +154,26 @@ function createListingCard(listing) {
         images = [];
     }
     
-    const mainImage = images && images.length > 0 ? images[0] : `${window.ASSETS_BASE_URL}/assets/images/no-image.jpg`;
+    const defaultImage = `${window.ASSETS_BASE_URL}/assets/images/no-image.jpg`;
+    const hasMultipleImages = images.length > 1;
     
     return `
         <div class="listing-card" data-id="${listing.id || ''}">
             <div class="listing-image">
-                <img src="${mainImage}" alt="${listing.car_title || 'Vehicle'}" onerror="this.src='${window.ASSETS_BASE_URL}/assets/images/no-image.jpg'">
+                <div class="image-slider" data-current-index="0">
+                    <img src="${images[0] || defaultImage}" alt="${listing.car_title || 'Vehicle'}" 
+                         onerror="this.src='${defaultImage}'" class="slider-image">
+                    ${hasMultipleImages ? `
+                        <button class="slider-btn prev" onclick="slideImage(${listing.id}, 'prev')">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="slider-btn next" onclick="slideImage(${listing.id}, 'next')">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <div class="image-counter">${1}/${images.length}</div>
+                    ` : ''}
+                    <div class="image-data" style="display: none;">${JSON.stringify(images)}</div>
+                </div>
             </div>
             <div class="listing-content">
                 <h3 class="listing-title">${listing.car_title || 'Untitled Vehicle'}</h3>
@@ -181,6 +195,27 @@ function createListingCard(listing) {
             </div>
         </div>
     `;
+}
+
+// Add image slider functionality
+function slideImage(listingId, direction) {
+    const card = document.querySelector(`.listing-card[data-id="${listingId}"]`);
+    const slider = card.querySelector('.image-slider');
+    const img = slider.querySelector('.slider-image');
+    const counter = slider.querySelector('.image-counter');
+    const imagesData = JSON.parse(slider.querySelector('.image-data').textContent);
+    
+    let currentIndex = parseInt(slider.dataset.currentIndex);
+    
+    if (direction === 'next') {
+        currentIndex = (currentIndex + 1) % imagesData.length;
+    } else {
+        currentIndex = (currentIndex - 1 + imagesData.length) % imagesData.length;
+    }
+    
+    slider.dataset.currentIndex = currentIndex;
+    img.src = imagesData[currentIndex] || `${window.ASSETS_BASE_URL}/assets/images/no-image.jpg`;
+    counter.textContent = `${currentIndex + 1}/${imagesData.length}`;
 }
 
 // Setup pagination controls

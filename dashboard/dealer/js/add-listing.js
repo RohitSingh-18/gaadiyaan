@@ -5,7 +5,7 @@ const API_BASE_URL = 'http://localhost:3000/api';
 let specifications = [];
 let features = {};
 let currentImages = [];
-const MAX_IMAGES = 5;
+const MAX_IMAGES = 10;
 
 // Initialize form handlers
 function initializeFormHandlers() {

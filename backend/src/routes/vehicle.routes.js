@@ -210,7 +210,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create new vehicle listing with image upload
-router.post('/', upload.array('vehicleImages', 5), handleMulterError, async (req, res) => {
+router.post('/', upload.array('vehicleImages', 10), handleMulterError, async (req, res) => {
     try {
         console.log('\n--- New Vehicle Listing Request ---');
         console.log('Headers:', req.headers);
