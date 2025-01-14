@@ -1,5 +1,7 @@
+import config from './config.js';
+
 // Constants
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = config.API_BASE_URL;
 
 // Global state
 let specifications = [];

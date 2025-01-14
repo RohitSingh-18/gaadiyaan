@@ -7,7 +7,14 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:5506', 'http://127.0.0.1:5506'],  // Add your frontend URL
+  origin: [
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:5506',
+    'http://127.0.0.1:5506',
+    'https://gaadiyaan.vercel.app',  // Add deployed frontend URL
+    'https://www.gaadiyaan.vercel.app'  // Add www subdomain
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
   credentials: true,
