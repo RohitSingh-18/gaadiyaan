@@ -229,6 +229,7 @@ router.post('/', upload.array('vehicleImages', 10), handleMulterError, async (re
             carTitle: req.body.carTitle,
             price: parseFloat(req.body.price),
             year: parseInt(req.body.year),
+            description: req.body.description,
             make: req.body.make,
             model: req.body.model,
             registrationYear: parseInt(req.body.registrationYear),
