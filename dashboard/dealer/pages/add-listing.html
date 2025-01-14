@@ -28,6 +28,10 @@
                         <input type="number" id="year" required min="1900" max="2024">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" rows="5" required placeholder="Enter detailed description of the vehicle..."></textarea>
+                </div>
             </div>
 
             <div class="form-section">
@@ -145,10 +149,6 @@
                 <div class="features-container">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="featureCategory">Category</label>
-                            <input type="text" id="featureCategory" placeholder="e.g., Safety">
-                        </div>
-                        <div class="form-group">
                             <label for="featureName">Feature Name</label>
                             <input type="text" id="featureName" placeholder="e.g., ABS">
                         </div>
@@ -219,6 +219,25 @@
 
         .form-group input:focus,
         .form-group select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            outline: none;
+        }
+
+        /* Description textarea styles */
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 120px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .form-group textarea:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
             outline: none;
@@ -619,6 +638,14 @@
                 grid-template-columns: repeat(3, 1fr);
                 gap: 12px;
             }
+        }
+
+        .feature-name {
+            color: #6c757d;
+            font-size: 0.8em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
     <script>

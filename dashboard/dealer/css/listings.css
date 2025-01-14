@@ -248,7 +248,22 @@
     gap: 15px;
     margin-bottom: 15px;
     font-size: 14px;
+}
+
+.listing-description {
+    margin: 15px 0;
+    font-size: 14px;
     color: #4a5568;
+    line-height: 1.5;
+}
+
+.listing-description p {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .listing-actions {

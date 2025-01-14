@@ -3,7 +3,7 @@ const API_BASE_URL = 'http://localhost:3000/api';
 
 // Global state
 let specifications = [];
-let features = {};
+let features = [];
 let currentImages = [];
 const MAX_IMAGES = 10;
 
@@ -271,6 +271,7 @@ function collectFormData() {
         carTitle: document.getElementById('carTitle').value.trim(),
         price: document.getElementById('price').value,
         year: document.getElementById('year').value,
+        description: document.getElementById('description').value.trim(),
         make: document.getElementById('make').value.trim(),
         model: document.getElementById('model').value.trim(),
         registrationYear: document.getElementById('registrationYear').value,
@@ -352,40 +353,29 @@ function handleSpecification() {
 
 // Function to handle features
 function handleFeature() {
-    const categoryInput = document.getElementById('featureCategory');
     const nameInput = document.getElementById('featureName');
     
     // Reset any previous validation styles
-    categoryInput.style.borderColor = '#ddd';
     nameInput.style.borderColor = '#ddd';
     
-    const categoryValue = categoryInput.value.trim();
     const nameValue = nameInput.value.trim();
     
-    if (!categoryValue || !nameValue) {
-        if (!categoryValue) categoryInput.style.borderColor = '#dc3545';
-        if (!nameValue) nameInput.style.borderColor = '#dc3545';
+    if (!nameValue) {
+        nameInput.style.borderColor = '#dc3545';
         return;
     }
 
-    const totalFeatures = Object.values(features).reduce((acc, curr) => acc + curr.length, 0);
-    if (totalFeatures >= 100) {
+    if (features.length >= 100) {
         return;
-    }
-
-    if (!features[categoryValue]) {
-        features[categoryValue] = [];
     }
     
-    // Check if this feature already exists in this category
-    if (!features[categoryValue].includes(nameValue)) {
-        features[categoryValue].push(nameValue);
+    // Check if this feature already exists
+    if (!features.includes(nameValue)) {
+        features.push(nameValue);
         updateFeaturesList();
         
-        // Clear inputs and reset styles
-        categoryInput.value = '';
+        // Clear input and reset styles
         nameInput.value = '';
-        categoryInput.style.borderColor = '#ddd';
         nameInput.style.borderColor = '#ddd';
     }
 }
@@ -420,25 +410,19 @@ function updateFeaturesList() {
     const featuresList = document.getElementById('featuresList');
     if (!featuresList) return;
 
-    // Convert features object to flat array of {category, name} objects
-    const flatFeatures = Object.entries(features).reduce((acc, [category, items]) => {
-        return acc.concat(items.map(name => ({ category, name })));
-    }, []);
-
-    featuresList.innerHTML = flatFeatures.map((feature, index) => `
-        <div class="added-item" data-category="${feature.category}" data-index="${index}">
+    featuresList.innerHTML = features.map((feature, index) => `
+        <div class="added-item" data-index="${index}">
             <div class="item-content">
-                <span class="spec-name">${feature.category}</span>
-                <span class="spec-value">${feature.name}</span>
+                <span class="feature-name">${feature}</span>
             </div>
-            <button type="button" class="delete-btn" onclick="removeFeature('${feature.category}', '${feature.name}')" title="Remove">
+            <button type="button" class="delete-btn" onclick="removeFeature(${index})" title="Remove">
                 <i class="fas fa-times"></i>
             </button>
         </div>
     `).join('');
 
     // Update counter
-    const totalFeatures = flatFeatures.length;
+    const totalFeatures = features.length;
     const featureHeader = document.querySelector('.features-container h2');
     if (featureHeader) {
         featureHeader.textContent = `Features (${totalFeatures}/100)`;
@@ -452,14 +436,9 @@ function removeSpecification(index) {
 }
 
 // Function to remove feature
-function removeFeature(category, featureName) {
-    if (features[category]) {
-        features[category] = features[category].filter(name => name !== featureName);
-        if (features[category].length === 0) {
-            delete features[category];
-        }
-        updateFeaturesList();
-    }
+function removeFeature(index) {
+    features.splice(index, 1);
+    updateFeaturesList();
 }
 
 // Add this to your existing styles (add to the style section in add-listing.html)

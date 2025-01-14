@@ -184,6 +184,9 @@ function createListingCard(listing) {
                     <span class="fuel-type">${listing.fuel_type || 'N/A'}</span>
                     <span class="transmission">${listing.transmission || 'N/A'}</span>
                 </div>
+                <div class="listing-description">
+                    <p>${listing.description || 'No description available'}</p>
+                </div>
                 <div class="listing-actions">
                     <button class="btn-edit" onclick="editListing(${listing.id})">
                         <i class="fas fa-edit"></i> Edit
