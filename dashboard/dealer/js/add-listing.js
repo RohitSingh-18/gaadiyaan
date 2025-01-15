@@ -255,30 +255,18 @@ async function handleSubmission() {
             return;
         }
 
-        // First, create vehicle listing without images
-        const vehicleData = {
-            ...data,
-            dealerId: userProfile.uid
-        };
-
-        // Create vehicle listing
-        const createResponse = await fetch(`${API_BASE_URL}/vehicles`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(vehicleData)
+        // Create FormData with all fields
+        const formData = new FormData();
+        
+        // Add all form fields
+        Object.entries(data).forEach(([key, value]) => {
+            formData.append(key, value);
         });
+        
+        // Add dealer ID
+        formData.append('dealerId', userProfile.uid);
 
-        if (!createResponse.ok) {
-            throw new Error('Failed to create vehicle listing');
-        }
-
-        const createResult = await createResponse.json();
-        const vehicleId = createResult.data.id;
-
-        // Now upload images one by one
+        // Add images
         const previewContainer = document.getElementById('imagePreviewContainer');
         if (previewContainer) {
             const previews = previewContainer.querySelectorAll('.image-preview img');
@@ -293,28 +281,36 @@ async function handleSubmission() {
                         const blob = await response.blob();
                         // Compress the image before uploading
                         const compressedBlob = await compressImage(blob);
-                        const formData = new FormData();
-                        formData.append('image', new File([compressedBlob], `image-${i + 1}.jpg`, { type: 'image/jpeg' }));
-                        
-                        // Upload single image
-                        const uploadResponse = await fetch(`${API_BASE_URL}/vehicles/${vehicleId}/images`, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            },
-                            body: formData
-                        });
-
-                        if (!uploadResponse.ok) {
-                            console.error('Failed to upload image:', i + 1);
-                        }
+                        formData.append('vehicleImages', new File([compressedBlob], `image-${i + 1}.jpg`, { type: 'image/jpeg' }));
                     } catch (error) {
                         console.error('Error processing image:', error);
+                        showNotification('Error processing images. Please try again.', false);
+                        return;
                     }
                 }
             }
         }
 
+        // Send data to server
+        console.log('Preparing to send data to server...');
+        console.log('API URL:', `${API_BASE_URL}/vehicles`);
+        
+        const response = await fetch(`${API_BASE_URL}/vehicles`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to create listing');
+        }
+
+        const result = await response.json();
+        console.log('Server response:', result);
+        
         showNotification('Listing created successfully!');
         
         // Clear form and reset state
