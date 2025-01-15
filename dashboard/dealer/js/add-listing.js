@@ -1,5 +1,5 @@
 // Constants
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://gaadiyaan.vercel.app/api';
 
 // Global state
 let specifications = [];
@@ -184,21 +184,28 @@ async function handleSubmission() {
     console.log('Starting form submission');
     
     try {
+        // Get the token from localStorage first
+        const token = localStorage.getItem('token');
+        if (!token) {
+            showNotification('Please login to create a listing', false);
+            setTimeout(() => {
+                window.location.href = '../../../auth/login.html';
+            }, 2000);
+            return;
+        }
+
         // Validate form data
-        const formData = new FormData();
         const data = collectFormData();
-        
         console.log('Collected form data:', data);
         
         if (!validateFormData(data)) {
             console.log('Form validation failed');
             return;
         }
-        
-        // Add form data
-        Object.entries(data).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
+
+        // Create FormData and append the JSON data
+        const formData = new FormData();
+        formData.append('vehicleData', JSON.stringify(data));
         
         // Add images from the preview container
         const previewContainer = document.getElementById('imagePreviewContainer');
@@ -206,25 +213,22 @@ async function handleSubmission() {
             const previews = previewContainer.querySelectorAll('.image-preview img');
             console.log(`Found ${previews.length} images to upload`);
             
-            const imagePromises = Array.from(previews).map((img, index) => {
-                return new Promise((resolve, reject) => {
-                    const base64 = img.src;
-                    if (base64.startsWith('data:image')) {
-                        fetch(base64)
-                            .then(res => res.blob())
-                            .then(blob => {
-                                const file = new File([blob], `image-${index + 1}.jpg`, { type: 'image/jpeg' });
-                                formData.append('vehicleImages', file);
-                                resolve();
-                            })
-                            .catch(reject);
-                    } else {
-                        resolve();
+            for (let i = 0; i < previews.length; i++) {
+                const img = previews[i];
+                const base64 = img.src;
+                if (base64.startsWith('data:image')) {
+                    try {
+                        const response = await fetch(base64);
+                        const blob = await response.blob();
+                        const file = new File([blob], `image-${i + 1}.jpg`, { type: 'image/jpeg' });
+                        formData.append('vehicleImages', file);
+                    } catch (error) {
+                        console.error('Error processing image:', error);
+                        showNotification('Error processing images. Please try again.', false);
+                        return;
                     }
-                });
-            });
-            
-            await Promise.all(imagePromises);
+                }
+            }
         }
         
         // Send data to server
@@ -233,35 +237,63 @@ async function handleSubmission() {
         
         const response = await fetch(`${API_BASE_URL}/vehicles`, {
             method: 'POST',
-            body: formData
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData,
+            credentials: 'include'
         });
-        
-        const result = await response.json();
-        console.log('Server response:', result);
-        
+
+        let result;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            result = await response.json();
+        } else {
+            throw new Error('Invalid response format from server');
+        }
+
         if (!response.ok) {
             throw new Error(result.message || 'Failed to create listing');
         }
+
+        console.log('Server response:', result);
         
         showNotification('Listing created successfully!');
         
-        // Instead of reloading, redirect using the dashboard's loadPage function
-        if (typeof loadPage === 'function') {
-            console.log('Using dashboard loadPage function');
-            setTimeout(() => {
-                loadPage('listings');
-                window.location.hash = 'listings';
-            }, 2000);
-        } else {
-            console.log('Fallback to hash navigation');
-            setTimeout(() => {
-                window.location.hash = 'listings';
-            }, 2000);
+        // Clear form and reset state
+        document.getElementById('addListingForm').reset();
+        specifications = [];
+        features = [];
+        currentImages = [];
+        updateSpecificationsList();
+        updateFeaturesList();
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        if (imagePreviewContainer) {
+            imagePreviewContainer.innerHTML = '';
         }
+        
+        // Redirect after success
+        setTimeout(() => {
+            if (typeof loadPage === 'function') {
+                console.log('Using dashboard loadPage function');
+                loadPage('listings');
+            } else {
+                console.log('Redirecting to listings page');
+                window.location.href = 'listings.html';
+            }
+        }, 2000);
         
     } catch (error) {
         console.error('Submission error:', error);
-        showNotification(error.message || 'Error creating listing', false);
+        
+        if (error.message.includes('token') || error.message.includes('authentication')) {
+            showNotification('Session expired. Please login again.', false);
+            setTimeout(() => {
+                window.location.href = '../../../auth/login.html';
+            }, 2000);
+        } else {
+            showNotification(error.message || 'Error creating listing. Please try again.', false);
+        }
     }
 }
 
