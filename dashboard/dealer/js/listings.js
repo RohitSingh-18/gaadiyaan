@@ -7,6 +7,33 @@ let currentView = 'grid';
 let currentPage = 1;
 let currentFilters = {};
 
+// Function to make API calls with proper CORS handling
+async function apiCall(endpoint, options = {}) {
+    const defaultOptions = {
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const response = await fetch(`${window.API_BASE_URL}${endpoint}`, {
+        ...defaultOptions,
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...options.headers
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`API call failed: ${response.statusText}`);
+    }
+
+    return response.json();
+}
+
 // Initialize listings page
 async function initializeListings() {
     setupEventListeners();
@@ -91,8 +118,7 @@ async function loadListings() {
             ...currentFilters
         });
         
-        const response = await fetch(`${window.API_BASE_URL}/vehicles?${params}`);
-        const data = await response.json();
+        const data = await apiCall(`/vehicles?${params}`);
 
         if (!data.success) {
             throw new Error(data.message);
