@@ -179,6 +179,50 @@ function updateImageCount() {
     }
 }
 
+// Function to compress image
+async function compressImage(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                // Max dimensions
+                const MAX_WIDTH = 1200;
+                const MAX_HEIGHT = 1200;
+                
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Get compressed image as base64
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, 'image/jpeg', 0.7); // 0.7 quality = 30% compression
+            };
+        };
+    });
+}
+
 // Handle form submission
 async function handleSubmission() {
     console.log('Starting form submission');
@@ -231,7 +275,9 @@ async function handleSubmission() {
                     try {
                         const response = await fetch(base64);
                         const blob = await response.blob();
-                        const file = new File([blob], `image-${i + 1}.jpg`, { type: 'image/jpeg' });
+                        // Compress the image before uploading
+                        const compressedBlob = await compressImage(blob);
+                        const file = new File([compressedBlob], `image-${i + 1}.jpg`, { type: 'image/jpeg' });
                         formData.append('vehicleImages', file);
                     } catch (error) {
                         console.error('Error processing image:', error);
@@ -251,8 +297,7 @@ async function handleSubmission() {
             headers: {
                 'Authorization': `Bearer ${token}`
             },
-            body: formData,
-            credentials: 'include'
+            body: formData
         });
 
         let result;
