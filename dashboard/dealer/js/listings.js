@@ -1,6 +1,6 @@
 // Global configuration
-window.API_BASE_URL = '/api';
-window.ASSETS_BASE_URL = '';
+window.API_BASE_URL = 'https://g-backend-rho.vercel.app/api';
+window.ASSETS_BASE_URL = 'https://g-backend-rho.vercel.app';
 
 // Module variables
 let currentView = 'grid';

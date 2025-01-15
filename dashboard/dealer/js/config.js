@@ -4,7 +4,7 @@ const config = {
         API_BASE_URL: 'http://localhost:3000/api'
     },
     production: {
-        API_BASE_URL: 'https://gaadiyaan.vercel.app/api'  // Updated to match your deployed frontend
+        API_BASE_URL: 'https://gaadiyaan.com/api'  // Updated to match your deployed frontend
     }
 };
 
