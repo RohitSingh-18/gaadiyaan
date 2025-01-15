@@ -184,13 +184,21 @@ async function handleSubmission() {
     console.log('Starting form submission');
     
     try {
-        // Get the token from localStorage first
+        // Get the token and user profile from localStorage
         const token = localStorage.getItem('token');
-        if (!token) {
+        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        
+        if (!token || !userProfile) {
             showNotification('Please login to create a listing', false);
             setTimeout(() => {
                 window.location.href = '../../../auth/login.html';
             }, 2000);
+            return;
+        }
+
+        // Check if user is a dealer
+        if (userProfile.role !== 'dealer') {
+            showNotification('Only dealers can create listings', false);
             return;
         }
 
@@ -202,10 +210,13 @@ async function handleSubmission() {
             console.log('Form validation failed');
             return;
         }
-
+        
         // Create FormData and append the JSON data
         const formData = new FormData();
-        formData.append('vehicleData', JSON.stringify(data));
+        formData.append('vehicleData', JSON.stringify({
+            ...data,
+            dealerId: userProfile.uid // Add dealer ID from profile
+        }));
         
         // Add images from the preview container
         const previewContainer = document.getElementById('imagePreviewContainer');
@@ -251,8 +262,13 @@ async function handleSubmission() {
         } else {
             throw new Error('Invalid response format from server');
         }
-
+        
         if (!response.ok) {
+            if (response.status === 401) {
+                // Token expired or invalid
+                localStorage.removeItem('token');
+                throw new Error('Session expired. Please login again.');
+            }
             throw new Error(result.message || 'Failed to create listing');
         }
 
@@ -286,7 +302,7 @@ async function handleSubmission() {
     } catch (error) {
         console.error('Submission error:', error);
         
-        if (error.message.includes('token') || error.message.includes('authentication')) {
+        if (error.message.includes('token') || error.message.includes('login') || error.message.includes('session')) {
             showNotification('Session expired. Please login again.', false);
             setTimeout(() => {
                 window.location.href = '../../../auth/login.html';

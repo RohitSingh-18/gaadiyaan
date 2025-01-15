@@ -100,14 +100,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('password').value;
 
         try {
-            // Your existing Firebase login code here
+            // Firebase login
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
             
-            // Set login state in localStorage
+            // Get the Firebase ID token
+            const token = await user.getIdToken();
+            
+            // Get user data from Firestore
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            const userData = userDoc.data();
+            
+            // Store everything in localStorage
+            localStorage.setItem('token', token);
             localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userProfile', JSON.stringify(userData));
+            localStorage.setItem('userType', userData.role);
             
-            // Redirect to home page
-            window.location.href = '../index.html';
+            // Redirect based on user role
+            if (userData.role === 'dealer') {
+                window.location.href = '../dashboard/dealer/pages/portal.html';
+            } else {
+                window.location.href = '../dashboard/client/user.html';
+            }
         } catch (error) {
             console.error('Login error:', error);
             document.getElementById('loginError').textContent = error.message;
