@@ -1,6 +1,6 @@
 // Global configuration
-window.API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000/api';
-window.ASSETS_BASE_URL = window.ASSETS_BASE_URL || 'http://localhost:3000';
+window.API_BASE_URL = window.API_BASE_URL || 'https://gaadiyaan.com/api';
+window.ASSETS_BASE_URL = window.ASSETS_BASE_URL || 'https://gaadiyaan.com';
 
 // Module variables
 let currentView = 'grid';

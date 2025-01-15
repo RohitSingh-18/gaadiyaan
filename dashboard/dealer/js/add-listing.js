@@ -1,5 +1,5 @@
 // Constants
-const API_BASE_URL = 'https://gaadiyaan.vercel.app/api';
+const API_BASE_URL = 'https://gaadiyaan.com/api';
 
 // Global state
 let specifications = [];
