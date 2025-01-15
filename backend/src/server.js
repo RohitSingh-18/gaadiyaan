@@ -12,8 +12,10 @@ const corsOptions = {
     'http://127.0.0.1:5500',
     'http://localhost:5506',
     'http://127.0.0.1:5506',
-    'https://gaadiyaan.vercel.app',  // Add deployed frontend URL
-    'https://www.gaadiyaan.vercel.app'  // Add www subdomain
+    'https://gaadiyaan.vercel.app',
+    'https://www.gaadiyaan.vercel.app',
+    'https://gaadiyaan.com',
+    'https://www.gaadiyaan.com'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
