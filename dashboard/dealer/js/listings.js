@@ -1,6 +1,6 @@
 // Global configuration
-window.API_BASE_URL = 'https://g-backend-rho.vercel.app/api';
-window.ASSETS_BASE_URL = 'https://g-backend-rho.vercel.app';
+window.API_BASE_URL = 'https://gaadiyaan-api.onrender.com/api';
+window.ASSETS_BASE_URL = 'https://gaadiyaan-api.onrender.com';
 
 // Module variables
 let currentView = 'grid';
