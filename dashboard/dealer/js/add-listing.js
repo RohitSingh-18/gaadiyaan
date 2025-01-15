@@ -298,17 +298,24 @@ async function handleSubmission() {
         const response = await fetch(`${API_BASE_URL}/vehicles`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
             },
-            body: formData
+            body: formData,
+            mode: 'cors'
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to create listing');
+        let result;
+        try {
+            result = await response.json();
+        } catch (error) {
+            throw new Error('Invalid response from server');
         }
 
-        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(result.message || 'Failed to create listing');
+        }
+
         console.log('Server response:', result);
         
         showNotification('Listing created successfully!');
