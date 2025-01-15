@@ -254,15 +254,31 @@ async function handleSubmission() {
             console.log('Form validation failed');
             return;
         }
-        
-        // Create FormData and append the JSON data
-        const formData = new FormData();
-        formData.append('vehicleData', JSON.stringify({
+
+        // First, create vehicle listing without images
+        const vehicleData = {
             ...data,
-            dealerId: userProfile.uid // Add dealer ID from profile
-        }));
-        
-        // Add images from the preview container
+            dealerId: userProfile.uid
+        };
+
+        // Create vehicle listing
+        const createResponse = await fetch(`${API_BASE_URL}/vehicles`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(vehicleData)
+        });
+
+        if (!createResponse.ok) {
+            throw new Error('Failed to create vehicle listing');
+        }
+
+        const createResult = await createResponse.json();
+        const vehicleId = createResult.data.id;
+
+        // Now upload images one by one
         const previewContainer = document.getElementById('imagePreviewContainer');
         if (previewContainer) {
             const previews = previewContainer.querySelectorAll('.image-preview img');
@@ -277,48 +293,28 @@ async function handleSubmission() {
                         const blob = await response.blob();
                         // Compress the image before uploading
                         const compressedBlob = await compressImage(blob);
-                        const file = new File([compressedBlob], `image-${i + 1}.jpg`, { type: 'image/jpeg' });
-                        formData.append('vehicleImages', file);
+                        const formData = new FormData();
+                        formData.append('image', new File([compressedBlob], `image-${i + 1}.jpg`, { type: 'image/jpeg' }));
+                        
+                        // Upload single image
+                        const uploadResponse = await fetch(`${API_BASE_URL}/vehicles/${vehicleId}/images`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: formData
+                        });
+
+                        if (!uploadResponse.ok) {
+                            console.error('Failed to upload image:', i + 1);
+                        }
                     } catch (error) {
                         console.error('Error processing image:', error);
-                        showNotification('Error processing images. Please try again.', false);
-                        return;
                     }
                 }
             }
         }
-        
-        // Send data to server
-        console.log('Preparing to send data to server...');
-        console.log('API URL:', `${API_BASE_URL}/vehicles`);
-        
-        const response = await fetch(`${API_BASE_URL}/vehicles`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
 
-        let result;
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-            result = await response.json();
-        } else {
-            throw new Error('Invalid response format from server');
-        }
-        
-        if (!response.ok) {
-            if (response.status === 401) {
-                // Token expired or invalid
-                localStorage.removeItem('token');
-                throw new Error('Session expired. Please login again.');
-            }
-            throw new Error(result.message || 'Failed to create listing');
-        }
-
-        console.log('Server response:', result);
-        
         showNotification('Listing created successfully!');
         
         // Clear form and reset state
