@@ -26,6 +26,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Add initialization checks
+console.log("Firebase App initialized:", app.name);
+console.log("Firestore initialized:", db ? "Yes" : "No");
+
 // Get DOM elements
 const signupForm = document.getElementById('signupForm');
 const buyerBtn = document.getElementById('buyerBtn');
@@ -35,6 +39,8 @@ const verificationMessage = document.getElementById('verificationMessage');
 
 // Function to handle user registration
 async function registerUser(userType) {
+    console.log("Starting registration for userType:", userType);
+    
     // Get form values
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -59,12 +65,15 @@ async function registerUser(userType) {
     }
 
     try {
+        console.log("Creating authentication user...");
         // Create user account
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        console.log("Auth user created successfully:", user.uid);
 
         // Send verification email
         await sendEmailVerification(user);
+        console.log("Verification email sent");
 
         // Store additional user data in Firestore
         const userData = {
@@ -75,7 +84,21 @@ async function registerUser(userType) {
             emailVerified: false
         };
 
-        await setDoc(doc(db, "users", user.uid), userData);
+        console.log("Attempting to create Firestore document for user:", user.uid);
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            console.log("Document reference created:", userDocRef.path);
+            await setDoc(userDocRef, userData);
+            console.log("Firestore document created successfully");
+        } catch (firestoreError) {
+            console.error("Firestore Error Details:", {
+                code: firestoreError.code,
+                message: firestoreError.message,
+                stack: firestoreError.stack
+            });
+            showError("Account created but profile setup failed. Please contact support.");
+            throw firestoreError;
+        }
 
         // Clear any existing user data from localStorage
         localStorage.clear();
@@ -86,7 +109,7 @@ async function registerUser(userType) {
         errorMessage.style.display = 'none';
 
     } catch (error) {
-        console.error(error);
+        console.error("Signup Error:", error);
         let errorMsg = 'An error occurred during registration';
         if (error.code === 'auth/email-already-in-use') {
             errorMsg = 'This email is already registered';
