@@ -111,6 +111,138 @@
                 font-size: 25px;
             }
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            padding: 0;
+        }
+
+        .modal-body {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .modal-body p {
+            margin: 5px 0;
+            color: #475569;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn {
+            background-color: #e2e8f0;
+            color: #475569;
+        }
+
+        .secondary-btn:hover {
+            background-color: #cbd5e1;
+        }
+
+        .primary-btn {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background-color: #b91c1c;
+        }
+
+        /* Modal icon styles */
+        .modal-icon {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .modal-icon i {
+            font-size: 3rem;
+            color: #dc2626;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 0 10px;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.25rem;
+            }
+            
+            .modal-btn {
+                padding: 8px 16px;
+            }
+        }
     </style>
   </head>
   <body>
@@ -165,7 +297,7 @@
             </a>
           </li> -->
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="javascript:void(0)" class="nav-link" onclick="showLogoutModal()">
               <i class="fas fa-sign-out-alt"></i>
               <span>Logout</span>
             </a>
@@ -178,18 +310,20 @@
       </main>
 
       <!-- Add this modal right before closing the dashboard-container div -->
-      <div class="modal" id="logoutModal">
+      <div id="logoutModal" class="modal">
           <div class="modal-content">
               <div class="modal-header">
-                  <h3>Logout</h3>
+                  <h2>Logout</h2>
                   <button class="close-modal">
                       <i class="fas fa-times"></i>
                   </button>
               </div>
+              <div class="modal-icon">
+                  <i class="fas fa-sign-out-alt"></i>
+              </div>
               <div class="modal-body">
-                  <i class="fas fa-sign-out-alt warning-icon"></i>
                   <p>Are you sure you want to logout?</p>
-                  <p class="modal-subtitle">You will be redirected to the login page.</p>
+                  <p>You will be redirected to the homepage.</p>
               </div>
               <div class="modal-footer">
                   <button class="modal-btn secondary-btn" id="logoutNo">No, Stay</button>
@@ -777,6 +911,65 @@
           if (!menu.contains(event.target) && !whatsappFloat.contains(event.target)) {
               menu.classList.remove('show');
           }
+      });
+
+      // Authentication check on page load
+      document.addEventListener('DOMContentLoaded', function() {
+          const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+          const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+          // If not logged in or not a buyer, redirect to homepage
+          if (!isLoggedIn || userProfile.userType !== 'buyer') {
+              localStorage.clear();
+              window.location.href = '/index.html';
+          }
+      });
+
+      // Logout function
+      function handleLogout() {
+          localStorage.clear();
+          sessionStorage.clear();
+          window.location.href = '/index.html';
+      }
+
+      // Handle browser back button
+      window.addEventListener('popstate', function() {
+          const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+          if (!isLoggedIn) {
+              window.location.href = '/index.html';
+          }
+      });
+
+      function showLogoutModal() {
+          const logoutModal = document.getElementById('logoutModal');
+          logoutModal.classList.add('show');
+      }
+
+      function closeLogoutModal() {
+          const logoutModal = document.getElementById('logoutModal');
+          logoutModal.classList.remove('show');
+      }
+
+      // Update modal buttons
+      document.getElementById('logoutNo').addEventListener('click', () => {
+          closeLogoutModal();
+      });
+
+      document.getElementById('logoutYes').addEventListener('click', () => {
+          handleLogout();
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener('click', (e) => {
+          const logoutModal = document.getElementById('logoutModal');
+          if (e.target === logoutModal) {
+              closeLogoutModal();
+          }
+      });
+
+      // Close modal with X button
+      document.querySelector('.close-modal').addEventListener('click', () => {
+          closeLogoutModal();
       });
     </script>
 

@@ -1,11 +1,20 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword,
+    sendEmailVerification 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+    getFirestore, 
+    doc, 
+    setDoc 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Firebase configuration
+// Your Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCwnuce6MccySFnJSpJO4XzAGzwY2wRTmE",
     authDomain: "gaadyaan.firebaseapp.com",
+    databaseURL: "https://gaadyaan-default-rtdb.firebaseio.com",
     projectId: "gaadyaan",
     storageBucket: "gaadyaan.firebasestorage.app",
     messagingSenderId: "525025701510",
@@ -17,90 +26,83 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Get form elements
-const signupForm = document.querySelector('#signupForm');
-const errorMessageDiv = document.querySelector('#errorMessage');
+// Get DOM elements
+const signupForm = document.getElementById('signupForm');
+const buyerBtn = document.getElementById('buyerBtn');
+const dealerBtn = document.getElementById('dealerBtn');
+const errorMessage = document.getElementById('errorMessage');
+const verificationMessage = document.getElementById('verificationMessage');
 
-signupForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Get form data
-    const buttonClicked = e.submitter;
-    const role = buttonClicked.classList.contains('buyer-button') ? 'buyer' : 'dealer';
-    const name = document.querySelector('input[type="text"]').value;
-    const email = document.querySelector('input[type="email"]').value;
-    const password = document.querySelector('input[type="password"]').value;
-    const confirmPassword = document.querySelectorAll('input[type="password"]')[1].value;
-    const termsChecked = document.querySelector('#terms').checked;
+// Function to handle user registration
+async function registerUser(userType) {
+    // Get form values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const terms = document.getElementById('terms').checked;
 
-    // Clear previous errors
-    errorMessageDiv.style.display = 'none';
+    // Form validation
+    if (!name || !email || !password || !confirmPassword) {
+        showError('Please fill in all fields');
+        return;
+    }
 
-    // Basic validation
-    if (!termsChecked) {
-        errorMessageDiv.textContent = 'Please agree to the Terms and Conditions';
-        errorMessageDiv.style.display = 'block';
+    if (!terms) {
+        showError('Please accept the terms and conditions');
         return;
     }
 
     if (password !== confirmPassword) {
-        errorMessageDiv.textContent = 'Passwords do not match';
-        errorMessageDiv.style.display = 'block';
+        showError('Passwords do not match');
         return;
     }
 
     try {
-        // Disable button and show loading state
-        buttonClicked.disabled = true;
-        buttonClicked.textContent = 'Creating Account...';
-
-        // 1. Create auth user
-        console.log('Creating auth user...');
+        // Create user account
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log('Auth user created:', user.uid);
 
-        // 2. Create user document
-        console.log('Creating user document...');
+        // Send verification email
+        await sendEmailVerification(user);
+
+        // Store additional user data in Firestore
         const userData = {
-            uid: user.uid,
+            name: name,
             email: email,
-            full_name: name,
-            role: role,
-            created_at: new Date().toISOString()
+            userType: userType,
+            createdAt: new Date().toISOString(),
+            emailVerified: false
         };
 
-        await setDoc(doc(db, 'users', user.uid), userData);
-        console.log('User document created');
+        await setDoc(doc(db, "users", user.uid), userData);
 
-        // 3. Save to localStorage
-        localStorage.setItem('userProfile', JSON.stringify(userData));
-        localStorage.setItem('isLoggedIn', 'true');
+        // Clear any existing user data from localStorage
+        localStorage.clear();
 
-        // 4. Redirect
-        const redirectPath = role === 'dealer' 
-            ? '../dashboard/dealer/pages/portal.html' 
-            : '../dashboard/client/user.html';
-        
-        window.location.href = redirectPath;
+        // Show verification message and hide form
+        signupForm.classList.add('hide-form');
+        verificationMessage.style.display = 'block';
+        errorMessage.style.display = 'none';
 
     } catch (error) {
-        console.error('Signup error:', error);
-        errorMessageDiv.textContent = error.message;
-        errorMessageDiv.style.display = 'block';
-        
-        // Reset button
-        buttonClicked.disabled = false;
-        buttonClicked.textContent = role === 'buyer' ? 'I Am Buyer' : 'I Am Dealer';
+        console.error(error);
+        let errorMsg = 'An error occurred during registration';
+        if (error.code === 'auth/email-already-in-use') {
+            errorMsg = 'This email is already registered';
+        } else if (error.code === 'auth/weak-password') {
+            errorMsg = 'Password should be at least 6 characters';
+        }
+        showError(errorMsg);
     }
-});
+}
 
-const handleSignupSuccess = async (userCredential) => {
-    // Your existing signup success code
-    
-    // Set login state
-    localStorage.setItem('isLoggedIn', 'true');
-    
-    // Redirect to home page
-    window.location.href = '../index.html';
-};
+// Function to show error messages
+function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+}
+
+// Event listeners for buttons
+buyerBtn.addEventListener('click', () => registerUser('buyer'));
+dealerBtn.addEventListener('click', () => registerUser('dealer'));

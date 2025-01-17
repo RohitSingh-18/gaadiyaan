@@ -726,6 +726,9 @@
         // Test Firebase connection
         console.log('Firebase initialized');
     </script>
+
+    <!-- Add this in the head section -->
+    <script src="assets/js/auth-check.js"></script>
 </head>
 
 <body class="page">
@@ -794,7 +797,7 @@
                 <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
                 <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/auth/signup.html" id="signupNavLink">Sign Up</a>
+                    <a href="javascript:void(0)" onclick="handleMyAccountClick()">My Account</a>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#feedbackModal"> Feedback</a></li>
@@ -858,7 +861,7 @@
                                         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
                                         <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/auth/signup.html" id="signupNavLink">Sign Up</a>
+                                            <a href="javascript:void(0)" onclick="handleMyAccountClick()">My Account</a>
                                         </li>
 
                                         <!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown1" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
@@ -2507,6 +2510,32 @@
             });
         }
     });
+    </script>
+
+    <!-- Add this function to handle My Account navigation -->
+    <script>
+    function handleMyAccountClick() {
+        // Get user data from localStorage
+        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+        // If not logged in, redirect to login page
+        if (!isLoggedIn || !userProfile.userType) {
+            window.location.href = '/auth/login.html';
+            return;
+        }
+
+        // Redirect based on user type
+        if (userProfile.userType === 'dealer') {
+            window.location.href = '/dashboard/dealer/pages/portal.html';
+        } else if (userProfile.userType === 'buyer') {
+            window.location.href = '/dashboard/client/user.html';
+        } else {
+            // If userType is invalid, clear storage and redirect to login
+            localStorage.clear();
+            window.location.href = '/auth/login.html';
+        }
+    }
     </script>
 </body>
 

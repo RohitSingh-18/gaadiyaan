@@ -59,6 +59,25 @@
             margin-top: 10px;
             text-align: center;
         }
+
+        .warning-message {
+            background-color: #fff3e0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .link-button:hover {
+            color: #004499;
+        }
+        
+        .success-message {
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -74,6 +93,14 @@
         </div>
 
         <div id="loginError" style="color: #D01818; margin-bottom: 15px; text-align: center; display: none;"></div>
+        
+        <!-- Add verification message -->
+        <div id="verificationRequired" class="warning-message" style="display: none; color: #ff9800; margin-bottom: 15px; text-align: center;">
+            <p>Please verify your email address before logging in.</p>
+            <button id="resendVerification" class="link-button" style="background: none; border: none; color: #0066cc; text-decoration: underline; cursor: pointer; padding: 0;">
+                Resend verification email
+            </button>
+        </div>
 
         <form id="loginForm">
             <div class="form-group">
