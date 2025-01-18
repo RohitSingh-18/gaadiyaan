@@ -203,20 +203,48 @@
     </style>
 </head>
 <body>
-    <!-- <script>
+    <script>
         // Check if user is logged in
         function checkAuth() {
+            const userProfileStr = localStorage.getItem('userProfile');
             const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const userType = localStorage.getItem('userType');
             
-            if (!isLoggedIn || userType !== 'dealer') {
+            if (!userProfileStr || !isLoggedIn) {
+                console.log('No user profile or not logged in, redirecting to login...');
+                window.location.href = '../../../auth/login.html';
+                return;
+            }
+
+            try {
+                const userProfile = JSON.parse(userProfileStr);
+                if (userProfile.userType !== 'dealer') {
+                    console.log('Not a dealer, redirecting to login...');
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+
+                // Ensure login state and profile data persists
+                localStorage.setItem('isLoggedIn', 'true');
+                
+                // Make sure all required fields are present
+                const updatedProfile = {
+                    ...userProfile,
+                    userType: 'dealer',  // Ensure userType is set
+                    dealer_id: userProfile.dealer_id || userProfile.dealerId  // Ensure dealer_id is consistent
+                };
+                
+                localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+            } catch (error) {
+                console.error('Error parsing user profile:', error);
+                localStorage.clear();
                 window.location.href = '../../../auth/login.html';
             }
         }
-        
-        // Check auth on page load
-        checkAuth();
-    </script> -->
+
+        // Call checkAuth when page loads
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
 
     <div class="dashboard-container">
         <aside class="sidebar">
@@ -340,8 +368,24 @@
                 const content = await response.text();
                 mainContent.innerHTML = content;
 
+                // Special handling for profile page
+                if (pageName === 'profile') {
+                    // Move generateDealerId to global scope if not already there
+                    if (typeof generateDealerId !== 'function') {
+                        window.generateDealerId = function() {
+                            const year = new Date().getFullYear();
+                            const randomNum = Math.floor(Math.random() * 9000) + 1000;
+                            const newId = `GD${year}${randomNum}`;
+                            console.log('Generated new ID:', newId);
+                            return newId;
+                        };
+                    }
+
+                    // Initialize profile page functionality
+                    initializeProfilePage();
+                }
                 // Special handling for listings page
-                if (pageName === 'listings') {
+                else if (pageName === 'listings') {
                     // Remove any existing listings.js script
                     const existingScript = document.querySelector('script[src="../js/listings.js"]');
                     if (existingScript) {
@@ -353,15 +397,13 @@
                     script.src = '../js/listings.js';
                     script.defer = true;
                     
-                    // Wait for DOM to be ready before initializing
                     script.onload = function() {
-                        // Ensure elements exist before initializing
                         setTimeout(() => {
                             if (typeof initializeListings === 'function') {
                                 initializeListings();
                             }
                             setupListingsEventListeners();
-                        }, 100); // Small delay to ensure DOM is ready
+                        }, 100);
                     };
                     document.body.appendChild(script);
                 }
@@ -378,9 +420,7 @@
                     script.src = '../js/add-listing.js';
                     script.defer = true;
                     
-                    // Wait for DOM to be ready before initializing
                     script.onload = function() {
-                        // Ensure elements exist before initializing
                         setTimeout(() => {
                             if (typeof initializeFormHandlers === 'function') {
                                 initializeFormHandlers();
@@ -388,7 +428,7 @@
                             if (typeof initializeEventListeners === 'function') {
                                 initializeEventListeners();
                             }
-                        }, 100); // Small delay to ensure DOM is ready
+                        }, 100);
                     };
                     document.body.appendChild(script);
                 }
@@ -414,6 +454,174 @@
                 console.error('Error loading page:', error);
                 mainContent.innerHTML = `<div class="error">Error loading ${pageName}.html: ${error.message}</div>`;
             }
+        }
+
+        // Function to initialize profile page
+        function initializeProfilePage() {
+            console.log('Initializing profile page...');
+            
+            // Get elements
+            const copyBtn = document.getElementById('copyDealerIdBtn');
+            const generateBtn = document.getElementById('generateDealerIdBtn');
+            const saveBtn = document.getElementById('saveDealerIdBtn');
+            const dealerIdElement = document.getElementById('dealerId');
+            const toast = document.getElementById('copyToast');
+
+            if (!generateBtn || !dealerIdElement || !copyBtn || !saveBtn) {
+                console.error('Required elements not found');
+                return;
+            }
+
+            // Get user data from localStorage
+            const userDataStr = localStorage.getItem('userProfile');
+            console.log('Raw user data from storage:', userDataStr);
+            
+            let userData = {};
+            try {
+                userData = JSON.parse(userDataStr || '{}');
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+            }
+
+            // Fill in the form fields
+            const fields = {
+                'dealerEmail': userData.email || '',
+                'dealerName': userData.full_name || '',
+                'dealershipName': userData.dealership_name || ''
+            };
+
+            // Update each field if it exists
+            Object.entries(fields).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element && element.tagName === 'INPUT') {
+                    element.value = value;
+                }
+            });
+
+            // Check if dealer ID exists
+            if (userData.dealer_id) {
+                dealerIdElement.textContent = userData.dealer_id;
+                copyBtn.style.display = 'flex';
+                generateBtn.style.display = 'none';
+                saveBtn.style.display = 'none';
+            }
+
+            // Generate button click handler
+            generateBtn.addEventListener('click', async function() {
+                console.log('Generate button clicked');
+                try {
+                    const response = await fetch('https://gaadiyaan-api.onrender.com/api/users/generate-dealer-id');
+                    const data = await response.json();
+                    
+                    if (response.ok && data.dealer_id) {
+                        dealerIdElement.textContent = data.dealer_id;
+                        generateBtn.style.display = 'none';
+                        saveBtn.style.display = 'flex';
+                        console.log('Generated ID:', data.dealer_id);
+                    } else {
+                        throw new Error(data.message || 'Failed to generate dealer ID');
+                    }
+                } catch (error) {
+                    console.error('Error generating dealer ID:', error);
+                    alert('Failed to generate dealer ID. Please try again.');
+                }
+            });
+
+            // Save button click handler
+            saveBtn.addEventListener('click', async function() {
+                try {
+                    const newId = dealerIdElement.textContent;
+                    
+                    // Get current form values
+                    const username = document.getElementById('dealerName').value;
+                    const email = document.getElementById('dealerEmail').value;
+                    const dealershipName = document.getElementById('dealershipName').value;
+                    const phone = document.getElementById('dealerPhone').value;
+
+                    // Get existing user profile
+                    const userProfileStr = localStorage.getItem('userProfile');
+                    const userProfile = JSON.parse(userProfileStr || '{}');
+                    const token = userProfile.uid;
+                    
+                    if (!token) {
+                        throw new Error('No authentication token found');
+                    }
+
+                    const response = await fetch('https://gaadiyaan-api.onrender.com/api/users/profile', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            full_name: username,
+                            email: email,
+                            dealership_name: dealershipName,
+                            phone: phone,
+                            dealer_id: newId,
+                            userType: 'dealer'
+                        })
+                    });
+
+                    const data = await response.json();
+                    console.log('API Response:', data);
+
+                    if (response.ok) {
+                        console.log('Dealer ID saved successfully');
+                        // Update localStorage with all the returned data
+                        if (data.user) {
+                            const updatedProfile = {
+                                ...userProfile,  // Keep existing data like uid
+                                ...data.user,    // Update with new data
+                                dealer_id: newId,
+                                userType: 'dealer'
+                            };
+                            localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+                            localStorage.setItem('isLoggedIn', 'true');
+                            userData = updatedProfile;
+                        } else {
+                            const updatedProfile = {
+                                ...userProfile,
+                                dealer_id: newId,
+                                full_name: username,
+                                email: email,
+                                dealership_name: dealershipName,
+                                phone: phone,
+                                userType: 'dealer'
+                            };
+                            localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+                            localStorage.setItem('isLoggedIn', 'true');
+                            userData = updatedProfile;
+                        }
+                        
+                        // Update UI
+                        saveBtn.style.display = 'none';
+                        copyBtn.style.display = 'flex';
+                        
+                        alert('Dealer ID saved successfully!');
+                    } else {
+                        console.error('API Error Response:', data);
+                        throw new Error(data.message || 'Failed to save dealer ID');
+                    }
+                } catch (error) {
+                    console.error('Error saving dealer ID:', error);
+                    alert('Failed to save dealer ID. Please try again. Error: ' + error.message);
+                }
+            });
+
+            // Copy button click handler
+            copyBtn.addEventListener('click', async function() {
+                const textToCopy = dealerIdElement.textContent;
+                console.log('Copying text:', textToCopy);
+                
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    showToast();
+                } catch (err) {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy(textToCopy);
+                }
+            });
         }
 
         // Function to setup listing buttons

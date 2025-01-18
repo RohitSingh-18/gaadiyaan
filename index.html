@@ -2525,8 +2525,12 @@
             return;
         }
 
-        // Redirect based on user type
-        if (userProfile.userType === 'dealer') {
+        // First check for admin role
+        if (userProfile.role === 'admin') {
+            window.location.href = '/dashboard/admin/pages/portal.html';
+        }
+        // Then check other user types
+        else if (userProfile.userType === 'dealer') {
             window.location.href = '/dashboard/dealer/pages/portal.html';
         } else if (userProfile.userType === 'buyer') {
             window.location.href = '/dashboard/client/user.html';

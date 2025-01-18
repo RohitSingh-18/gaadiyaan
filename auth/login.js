@@ -54,12 +54,34 @@ loginForm.addEventListener('submit', async (e) => {
         const userData = userDoc.data();
 
         // Store essential user data in localStorage
-        localStorage.setItem('userProfile', JSON.stringify({
+        const userProfile = {
             uid: user.uid,
             email: user.email,
             name: userData.name,
             userType: userData.userType
-        }));
+        };
+
+        // If user is a dealer, fetch additional info from MySQL
+        if (userData.userType === 'dealer') {
+            try {
+                const response = await fetch(`https://gaadiyaan-api.onrender.com/api/users/dealer/${encodeURIComponent(user.email)}`);
+                const dealerData = await response.json();
+                
+                if (dealerData.success && dealerData.dealer) {
+                    // Merge dealer info with user profile
+                    Object.assign(userProfile, {
+                        dealer_id: dealerData.dealer.dealer_id,
+                        dealership_name: dealerData.dealer.dealership_name,
+                        phone: dealerData.dealer.phone
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching dealer info:', error);
+                // Continue with login even if dealer info fetch fails
+            }
+        }
+
+        localStorage.setItem('userProfile', JSON.stringify(userProfile));
         localStorage.setItem('isLoggedIn', 'true');
 
         // Always redirect to homepage first
