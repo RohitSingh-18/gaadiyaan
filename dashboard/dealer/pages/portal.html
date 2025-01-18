@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealer Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/dealer-dashboard.css">
+    <link rel="stylesheet" href="../assets/css/listings.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/loading.css">
+    <style>
+        /* Header and Hamburger Styles */
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .hamburger-menu {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            margin: 5px 0;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease-in-out;
+            transform-origin: center;
+        }
+
+        .hamburger-menu.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 80%;
+                max-width: 300px;
+                z-index: 1000;
+                background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #128C7E;
+            color: #FFF;
+            transform: translateY(-3px);
+            box-shadow: 2px 5px 10px rgba(0,0,0,0.2);
+        }
+
+        /* WhatsApp Menu Styles */
+        .whatsapp-menu {
+            position: fixed;
+            bottom: 110px;
+            right: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 10px 0;
+            width: 250px;
+            display: none;
+            z-index: 99;
+        }
+
+        .whatsapp-menu.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            color: #1e293b;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+
+        .whatsapp-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .whatsapp-menu-item i {
+            margin-right: 12px;
+            color: #FF3B30;
+            font-size: 18px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .whatsapp-menu {
+                width: 220px;
+                right: 20px;
+                bottom: 90px;
+            }
+        }
+
+        /* Mobile Styles */
+        @media screen and (max-width: 768px) {
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 25px;
+            }
+        }
+
+        /* Support System Nav Item Styles */
+        .sidebar-nav li[data-page="support"] .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav li[data-page="support"].active .nav-link {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Check if user is logged in
+        function checkAuth() {
+            const userProfileStr = localStorage.getItem('userProfile');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            
+            if (!userProfileStr || !isLoggedIn) {
+                console.log('No user profile or not logged in, redirecting to login...');
+                window.location.href = '../../../auth/login.html';
+                return;
+            }
+
+            try {
+                const userProfile = JSON.parse(userProfileStr);
+                if (userProfile.userType !== 'dealer') {
+                    console.log('Not a dealer, redirecting to login...');
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+
+                // Ensure login state and profile data persists
+                localStorage.setItem('isLoggedIn', 'true');
+                
+                // Make sure all required fields are present
+                const updatedProfile = {
+                    ...userProfile,
+                    userType: 'dealer',  // Ensure userType is set
+                    dealer_id: userProfile.dealer_id || userProfile.dealerId  // Ensure dealer_id is consistent
+                };
+                
+                localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+            } catch (error) {
+                console.error('Error parsing user profile:', error);
+                localStorage.clear();
+                window.location.href = '../../../auth/login.html';
+            }
+        }
+
+        // Call checkAuth when page loads
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../../assets/media/general/mobile_logo.png" alt="Gaadiyaan Logo" class="logo">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li data-page="home">
+                        <a href="../../../index.html" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="active" data-page="listings">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-car"></i>
+                            <span>My Listings</span>
+                        </a>
+                    </li>
+                    <li data-page="add-listing">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add Listing</span>
+                        </a>
+                    </li>
+                    <li data-page="profile">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-user-cog"></i>
+                            <span>Profile Settings</span>
+                        </a>
+                    </li>
+                    <!-- <li data-page="support">
+                        <a href="javascript:void(0)" class="nav-link">
+                            <i class="fas fa-headset"></i>
+                            <span>Support System</span>
+                        </a>
+                    </li> -->
+                    <li>
+                        <a href="javascript:void(0)" class="nav-link" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <button class="hamburger-menu" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <h1 class="header-title" id="pageTitle">My Listings</h1>
+            </header>
+
+            <div id="mainContent"></div>
+        </main>
+    </div>
+
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Logout</h2>
+                <button class="modal-close" onclick="closeLogoutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-icon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+                <p>You will be redirected to the login page.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeLogoutModal()">No, Stay</button>
+                <button class="btn-primary" onclick="confirmLogout()">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        // Toggle sidebar and hamburger animation
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+
+        // Close sidebar
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            menuToggle.classList.remove('active');
+        }
+
+        // Handle menu toggle click
+        menuToggle.addEventListener('click', toggleSidebar);
+
+        // Function to load page content
+        async function loadPage(pageName) {
+            const mainContent = document.getElementById('mainContent');
+            const pageTitle = document.getElementById('pageTitle');
+            
+            try {
+                // Check authentication before loading page
+                const userProfileStr = localStorage.getItem('userProfile');
+                const isLoggedIn = localStorage.getItem('isLoggedIn');
+                
+                if (!userProfileStr || !isLoggedIn) {
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+
+                const userProfile = JSON.parse(userProfileStr);
+                if (userProfile.userType !== 'dealer') {
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+
+                mainContent.innerHTML = `
+                    <div class="loading-container">
+                        <div>
+                            <div class="progress-bar"></div>
+                            <div class="loading-text">Loading...</div>
+                        </div>
+                    </div>`;
+
+                const response = await fetch(`./${pageName}.html`);
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${pageName}.html`);
+                }
+                const content = await response.text();
+                mainContent.innerHTML = content;
+
+                // Special handling for profile page
+                if (pageName === 'profile') {
+                    if (typeof generateDealerId !== 'function') {
+                        window.generateDealerId = function() {
+                            const year = new Date().getFullYear();
+                            const randomNum = Math.floor(Math.random() * 9000) + 1000;
+                            const newId = `GD${year}${randomNum}`;
+                            console.log('Generated new ID:', newId);
+                            return newId;
+                        };
+                    }
+                    initializeProfilePage();
+                }
+                // Special handling for listings page
+                else if (pageName === 'listings') {
+                    const existingScript = document.querySelector('script[src="../js/listings.js"]');
+                    if (existingScript) {
+                        existingScript.remove();
+                    }
+
+                    const script = document.createElement('script');
+                    script.src = '../js/listings.js';
+                    script.defer = true;
+                    
+                    script.onload = function() {
+                        setTimeout(() => {
+                            if (typeof initializeListings === 'function') {
+                                initializeListings();
+                            }
+                            setupListingsEventListeners();
+                        }, 100);
+                    };
+                    document.body.appendChild(script);
+                }
+                // Special handling for add-listing page
+                else if (pageName === 'add-listing') {
+                    const existingScript = document.querySelector('script[src="../js/add-listing.js"]');
+                    if (existingScript) {
+                        existingScript.remove();
+                    }
+
+                    const script = document.createElement('script');
+                    script.src = '../js/add-listing.js';
+                    script.defer = true;
+                    
+                    script.onload = function() {
+                        setTimeout(() => {
+                            if (typeof initializeFormHandlers === 'function') {
+                                initializeFormHandlers();
+                            }
+                            if (typeof initializeEventListeners === 'function') {
+                                initializeEventListeners();
+                            }
+                        }, 100);
+                    };
+                    document.body.appendChild(script);
+                }
+
+                // Update page title
+                const titles = {
+                    'listings': 'My Listings',
+                    'add-listing': 'Add New Listing',
+                    'profile': 'Profile Settings',
+                    'support': 'Support System'
+                };
+                pageTitle.textContent = titles[pageName] || 'My Listings';
+
+                // Update active state in sidebar
+                document.querySelectorAll('.sidebar-nav li').forEach(li => {
+                    li.classList.remove('active');
+                    if (li.dataset.page === pageName) {
+                        li.classList.add('active');
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error loading page:', error);
+                mainContent.innerHTML = `<div class="error">Error loading ${pageName}.html: ${error.message}</div>`;
+            }
+        }
+
+        // Function to initialize profile page
+        function initializeProfilePage() {
+            console.log('Initializing profile page...');
+            
+            // Get elements
+            const copyBtn = document.getElementById('copyDealerIdBtn');
+            const generateBtn = document.getElementById('generateDealerIdBtn');
+            const saveBtn = document.getElementById('saveDealerIdBtn');
+            const dealerIdElement = document.getElementById('dealerId');
+            const toast = document.getElementById('copyToast');
+
+            if (!generateBtn || !dealerIdElement || !copyBtn || !saveBtn) {
+                console.error('Required elements not found');
+                return;
+            }
+
+            // Get user data from localStorage
+            const userDataStr = localStorage.getItem('userProfile');
+            console.log('Raw user data from storage:', userDataStr);
+            
+            let userData = {};
+            try {
+                userData = JSON.parse(userDataStr || '{}');
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+            }
+
+            // Fill in the form fields
+            const fields = {
+                'dealerEmail': userData.email || '',
+                'dealerName': userData.full_name || '',
+                'dealershipName': userData.dealership_name || ''
+            };
+
+            // Update each field if it exists
+            Object.entries(fields).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element && element.tagName === 'INPUT') {
+                    element.value = value;
+                }
+            });
+
+            // Check if dealer ID exists
+            if (userData.dealer_id) {
+                dealerIdElement.textContent = userData.dealer_id;
+                copyBtn.style.display = 'flex';
+                generateBtn.style.display = 'none';
+                saveBtn.style.display = 'none';
+            }
+
+            // Generate button click handler
+            generateBtn.addEventListener('click', async function() {
+                console.log('Generate button clicked');
+                try {
+                    const response = await fetch('https://gaadiyaan-api.onrender.com/api/users/generate-dealer-id');
+                    const data = await response.json();
+                    
+                    if (response.ok && data.dealer_id) {
+                        dealerIdElement.textContent = data.dealer_id;
+                        generateBtn.style.display = 'none';
+                        saveBtn.style.display = 'flex';
+                        console.log('Generated ID:', data.dealer_id);
+                    } else {
+                        throw new Error(data.message || 'Failed to generate dealer ID');
+                    }
+                } catch (error) {
+                    console.error('Error generating dealer ID:', error);
+                    alert('Failed to generate dealer ID. Please try again.');
+                }
+            });
+
+            // Save button click handler
+            saveBtn.addEventListener('click', async function() {
+                try {
+                    const newId = dealerIdElement.textContent;
+                    
+                    // Get current form values
+                    const username = document.getElementById('dealerName').value;
+                    const email = document.getElementById('dealerEmail').value;
+                    const dealershipName = document.getElementById('dealershipName').value;
+                    const phone = document.getElementById('dealerPhone').value;
+
+                    // Get existing user profile
+                    const userProfileStr = localStorage.getItem('userProfile');
+                    const userProfile = JSON.parse(userProfileStr || '{}');
+                    const token = userProfile.uid;
+                    
+                    if (!token) {
+                        throw new Error('No authentication token found');
+                    }
+
+                    const response = await fetch('https://gaadiyaan-api.onrender.com/api/users/profile', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            full_name: username,
+                            email: email,
+                            dealership_name: dealershipName,
+                            phone: phone,
+                            dealer_id: newId,
+                            userType: 'dealer'
+                        })
+                    });
+
+                    const data = await response.json();
+                    console.log('API Response:', data);
+
+                    if (response.ok) {
+                        console.log('Dealer ID saved successfully');
+                        // Update localStorage with all the returned data
+                        if (data.user) {
+                            const updatedProfile = {
+                                ...userProfile,  // Keep existing data like uid
+                                ...data.user,    // Update with new data
+                                dealer_id: newId,
+                                userType: 'dealer'
+                            };
+                            localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+                            localStorage.setItem('isLoggedIn', 'true');
+                            userData = updatedProfile;
+                        } else {
+                            const updatedProfile = {
+                                ...userProfile,
+                                dealer_id: newId,
+                                full_name: username,
+                                email: email,
+                                dealership_name: dealershipName,
+                                phone: phone,
+                                userType: 'dealer'
+                            };
+                            localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+                            localStorage.setItem('isLoggedIn', 'true');
+                            userData = updatedProfile;
+                        }
+                        
+                        // Update UI
+                        saveBtn.style.display = 'none';
+                        copyBtn.style.display = 'flex';
+                        
+                        alert('Dealer ID saved successfully!');
+                    } else {
+                        console.error('API Error Response:', data);
+                        throw new Error(data.message || 'Failed to save dealer ID');
+                    }
+                } catch (error) {
+                    console.error('Error saving dealer ID:', error);
+                    alert('Failed to save dealer ID. Please try again. Error: ' + error.message);
+                }
+            });
+
+            // Copy button click handler
+            copyBtn.addEventListener('click', async function() {
+                const textToCopy = dealerIdElement.textContent;
+                console.log('Copying text:', textToCopy);
+                
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    showToast();
+                } catch (err) {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy(textToCopy);
+                }
+            });
+        }
+
+        // Function to setup listing buttons
+        function setupListingButtons() {
+            // Add Listing button functionality
+            const addListingBtn = document.querySelector('.add-listing-btn');
+            if (addListingBtn) {
+                addListingBtn.addEventListener('click', () => {
+                    loadPage('add-listing');
+                });
+            }
+
+            // Delete buttons functionality
+            const deleteButtons = document.querySelectorAll('.delete-listing-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const listingId = this.getAttribute('data-listing-id');
+                    showDeleteModal(listingId);
+                });
+            });
+        }
+
+        // Add click handlers to sidebar navigation
+        document.querySelectorAll('.sidebar-nav li[data-page]').forEach(li => {
+            li.addEventListener('click', () => {
+                const userProfileStr = localStorage.getItem('userProfile');
+                const isLoggedIn = localStorage.getItem('isLoggedIn');
+                
+                if (!userProfileStr || !isLoggedIn) {
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+
+                try {
+                    const userProfile = JSON.parse(userProfileStr);
+                    if (userProfile.userType !== 'dealer') {
+                        localStorage.clear();
+                        window.location.href = '../../../auth/login.html';
+                        return;
+                    }
+                    loadPage(li.dataset.page);
+                } catch (error) {
+                    console.error('Error parsing user profile:', error);
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                }
+            });
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnHamburger = menuToggle.contains(event.target);
+                
+                if (!isClickInsideSidebar && !isClickOnHamburger && sidebar.classList.contains('active')) {
+                    closeSidebar();
+                }
+            }
+        });
+
+        // Load default page
+        window.addEventListener('DOMContentLoaded', () => {
+            const userProfileStr = localStorage.getItem('userProfile');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            
+            if (!userProfileStr || !isLoggedIn) {
+                window.location.href = '../../../auth/login.html';
+                return;
+            }
+
+            try {
+                const userProfile = JSON.parse(userProfileStr);
+                if (userProfile.userType !== 'dealer') {
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+                loadPage('listings');
+            } catch (error) {
+                console.error('Error parsing user profile:', error);
+                localStorage.clear();
+                window.location.href = '../../../auth/login.html';
+            }
+        });
+
+        // Logout functions
+        function logout() {
+            console.log('Logging out...');
+            
+            // Clear all localStorage data
+            localStorage.clear();
+            
+            // Double-check specific items are removed
+            localStorage.removeItem('token');
+            localStorage.removeItem('userType');
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userProfile');
+            
+            console.log('LocalStorage cleared');
+            
+            // Force reload before redirect to ensure clean state
+            window.location.replace('../../../auth/login.html');
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('show');
+        }
+
+        function confirmLogout() {
+            // Clear session storage
+            sessionStorage.clear();
+            window.location.href = '../../../auth/login.html';
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('logoutModal');
+            if (event.target === modal) {
+                closeLogoutModal();
+            }
+        });
+
+        // Prevent modal close when clicking inside modal content
+        document.querySelector('.modal-content').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+
+        let listingToDelete = null;
+
+        function showDeleteModal(listingId) {
+            listingToDelete = listingId;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            listingToDelete = null;
+        }
+
+        function confirmDelete() {
+            if (listingToDelete) {
+                // Remove the listing card
+                const listingCard = document.querySelector(`[data-listing-id="${listingToDelete}"]`).closest('.listing-card');
+                if (listingCard) {
+                    listingCard.remove();
+                    
+                    // Check if there are any listings left
+                    const remainingListings = document.querySelectorAll('.listing-card');
+                    if (remainingListings.length === 0) {
+                        // Show empty state
+                        document.querySelector('.empty-state').style.display = 'block';
+                        document.querySelector('.listings-grid').style.display = 'none';
+                    }
+                }
+            }
+            closeDeleteModal();
+        }
+
+        // Add event listener for clicking outside delete modal
+        document.addEventListener('click', function(event) {
+            const deleteModal = document.getElementById('deleteModal');
+            if (event.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+
+        // Add this function to get dealer info from localStorage
+        function getDealerInfo() {
+            return {
+                name: localStorage.getItem('dealerName') || '[Your Name]',
+                id: localStorage.getItem('dealerId') || '[Your ID]'
+            };
+        }
+
+        // Add this function to create the WhatsApp link
+        function createWhatsAppLink() {
+            const dealer = getDealerInfo();
+            const message = encodeURIComponent(
+                `Hello! I'm a dealer on Gaadiyaan.\n\n` +
+                `I need assistance with my dealer account.\n\n` +
+                `Dealer Name: ${dealer.name}\n` +
+                `Account ID: ${dealer.id}\n\n` +
+                `Query: `
+            );
+            
+            // Check if it's a mobile device
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            // Use appropriate WhatsApp link based on device
+            const baseUrl = isMobile ? 'whatsapp://' : 'https://web.whatsapp.com/send?phone=919583528458&text=';
+            
+            return `${baseUrl}send?phone=919583528458&text=${message}`;
+        }
+
+        // Add this function to update the WhatsApp link
+        function updateWhatsAppLink() {
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            whatsappFloat.href = createWhatsAppLink();
+        }
+
+        // Call this when page loads
+        document.addEventListener('DOMContentLoaded', updateWhatsAppLink);
+
+        // Add these helper functions at the global scope
+        function generateDealerId() {
+            const year = new Date().getFullYear();
+            let lastNumber = parseInt(localStorage.getItem('lastDealerId') || '0');
+            lastNumber++;
+            localStorage.setItem('lastDealerId', lastNumber.toString());
+            return `GD${year}${lastNumber.toString().padStart(3, '0')}`;
+        }
+
+        function showToast() {
+            const toast = document.getElementById('copyToast');
+            toast.classList.remove('show');
+            void toast.offsetWidth;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function fallbackCopy(text) {
+            const tempInput = document.createElement('input');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+
+        // Add these functions for WhatsApp menu functionality
+        function toggleWhatsAppMenu() {
+            const menu = document.getElementById('whatsappMenu');
+            menu.classList.toggle('show');
+        }
+
+        function sendWhatsAppMessage(type) {
+            const dealer = getDealerInfo();
+            let messagePrefix = '';
+            
+            switch(type) {
+                case 'query':
+                    messagePrefix = 'I have a general query regarding';
+                    break;
+                case 'complaint':
+                    messagePrefix = 'I want to report a complaint about';
+                    break;
+                case 'issue':
+                    messagePrefix = 'I am facing a technical issue with';
+                    break;
+                case 'feedback':
+                    messagePrefix = 'I want to provide feedback about';
+                    break;
+            }
+
+            const message = encodeURIComponent(
+                `Hello! I'm a dealer on Gaadiyaan.\n\n` +
+                `${messagePrefix} the platform.\n\n` +
+                `Dealer Name: ${dealer.name}\n` +
+                `Account ID: ${dealer.id}\n\n` +
+                `Details: `
+            );
+            
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const baseUrl = isMobile ? 'whatsapp://' : 'https://web.whatsapp.com/';
+            const whatsappUrl = `${baseUrl}send?phone=919583528458&text=${message}`;
+            
+            // Close the menu
+            document.getElementById('whatsappMenu').classList.remove('show');
+            
+            // Open WhatsApp in a new tab
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Close WhatsApp menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('whatsappMenu');
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            
+            if (!menu.contains(event.target) && !whatsappFloat.contains(event.target)) {
+                menu.classList.remove('show');
+            }
+        });
+
+        // Add this new function to setup listings event listeners
+        function setupListingsEventListeners() {
+            // Wait for elements to be available
+            setTimeout(() => {
+                // Search functionality
+                const searchInput = document.getElementById('searchInput');
+                const searchBtn = document.getElementById('searchBtn');
+                if (searchInput && searchBtn) {
+                    searchBtn.addEventListener('click', () => {
+                        const searchTerm = searchInput.value.toLowerCase();
+                        filterListings(searchTerm);
+                    });
+
+                    searchInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            const searchTerm = searchInput.value.toLowerCase();
+                            filterListings(searchTerm);
+                        }
+                    });
+                }
+
+                // Sort functionality
+                const sortSelect = document.getElementById('sortBy');
+                if (sortSelect) {
+                    sortSelect.addEventListener('change', () => {
+                        const sortValue = sortSelect.value;
+                        sortListings(sortValue);
+                    });
+                }
+
+                // View toggle functionality
+                const viewButtons = document.querySelectorAll('.view-btn');
+                if (viewButtons.length > 0) {
+                    viewButtons.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            viewButtons.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            const view = btn.dataset.view;
+                            toggleListingView(view);
+                        });
+                    });
+                }
+
+                // Filter functionality
+                const applyFiltersBtn = document.getElementById('applyFilters');
+                const resetFiltersBtn = document.getElementById('resetFilters');
+                
+                if (applyFiltersBtn) {
+                    applyFiltersBtn.addEventListener('click', applyFilters);
+                }
+                
+                if (resetFiltersBtn) {
+                    resetFiltersBtn.addEventListener('click', resetFilters);
+                }
+            }, 200); // Add a small delay to ensure DOM elements are loaded
+        }
+
+        // Helper functions for listings
+        function filterListings(searchTerm) {
+            // Implement your filtering logic here
+            console.log('Filtering listings with term:', searchTerm);
+        }
+
+        function sortListings(sortValue) {
+            // Implement your sorting logic here
+            console.log('Sorting listings by:', sortValue);
+        }
+
+        function toggleListingView(view) {
+            const listingsContainer = document.getElementById('listingsContainer');
+            if (listingsContainer) {
+                listingsContainer.className = `listings-${view}`;
+            }
+        }
+
+        function applyFilters() {
+            // Implement your filter application logic here
+            const minPrice = document.getElementById('minPrice').value;
+            const maxPrice = document.getElementById('maxPrice').value;
+            const year = document.getElementById('yearFilter').value;
+            const fuelType = document.getElementById('fuelTypeFilter').value;
+            const transmission = document.getElementById('transmissionFilter').value;
+
+            console.log('Applying filters:', { minPrice, maxPrice, year, fuelType, transmission });
+        }
+
+        function resetFilters() {
+            // Reset all filter inputs
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('yearFilter').value = '';
+            document.getElementById('fuelTypeFilter').value = '';
+            document.getElementById('transmissionFilter').value = '';
+            
+            // Reload listings with no filters
+            // Implement your reset logic here
+        }
+    </script>
+
+    <script>
+        // Prefill form with existing data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve user data from local storage
+            const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            
+            // Prefill email
+            const emailInput = document.getElementById('dealerEmail');
+            if (emailInput && userProfile.email) {
+                emailInput.value = userProfile.email;
+                // Remove readonly attribute to make it editable
+                emailInput.removeAttribute('');
+                emailInput.classList.remove('bg-light');
+            }
+
+            // Prefill dealership name
+            const dealershipInput = document.getElementById('dealershipName');
+            if (dealershipInput && userProfile.dealershipName) {
+                dealershipInput.value = userProfile.dealershipName;
+            }
+        });
+    </script>
+
+    <div class="whatsapp-menu" id="whatsappMenu">
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('query')">
+            <i class="fas fa-question-circle"></i>
+            <span>I have a query</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('complaint')">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>I have a complaint</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('issue')">
+            <i class="fas fa-bug"></i>
+            <span>I have a technical issue</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('feedback')">
+            <i class="fas fa-comment-dots"></i>
+            <span>I want to give feedback</span>
+        </a>
+    </div>
+
+    <div class="whatsapp-float" onclick="toggleWhatsAppMenu()" title="Contact Support via WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+</body>
+</html>

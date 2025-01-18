@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - Premium Bikes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, 
+                         system-ui, Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow-y: auto;
+            padding: 4rem 0;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://wallpapercave.com/wp/wp8773431.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(3px);
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 20px;
+        }
+
+        .header {
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff3366, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #ffffff;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            min-width: 120px;
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff3366;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .email-form {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        input[type="email"] {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="email"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input[type="email"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #ff3366;
+        }
+
+        button {
+            position: absolute;
+            right: 5px;
+            top: 4px;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .social-links {
+            margin-top: 3rem;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            opacity: 1;
+            color: #ff3366;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-top: -60px;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+
+            .countdown {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .countdown-item {
+                min-width: calc(50% - 1rem);
+                padding: 1rem;
+            }
+
+            .email-form {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            button {
+                position: static;
+                width: 100%;
+            }
+        }
+
+        /* Scrollbar styling for all devices */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #ff6b6b, #ff3366);
+        }
+
+        /* Mobile scrollbar styling */
+        @media (max-width: 768px) {
+            /* For Chrome, Safari, and newer versions of Opera */
+            ::-webkit-scrollbar {
+                width: 5px;  /* Smaller width for mobile */
+            }
+
+            /* For Firefox */
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: #ff3366 rgba(255, 255, 255, 0.1);
+            }
+
+            /* For Internet Explorer */
+            body {
+                -ms-overflow-style: -ms-autohiding-scrollbar;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-image"></div>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-motorcycle"></i> GAADIYAAN FOR BIKES
+            </div>
+            <h1>Coming Soon</h1>
+            <p class="tagline">Experience the future of motorcycle shopping. We're crafting something extraordinary for riders who demand excellence.</p>
+        </div>
+
+        <div class="countdown" id="countdown-container">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+
+        <div class="email-form">
+            <input type="email" placeholder="Enter your email for exclusive updates">
+            <button>Notify Me</button>
+        </div>
+
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+
+    <script>
+        function updateCountdown() {
+            // Set initial countdown duration (101 days in milliseconds)
+            let remainingTime = 102 * 24 * 60 * 60 * 1000; // 101 days
+            
+            function update() {
+                // Decrease the remaining time
+                remainingTime = remainingTime - 1000; // Subtract 1 second (1000ms)
+                
+                if (remainingTime <= 0) {
+                    remainingTime = 0;
+                    // Optionally handle countdown completion
+                }
+
+                const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+
+            update();
+            // Update every second
+            const timer = setInterval(() => {
+                update();
+                if (remainingTime <= 0) {
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+
+        updateCountdown();
+    </script>
+</body>
+</html> 

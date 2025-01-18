@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - User</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./styles/common.css">
+    <link rel="stylesheet" href="./styles/dashboard.css">
+    <link rel="stylesheet" href="./styles/appointments.css">
+    <link rel="stylesheet" href="./styles/wishlist.css">
+    <link rel="stylesheet" href="./styles/settings.css">
+    <link rel="stylesheet" href="./styles/loading.css">
+    <link rel="stylesheet" href="./styles/support.css">
+    <style>
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #128C7E;
+            color: #FFF;
+            transform: translateY(-3px);
+            box-shadow: 2px 5px 10px rgba(0,0,0,0.2);
+        }
+
+        /* WhatsApp Menu Styles */
+        .whatsapp-menu {
+            position: fixed;
+            bottom: 110px;
+            right: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 10px 0;
+            width: 250px;
+            display: none;
+            z-index: 99;
+        }
+
+        .whatsapp-menu.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            color: #1e293b;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+
+        .whatsapp-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .whatsapp-menu-item i {
+            margin-right: 12px;
+            color: #FF3B30;
+            font-size: 18px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .whatsapp-menu {
+                width: 220px;
+                right: 20px;
+                bottom: 90px;
+            }
+        }
+
+        /* Mobile Styles */
+        @media screen and (max-width: 768px) {
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 25px;
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            padding: 0;
+        }
+
+        .modal-body {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .modal-body p {
+            margin: 5px 0;
+            color: #475569;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn {
+            background-color: #e2e8f0;
+            color: #475569;
+        }
+
+        .secondary-btn:hover {
+            background-color: #cbd5e1;
+        }
+
+        .primary-btn {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background-color: #b91c1c;
+        }
+
+        /* Modal icon styles */
+        .modal-icon {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .modal-icon i {
+            font-size: 3rem;
+            color: #dc2626;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 0 10px;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.25rem;
+            }
+            
+            .modal-btn {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+  </head>
+  <body>
+    <div class="loading-bar"></div>
+
+    <div class="dashboard-container">
+      <div class="mobile-header">
+        <img src="../../assets/media/general/logo.png" alt="Gaadiyaan" class="mobile-logo">
+        <button class="toggle-sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar">
+        <div class="logo-container">
+          <img
+            src="../../assets/media/general/mobile_logo.png"
+            alt="Gaadiyaan"
+            class="logo"
+          />
+        </div>
+
+        <ul class="nav-items">
+          <li class="nav-item">
+            <a href="../../index.html" class="nav-link">
+              <i class="fas fa-home"></i>
+              <span>Home</span>
+            </a>
+          </li>
+          <!-- <li class="nav-item">
+            <a href="#" class="nav-link ">
+              <i class="fas fa-calendar-check"></i>
+              <span>My Appointments</span>
+            </a>
+          </li> -->
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="fas fa-heart"></i>
+              <span>My Wishlist</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-page="settings">
+              <i class="fas fa-cog"></i>
+              <span>Account Settings</span>
+            </a>
+          </li>
+          <!-- <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-headset"></i>
+              <span>Support</span>
+            </a>
+          </li> -->
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="showLogoutModal()">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main class="main-content" id="mainContent">
+        <!-- Content will be loaded here dynamically -->
+      </main>
+
+      <!-- Add this modal right before closing the dashboard-container div -->
+      <div id="logoutModal" class="modal">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h2>Logout</h2>
+                  <button class="close-modal">
+                      <i class="fas fa-times"></i>
+                  </button>
+              </div>
+              <div class="modal-icon">
+                  <i class="fas fa-sign-out-alt"></i>
+              </div>
+              <div class="modal-body">
+                  <p>Are you sure you want to logout?</p>
+                  <p>You will be redirected to the homepage.</p>
+              </div>
+              <div class="modal-footer">
+                  <button class="modal-btn secondary-btn" id="logoutNo">No, Stay</button>
+                  <button class="modal-btn primary-btn" id="logoutYes">Yes, Logout</button>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <script>
+      const toggleBtn = document.querySelector(".toggle-sidebar");
+      const toggleIcon = toggleBtn.querySelector("i");
+      const sidebar = document.querySelector(".sidebar");
+      const mainContent = document.getElementById('mainContent');
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      // Add toggle button click handler
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent event bubbling
+        sidebar.classList.toggle('active');
+        // Toggle icon between bars and times
+        toggleIcon.classList.toggle('fa-bars');
+        toggleIcon.classList.toggle('fa-times');
+      });
+
+      // Close sidebar when clicking outside
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+            sidebar.classList.remove('active');
+            toggleIcon.classList.remove('fa-times');
+            toggleIcon.classList.add('fa-bars');
+          }
+        }
+      });
+
+      // Prevent sidebar from closing when clicking inside it
+      sidebar.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+      // Function to load page content
+      async function loadPage(pageName) {
+        try {
+          // Show loading bar
+          document.body.classList.remove('loaded');
+          
+          const response = await fetch(`${pageName}.html`);
+          const html = await response.text();
+          
+          // Create a temporary container
+          const temp = document.createElement('div');
+          temp.innerHTML = html;
+          
+          // Extract the main content section
+          const pageContent = temp.querySelector('.settings-section') || 
+                            temp.querySelector('.wishlist-section') ||
+                            temp.querySelector('.appointments-section') ||
+                            temp.querySelector('.support-section');
+          
+          if (pageContent) {
+            // Clear main content
+            mainContent.innerHTML = '';
+            
+            // Add the page content
+            mainContent.appendChild(pageContent);
+
+            // If it's the settings page, initialize settings functionality
+            if (pageName === 'settings') {
+                initializeSettings();
+            }
+          }
+
+          // Hide loading bar after content is loaded
+          setTimeout(() => {
+            document.body.classList.add('loaded');
+          }, 500);
+        } catch (error) {
+          console.error('Error loading page:', error);
+          mainContent.innerHTML = '<div class="error-message">Error loading content. Please try again.</div>';
+          document.body.classList.add('loaded');
+        }
+      }
+
+      // Add this new function to initialize settings
+      function initializeSettings() {
+        const userProfileString = localStorage.getItem('userProfile');
+        if (userProfileString) {
+            try {
+                // Remove the "uid:" prefix if present and parse the JSON
+                const cleanProfileString = userProfileString.replace(/^uid:/, '');
+                const profileData = JSON.parse(cleanProfileString);
+                
+                // Set the email value
+                const emailDisplay = document.getElementById('userEmailDisplay');
+                if (emailDisplay) {
+                    emailDisplay.value = profileData.email || 'hoho@gmail.com';
+                }
+            } catch (error) {
+                console.error('Error parsing user profile:', error);
+            }
+        }
+      }
+
+      // Add this function to handle modal functionality
+      function initializeAppointmentModals() {
+        const modal = document.getElementById('cancelModal');
+        const carNameSpan = document.getElementById('carName');
+        let currentCard = null;
+
+        // Handle cancel button click
+        document.querySelectorAll('.cancel-btn').forEach(button => {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            currentCard = this.closest('.appointment-card');
+            const carName = currentCard.querySelector('.car-name').textContent;
+            carNameSpan.textContent = carName;
+            modal.classList.add('active');
+          });
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            modal.classList.remove('active');
+          }
+        });
+
+        // Close modal with X button
+        document.querySelector('.close-modal').addEventListener('click', () => {
+          modal.classList.remove('active');
+        });
+
+        // Handle No button
+        document.getElementById('cancelNo').addEventListener('click', () => {
+          modal.classList.remove('active');
+        });
+
+        // Handle Yes button
+        document.getElementById('cancelYes').addEventListener('click', () => {
+          if (currentCard) {
+            currentCard.remove();
+            // Check if there are any remaining appointments
+            const remainingCards = document.querySelectorAll('.appointment-card');
+            if (remainingCards.length === 0) {
+              document.querySelector('.empty-state').style.display = 'block';
+            }
+          }
+          modal.classList.remove('active');
+        });
+      }
+
+      // Add this function after the initializeAppointmentModals function
+      function initializeWishlistFunctionality() {
+        const modal = document.getElementById('deleteModal');
+        const carNameSpan = document.getElementById('carName');
+        let currentCard = null;
+
+        // Handle remove button click for modal
+        document.querySelectorAll('.remove-btn').forEach(button => {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            currentCard = this.closest('.car-card');
+            const carName = currentCard.querySelector('.car-title').textContent;
+            carNameSpan.textContent = carName;
+            modal.classList.add('active');
+          });
+        });
+
+        // Handle view button click
+        document.querySelectorAll('.view-btn').forEach(button => {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const carCard = this.closest('.car-card');
+            const carTitle = carCard.querySelector('.car-title').textContent;
+            console.log(`Viewing details for ${carTitle}`);
+          });
+        });
+
+        // Close modal when clicking outside
+        modal?.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            modal.classList.remove('active');
+          }
+        });
+
+        // Close modal with X button
+        document.querySelector('.close-modal')?.addEventListener('click', () => {
+          modal.classList.remove('active');
+        });
+
+        // Handle No button
+        document.getElementById('deleteNo')?.addEventListener('click', () => {
+          modal.classList.remove('active');
+        });
+
+        // Handle Yes button
+        document.getElementById('deleteYes')?.addEventListener('click', () => {
+          if (currentCard) {
+            currentCard.remove();
+            // Check if there are any remaining cards
+            const remainingCards = document.querySelectorAll('.car-card');
+            if (remainingCards.length === 0) {
+              document.querySelector('.empty-state').style.display = 'flex';
+            }
+          }
+          modal.classList.remove('active');
+        });
+      }
+
+      // Add the schedule modal initialization function
+      function initializeScheduleModal() {
+        const scheduleModal = document.getElementById('scheduleModal');
+        const scheduleBtn = document.querySelector('.schedule-btn');
+
+        // Open modal when clicking Schedule Appointment button
+        scheduleBtn?.addEventListener('click', () => {
+            scheduleModal.classList.add('active');
+        });
+
+        // Close modal when clicking outside
+        scheduleModal?.addEventListener('click', (e) => {
+            if (e.target === scheduleModal) {
+                scheduleModal.classList.remove('active');
+            }
+        });
+
+        // Close modal with X button
+        scheduleModal?.querySelector('.close-modal')?.addEventListener('click', () => {
+            scheduleModal.classList.remove('active');
+        });
+
+        // Handle Cancel button
+        document.getElementById('cancelSchedule')?.addEventListener('click', () => {
+            scheduleModal.classList.remove('active');
+        });
+
+        // Handle Schedule button
+        document.getElementById('confirmSchedule')?.addEventListener('click', () => {
+            const form = document.getElementById('scheduleForm');
+            if (form.checkValidity()) {
+                // Here you would typically send the data to your backend
+                alert('Appointment scheduled successfully!');
+                scheduleModal.classList.remove('active');
+                form.reset();
+            } else {
+                form.reportValidity();
+            }
+        });
+      }
+
+      // Add this function to initialize support functionality
+      function initializeSupportFunctionality() {
+        const newTicketModal = document.getElementById('newTicketModal');
+        const newTicketBtns = document.querySelectorAll('.new-ticket-btn');
+        const ticketForm = document.getElementById('supportTicketForm');
+
+        // Open modal when clicking New Ticket button
+        newTicketBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            newTicketModal.classList.add('active');
+          });
+        });
+
+        // Close modal when clicking outside
+        newTicketModal?.addEventListener('click', (e) => {
+          if (e.target === newTicketModal) {
+            newTicketModal.classList.remove('active');
+          }
+        });
+
+        // Close modal with X button
+        newTicketModal?.querySelector('.close-modal')?.addEventListener('click', () => {
+          newTicketModal.classList.remove('active');
+        });
+
+        // Handle Cancel button
+        document.getElementById('cancelTicket')?.addEventListener('click', () => {
+          newTicketModal.classList.remove('active');
+          ticketForm.reset();
+        });
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+          const toast = document.createElement('div');
+          toast.className = `toast ${type}`;
+          toast.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+            <span>${message}</span>
+          `;
+          
+          document.querySelector('.toast-container').appendChild(toast);
+          
+          // Remove toast after 3 seconds
+          setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => toast.remove(), 300);
+          }, 3000);
+        }
+
+        // Handle ticket submission
+        document.getElementById('submitTicket')?.addEventListener('click', () => {
+          const form = document.getElementById('supportTicketForm');
+          if (form.checkValidity()) {
+            // Here you would typically send the data to your backend
+            newTicketModal.classList.remove('active');
+            form.reset();
+            
+            // Show success toast
+            showToast('Support ticket submitted successfully!');
+            
+            // Hide empty state and show tickets list
+            document.querySelector('.empty-state').style.display = 'none';
+            document.querySelector('.tickets-list').style.display = 'block';
+          } else {
+            form.reportValidity();
+          }
+        });
+
+        // Handle View Details button
+        document.querySelectorAll('.view-ticket-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            try {
+              const ticketCard = this.closest('.ticket-card');
+              const ticketDetailsModal = document.getElementById('ticketDetailsModal');
+              
+              if (!ticketDetailsModal) {
+                console.error('Ticket details modal not found');
+                return;
+              }
+
+              // Get ticket data
+              const subject = ticketCard.querySelector('.ticket-subject')?.textContent || '';
+              const status = ticketCard.querySelector('.ticket-status')?.textContent || '';
+              const preview = ticketCard.querySelector('.ticket-preview')?.textContent || '';
+              const date = ticketCard.querySelector('.ticket-date')?.textContent.replace('Created: ', '') || '';
+              
+              // Get modal elements
+              const subjectElement = ticketDetailsModal.querySelector('.ticket-info-item:nth-child(2) .ticket-info-value');
+              const statusBadge = ticketDetailsModal.querySelector('.status-badge');
+              const descriptionElement = ticketDetailsModal.querySelector('.ticket-description p');
+              const dateElement = ticketDetailsModal.querySelector('.ticket-info-item:nth-child(4) .ticket-info-value');
+              
+              // Update modal elements if they exist
+              if (subjectElement) subjectElement.textContent = subject;
+              if (statusBadge) statusBadge.textContent = status;
+              if (descriptionElement) descriptionElement.textContent = preview;
+              if (dateElement) dateElement.textContent = date;
+              
+              // Update status badge class
+              if (statusBadge) {
+                statusBadge.className = 'status-badge';
+                statusBadge.classList.add(status.toLowerCase());
+              }
+              
+              // Show modal
+              ticketDetailsModal.classList.add('active');
+            } catch (error) {
+              console.error('Error showing ticket details:', error);
+              showToast('Error showing ticket details', 'error');
+            }
+          });
+        });
+
+        // Handle Edit Ticket button
+        document.querySelector('.edit-ticket-btn')?.addEventListener('click', function() {
+          try {
+            const ticketDetailsModal = document.getElementById('ticketDetailsModal');
+            const newTicketModal = document.getElementById('newTicketModal');
+            
+            if (!ticketDetailsModal || !newTicketModal) {
+              console.error('Required modals not found');
+              return;
+            }
+            
+            // Get current ticket details
+            const subject = ticketDetailsModal.querySelector('.ticket-info-item:nth-child(2) .ticket-info-value')?.textContent || '';
+            const description = ticketDetailsModal.querySelector('.ticket-description p')?.textContent || '';
+            
+            // Get form elements
+            const subjectInput = document.getElementById('subject');
+            const descriptionInput = document.getElementById('description');
+            
+            // Populate form if elements exist
+            if (subjectInput) subjectInput.value = subject;
+            if (descriptionInput) descriptionInput.value = description;
+            
+            // Close details modal and open edit modal
+            ticketDetailsModal.classList.remove('active');
+            newTicketModal.classList.add('active');
+          } catch (error) {
+            console.error('Error editing ticket:', error);
+            showToast('Error editing ticket', 'error');
+          }
+        });
+
+        // Close ticket details modal
+        const ticketDetailsModal = document.getElementById('ticketDetailsModal');
+        ticketDetailsModal?.querySelector('.close-modal')?.addEventListener('click', () => {
+          ticketDetailsModal.classList.remove('active');
+        });
+
+        ticketDetailsModal?.addEventListener('click', (e) => {
+          if (e.target === ticketDetailsModal) {
+            ticketDetailsModal.classList.remove('active');
+          }
+        });
+      }
+
+      // Handle navigation clicks
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          // For Home link, remove active class from all links before navigating
+          if (link.textContent.includes('Home')) {
+            navLinks.forEach(l => l.classList.remove('active')); // Remove active class from all links
+            link.classList.add('active'); // Add active to home link
+            return; // Allow default navigation
+          }
+          
+          e.preventDefault();
+          
+          // Store the previously active link before removing active class
+          const previousActive = document.querySelector('.nav-link.active');
+          
+          // Remove active class from all links
+          navLinks.forEach(l => l.classList.remove('active'));
+          
+          // Add active class to clicked link
+          link.classList.add('active');
+          
+          // Determine which page to load
+          let pageName = '';
+          if (link.textContent.includes('Appointments')) {
+            pageName = 'appointments';
+          } else if (link.textContent.includes('Wishlist')) {
+            pageName = 'wishlist';
+          } else if (link.textContent.includes('Settings')) {
+            pageName = 'settings';
+          } else if (link.textContent.includes('Support')) {
+            pageName = 'support';
+          } else if (link.textContent.includes('Logout')) {
+            // Show logout modal
+            document.getElementById('logoutModal').classList.add('active');
+            
+            // If user clicks "No, Stay", we'll revert to previous active state
+            document.getElementById('logoutNo').onclick = () => {
+              logoutModal.classList.remove('active');
+              link.classList.remove('active');
+              previousActive.classList.add('active');
+            };
+            return;
+          }
+          
+          if (pageName) {
+            loadPage(pageName);
+            
+            // Close sidebar on mobile after navigation
+            if (window.innerWidth <= 768) {
+              sidebar.classList.remove('active');
+              toggleIcon.classList.remove('fa-times');
+              toggleIcon.classList.add('fa-bars');
+            }
+          }
+        });
+      });
+
+      // Load wishlist page by default and initialize modal
+      document.addEventListener('DOMContentLoaded', () => {
+        // Show loading bar
+        document.body.classList.remove('loaded');
+        
+        loadPage('wishlist').then(() => {
+          initializeWishlistFunctionality();
+          // Hide loading bar after content is loaded
+          setTimeout(() => {
+            document.body.classList.add('loaded');
+          }, 500); // Add a small delay to ensure smooth transition
+        });
+      });
+
+      // Add logout modal functionality
+      const logoutModal = document.getElementById('logoutModal');
+
+      // Close modal when clicking outside
+      logoutModal.addEventListener('click', function(e) {
+        if (e.target === logoutModal) {
+          logoutModal.classList.remove('active');
+        }
+      });
+
+      // Close modal with X button
+      logoutModal.querySelector('.close-modal').addEventListener('click', () => {
+        logoutModal.classList.remove('active');
+      });
+
+      // Handle No button
+      document.getElementById('logoutNo').addEventListener('click', () => {
+        logoutModal.classList.remove('active');
+        
+        // Remove active class from logout link
+        navLinks.forEach(link => {
+            if (link.textContent.includes('Logout')) {
+                link.classList.remove('active');
+            }
+        });
+        
+        // Re-add active class to the previously active link only
+        const currentPage = mainContent.querySelector('.appointments-section, .wishlist-section, .settings-section');
+        if (currentPage) {
+            // Determine which page is currently shown and set its nav link active
+            if (currentPage.classList.contains('appointments-section')) {
+                document.querySelector('.nav-link:contains("Appointments")').classList.add('active');
+            } else if (currentPage.classList.contains('wishlist-section')) {
+                document.querySelector('.nav-link:contains("Wishlist")').classList.add('active');
+            } else if (currentPage.classList.contains('settings-section')) {
+                document.querySelector('.nav-link:contains("Settings")').classList.add('active');
+            }
+        }
+      });
+
+      // Handle Yes button
+      document.getElementById('logoutYes').addEventListener('click', () => {
+        window.location.href = '../../auth/login.html';
+      });
+
+      // Add this function to get user info from localStorage
+      function getUserInfo() {
+          return {
+              name: localStorage.getItem('userName') || '[Your Name]',
+              id: localStorage.getItem('userId') || '[Your ID]'
+          };
+      }
+
+      // Add this function to create the WhatsApp link with menu functionality
+      function toggleWhatsAppMenu() {
+          const menu = document.getElementById('whatsappMenu');
+          menu.classList.toggle('show');
+      }
+
+      function sendWhatsAppMessage(type) {
+          const user = getUserInfo();
+          let messagePrefix = '';
+          
+          switch(type) {
+              case 'query':
+                  messagePrefix = 'I have a general query regarding';
+                  break;
+              case 'complaint':
+                  messagePrefix = 'I want to report a complaint about';
+                  break;
+              case 'issue':
+                  messagePrefix = 'I am facing a technical issue with';
+                  break;
+              case 'feedback':
+                  messagePrefix = 'I want to provide feedback about';
+                  break;
+          }
+
+          const message = encodeURIComponent(
+              `Hello! I'm a user on Gaadiyaan.\n\n` +
+              `${messagePrefix} the platform.\n\n` +
+              `User Name: ${user.name}\n` +
+              `Account ID: ${user.id}\n\n` +
+              `Details: `
+          );
+          
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+          const baseUrl = isMobile ? 'whatsapp://' : 'https://web.whatsapp.com/';
+          const whatsappUrl = `${baseUrl}send?phone=919583528458&text=${message}`;
+          
+          // Close the menu
+          document.getElementById('whatsappMenu').classList.remove('show');
+          
+          // Open WhatsApp in a new tab
+          window.open(whatsappUrl, '_blank');
+      }
+
+      // Close WhatsApp menu when clicking outside
+      document.addEventListener('click', function(event) {
+          const menu = document.getElementById('whatsappMenu');
+          const whatsappFloat = document.querySelector('.whatsapp-float');
+          
+          if (!menu.contains(event.target) && !whatsappFloat.contains(event.target)) {
+              menu.classList.remove('show');
+          }
+      });
+
+      // Authentication check on page load
+      document.addEventListener('DOMContentLoaded', function() {
+          const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+          const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+          // If not logged in or not a buyer, redirect to homepage
+          if (!isLoggedIn || userProfile.userType !== 'buyer') {
+              localStorage.clear();
+              window.location.href = '/index.html';
+          }
+      });
+
+      // Logout function
+      function handleLogout() {
+          localStorage.clear();
+          sessionStorage.clear();
+          window.location.href = '/index.html';
+      }
+
+      // Handle browser back button
+      window.addEventListener('popstate', function() {
+          const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+          if (!isLoggedIn) {
+              window.location.href = '/index.html';
+          }
+      });
+
+      function showLogoutModal() {
+          const logoutModal = document.getElementById('logoutModal');
+          logoutModal.classList.add('show');
+      }
+
+      function closeLogoutModal() {
+          const logoutModal = document.getElementById('logoutModal');
+          logoutModal.classList.remove('show');
+      }
+
+      // Update modal buttons
+      document.getElementById('logoutNo').addEventListener('click', () => {
+          closeLogoutModal();
+      });
+
+      document.getElementById('logoutYes').addEventListener('click', () => {
+          handleLogout();
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener('click', (e) => {
+          const logoutModal = document.getElementById('logoutModal');
+          if (e.target === logoutModal) {
+              closeLogoutModal();
+          }
+      });
+
+      // Close modal with X button
+      document.querySelector('.close-modal').addEventListener('click', () => {
+          closeLogoutModal();
+      });
+    </script>
+
+    <div class="whatsapp-menu" id="whatsappMenu">
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('query')">
+            <i class="fas fa-question-circle"></i>
+            <span>I have a query</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('complaint')">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>I have a complaint</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('issue')">
+            <i class="fas fa-bug"></i>
+            <span>I have a technical issue</span>
+        </a>
+        <a class="whatsapp-menu-item" onclick="sendWhatsAppMessage('feedback')">
+            <i class="fas fa-comment-dots"></i>
+            <span>I want to give feedback</span>
+        </a>
+    </div>
+
+    <div class="whatsapp-float" onclick="toggleWhatsAppMenu()" title="Contact Support via WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+  </body>
+</html>

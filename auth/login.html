@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Gaadiyaan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+    <style>
+        /* Add styles for the forgot password modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        /* Loading button styles */
+        .auth-button.loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.8;
+            color: transparent !important;
+        }
+
+        .auth-button.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: buttonLoader 0.8s linear infinite;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes buttonLoader {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+
+        .success-message {
+            color: #28a745;
+            display: none;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .warning-message {
+            background-color: #fff3e0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .link-button:hover {
+            color: #004499;
+        }
+        
+        .success-message {
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-lines"></div>
+    <div class="bg-overlay"></div>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <img src="../assets/media/general/logo.png" alt="Gaadiyaan Logo" class="brand-logo">
+            <h1>Welcome Back</h1>
+            <p>Sign in to continue your journey</p>
+        </div>
+
+        <div id="loginError" style="color: #D01818; margin-bottom: 15px; text-align: center; display: none;"></div>
+        
+        <!-- Add verification message -->
+        <div id="verificationRequired" class="warning-message" style="display: none; color: #ff9800; margin-bottom: 15px; text-align: center;">
+            <p>Please verify your email address before logging in.</p>
+            <button id="resendVerification" class="link-button" style="background: none; border: none; color: #0066cc; text-decoration: underline; cursor: pointer; padding: 0;">
+                Resend verification email
+            </button>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email address" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="auth-button">Sign In</button>
+
+            <div class="auth-links">
+                <a href="#" id="forgotPasswordLink">Forgot password?</a>
+                <a href="signup.html">Create account</a>
+            </div>
+        </form>
+
+        <div class="footer-links">
+            <a href="../legal/our-policy.html">Privacy Policy</a>
+            <a href="../legal/our-policy.html">Terms of Service</a>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reset Password</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Enter your email address and we'll send you a link to reset your password.</p>
+                <div class="form-group">
+                    <input type="email" id="resetEmail" placeholder="Email address" required>
+                </div>
+                <div id="resetError" style="color: #D01818; margin-top: 10px; display: none;"></div>
+                <div id="resetSuccess" class="success-message"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="auth-button" id="sendResetLink">Send Reset Link</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="login.js"></script>
+    <script>
+        // Handle loading state for login button
+        const loginForm = document.getElementById('loginForm');
+        const loginButton = loginForm.querySelector('button[type="submit"]');
+        const resetButton = document.getElementById('sendResetLink');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', function() {
+                loginButton.classList.add('loading');
+                loginButton.disabled = true;
+            });
+        }
+
+        if (resetButton) {
+            resetButton.addEventListener('click', function() {
+                resetButton.classList.add('loading');
+                resetButton.disabled = true;
+            });
+        }
+    </script>
+</body>
+</html>
+

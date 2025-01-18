@@ -1,0 +1,332 @@
+:root {
+    --primary-gradient: linear-gradient(135deg, #D01818 0%, #b01515 100%);
+    --text-color: #2C3E50;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --input-bg: #F8FAFC;
+    --shadow-color: rgba(208, 24, 24, 0.1);
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Raleway', sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a0505;
+    font-family: var(--font-body);
+}
+
+.auth-container {
+    width: 90%;
+    max-width: 360px;
+    padding: 28px 50px 28px 50px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    position: relative;
+    z-index: 3;
+    animation: slideUp 0.6s ease-out;
+    backdrop-filter: blur(20px);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.brand-logo {
+    width: 200px;
+    margin-bottom: 5px;
+    margin-top: -50px;
+    animation: pulse 2s infinite;
+}
+
+.auth-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: -70px 0 8px;
+    background: linear-gradient(45deg, #2C3E50, #1a1a1a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-header p {
+    font-size: 16px;
+    color: #64748B;
+    margin: 0;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group input {
+    width: 100%;
+    height: 45px;
+    padding: 0 15px;
+    background: var(--input-bg);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #D01818;
+    background: white;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(208, 24, 24, 0.1);
+}
+
+.auth-button {
+    flex: 1;
+    height: 48px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-heading);
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.buyer-button {
+    background: #D01818;
+    box-shadow: 0 2px 4px rgba(208, 24, 24, 0.2);
+}
+
+.dealer-button {
+    background: #1F2937;
+    box-shadow: 0 2px 4px rgba(31, 41, 55, 0.2);
+}
+
+.auth-button:hover {
+    transform: translateY(-1px);
+    filter: brightness(110%);
+}
+
+.auth-button:active {
+    transform: translateY(0);
+    filter: brightness(95%);
+}
+
+.auth-links {
+    margin-top: 18px;
+    text-align: center;
+}
+
+.auth-links a {
+    color: #D01818;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-links {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.footer-links a {
+    color: #64748B;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 22px;
+        margin: 12px;
+        width: 85%;
+    }
+    
+    .button-container {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .auth-button {
+        width: 50%;
+        height: 48px;
+        border-radius: 8px !important;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 0 10px;
+    }
+
+    .buyer-button {
+        background: #D01818 !important;
+        box-shadow: 0 2px 10px rgba(208, 24, 24, 0.3) !important;
+    }
+
+    .dealer-button {
+        background: #2C3E50 !important;
+        box-shadow: 0 2px 10px rgba(44, 62, 80, 0.3) !important;
+    }
+}
+
+/* Add background effects */
+.bg-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, 
+        transparent 0%,
+        rgba(208, 24, 24, 0.1) 45%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(208, 24, 24, 0.1) 55%,
+        transparent 100%);
+    background-size: 250% 250%;
+    animation: glowMove 8s linear infinite;
+    z-index: 0;
+}
+
+.bg-lines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.03) 10px,
+        rgba(255, 255, 255, 0.03) 20px
+    );
+    z-index: 1;
+}
+
+.bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(208, 24, 24, 0.2),
+        rgba(26, 5, 5, 0.9)
+    );
+    z-index: 2;
+}
+
+/* Add animations */
+@keyframes glowMove {
+    0% { background-position: -50% -50%; }
+    100% { background-position: 150% 150%; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.terms-checkbox {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.terms-checkbox input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #D01818;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    background: var(--input-bg);
+    transition: all 0.2s ease;
+}
+
+.terms-checkbox input[type="checkbox"]:checked {
+    background: #D01818;
+}
+
+.terms-checkbox input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+}
+
+.terms-checkbox label {
+    color: #64748B;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.terms-checkbox a {
+    color: #D01818;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.terms-checkbox a:hover {
+    color: #b01515;
+    text-decoration: underline;
+}
+
+.buyer-button {
+    background: var(--primary-gradient);
+}
+
+.dealer-button {
+    background: linear-gradient(135deg, #2C3E50 0%, #1a1a1a 100%);
+}
+
+.dealer-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(44, 62, 80, 0.2);
+}
+
+/* Add new button container style */
+.button-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+/* Add this CSS for error message after the existing styles */
+.error-message {
+    display: none;
+    color: #D01818;
+    background-color: rgba(208, 24, 24, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-align: center;
+}

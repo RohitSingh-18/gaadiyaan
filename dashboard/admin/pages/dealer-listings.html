@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealer Listings - Admin Dashboard</title>
+    <link rel="stylesheet" href="../assets/css/dealer-listings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="dealer-listings-page">
+        <!-- Dealer Profile Header -->
+        <div class="dealer-header">
+            <div class="dealer-info">
+                <div class="dealer-avatar">
+                    <img src="https://via.placeholder.com/100" alt="Dealer Avatar">
+                </div>
+                <div class="dealer-details">
+                    <h1>AutoMax Motors</h1>
+                    <div class="dealer-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Mumbai, Maharashtra</span>
+                        <span id="listingsCount"><i class="fas fa-car"></i> <span class="count">24</span> Active Listings</span>
+                    </div>
+                </div>
+            </div>
+            <div class="dealer-actions">
+               
+                <button class="btn-warning" onclick="confirmRemoveAllListings()">
+                    <i class="fas fa-ban"></i> Hold Dealer
+                </button>
+                <button class="btn-danger" onclick="confirmRemoveDealer()">
+                    <i class="fas fa-trash"></i> Remove Dealer
+                </button>
+                <button class="btn-outline" onclick="goBackToDealers()">
+                    <i class="fas fa-arrow-left"></i> Back to Dealers
+                </button>
+            </div>
+        </div>
+
+        <!-- Listings Filter Section -->
+        <div class="listings-filter">
+            <!-- <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search listings...">
+            </div> -->
+            <div class="filter-options">
+                <!-- <select class="filter-select">
+                    <option value="all">All Categories</option>
+                    <option value="sedan">Sedan</option>
+                    <option value="suv">SUV</option>
+                    <option value="luxury">Luxury</option>
+                </select> -->
+                <select class="filter-select">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="sold">Sold</option>
+                </select>
+                <select class="filter-select">
+                    <option value="newest">Newest First</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="price-low">Price: Low to High</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Listings Grid -->
+        <div class="listings-grid">
+            <!-- Sample Listing Cards -->
+            <div class="listing-card">
+                <div class="listing-image">
+                    <img src="https://via.placeholder.com/300x200" alt="2022 Honda City">
+                    <span class="listing-status active">Active</span>
+                </div>
+                <div class="listing-content">
+                    <div class="listing-title">
+                        <h3>2022 Honda City</h3>
+                        <span class="listing-price">₹12,50,000</span>
+                    </div>
+                    <div class="listing-details">
+                        <span><i class="fas fa-gas-pump"></i> Petrol</span>
+                        <span><i class="fas fa-tachometer-alt"></i> 15,000 km</span>
+                        <span><i class="fas fa-cog"></i> Automatic</span>
+                    </div>
+                    <div class="listing-meta">
+                        <span class="listing-date"><i class="far fa-clock"></i> Listed 2 days ago</span>
+                        
+                    </div>
+                    <div class="listing-actions">
+                        <button class="btn-danger btn-sm" onclick="showListingRemoveModal(this)">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More listing cards with different statuses -->
+            <div class="listing-card">
+                <div class="listing-image">
+                    <img src="https://via.placeholder.com/300x200" alt="2023 Hyundai Creta">
+                    <span class="listing-status pending">Pending</span>
+                </div>
+                <div class="listing-content">
+                    <div class="listing-title">
+                        <h3>2023 Hyundai Creta</h3>
+                        <span class="listing-price">₹16,75,000</span>
+                    </div>
+                    <div class="listing-details">
+                        <span><i class="fas fa-gas-pump"></i> Diesel</span>
+                        <span><i class="fas fa-tachometer-alt"></i> 8,000 km</span>
+                        <span><i class="fas fa-cog"></i> Manual</span>
+                    </div>
+                    <div class="listing-meta">
+                        <span class="listing-date"><i class="far fa-clock"></i> Listed 5 days ago</span>
+                        
+                    </div>
+                    <div class="listing-actions">
+                        <button class="btn-danger btn-sm" onclick="showListingRemoveModal(this)">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="listing-card">
+                <div class="listing-image">
+                    <img src="https://via.placeholder.com/300x200" alt="2021 Toyota Fortuner">
+                    <span class="listing-status sold">Sold</span>
+                </div>
+                <div class="listing-content">
+                    <div class="listing-title">
+                        <h3>2021 Toyota Fortuner</h3>
+                        <span class="listing-price">₹32,00,000</span>
+                    </div>
+                    <div class="listing-details">
+                        <span><i class="fas fa-gas-pump"></i> Diesel</span>
+                        <span><i class="fas fa-tachometer-alt"></i> 25,000 km</span>
+                        <span><i class="fas fa-cog"></i> Automatic</span>
+                    </div>
+                    <div class="listing-meta">
+                        <span class="listing-date"><i class="far fa-clock"></i> Sold 1 week ago</span>
+                        </div>
+                    <div class="listing-actions">
+                        <button class="btn-danger btn-sm" onclick="showListingRemoveModal(this)">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="prev-page" aria-label="Previous page">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="page-numbers">
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+            </div>
+            <button class="next-page" aria-label="Next page">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Removal</h3>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove this listing? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn-danger" onclick="removeListing()">Remove Listing</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this new modal for Remove All Listings confirmation -->
+    <div class="modal" id="removeAllListingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Remove All Listings</h3>
+                <button class="close-modal" onclick="closeRemoveAllListingsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p>Are you sure you want to remove all listings for this dealer?</p>
+                <p>This action will:</p>
+                <ul>
+                    <li>Delete all car listings from this dealer</li>
+                    <li>Remove all associated images and data</li>
+                    <li>Cancel any pending transactions</li>
+                </ul>
+                <p class="text-danger">This action cannot be undone!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeRemoveAllListingsModal()">Cancel</button>
+                <button class="btn-danger" onclick="removeAllListings()">
+                    <i class="fas fa-trash-alt"></i> Remove All Listings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this new modal for Remove confirmation -->
+    <div class="modal" id="removeConfirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Remove Listing</h3>
+                <button class="close-modal" onclick="closeRemoveConfirmation()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p>Are you sure you want to remove this listing?</p>
+                <p class="listing-to-remove"></p>
+                <p class="text-danger">This action cannot be undone!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeRemoveConfirmation()">Cancel</button>
+                <button class="btn-danger" onclick="confirmRemove()">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this new modal for individual listing removal -->
+    <div class="modal" id="listingRemoveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Remove Listing</h3>
+                <button class="close-modal" onclick="closeListingRemoveModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="listing-preview">
+                    <img id="listingPreviewImage" src="" alt="Listing Preview">
+                    <div class="listing-preview-details">
+                        <h4 id="listingPreviewTitle"></h4>
+                        <p id="listingPreviewPrice"></p>
+                    </div>
+                </div>
+                <div class="warning-message">
+                    <p>Are you sure you want to remove this listing?</p>
+                    <p class="text-danger">This action cannot be undone!</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeListingRemoveModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn-danger" onclick="confirmListingRemoval()">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle back navigation
+        function goBackToDealers() {
+            // If we came from the portal page
+            if (document.referrer.includes('portal.html')) {
+                window.location.href = document.referrer;
+            } else {
+                // If accessed directly or from elsewhere, go to portal with dealers page
+                window.location.href = 'portal.html?page=dealers';
+            }
+        }
+    </script>
+    <script src="../assets/js/dealer-listings.js"></script>
+</body>
+</html> 

@@ -1,0 +1,1002 @@
+/* Dealer Listings Page Styles */
+:root {
+    --primary-color: #d01818;
+    --danger-color: #dc2626;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --bg-hover: #f8fafc;
+    --transition: all 0.2s ease;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f1f5f9;
+    color: var(--text-primary);
+}
+
+.dealer-listings-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Dealer Header */
+.dealer-header {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dealer-info {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.dealer-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+.dealer-details h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.75rem;
+    color: var(--text-primary);
+}
+
+.dealer-meta {
+    display: flex;
+    gap: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.dealer-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dealer-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Listings Filter */
+.listings-filter {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.search-box {
+    position: relative;
+    width: 280px;
+    max-width: 100%;
+}
+
+.search-box i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.filter-options {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.filter-select {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    background: white;
+    width: 140px;
+}
+
+/* Listings Grid */
+.listings-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.listing-card {
+    width: calc((100% - 3rem) / 3); /* For 3 cards per row with 1.5rem gap */
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+/* Simple fade out for removal */
+.listing-card.removing {
+    opacity: 0;
+    transform: scale(0.9);
+    width: 0;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.listing-image {
+    position: relative;
+    height: 200px;
+}
+
+.listing-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.listing-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.listing-status.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+}
+
+.listing-status.pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning-color);
+}
+
+.listing-status.sold {
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--danger-color);
+}
+
+.listing-content {
+    padding: 1.5rem;
+}
+
+.listing-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.listing-title h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+}
+
+.listing-price {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.listing-details {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.listing-meta {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.listing-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.listing-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Buttons */
+.btn-outline {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-outline:hover {
+    background: var(--bg-hover);
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-warning {
+    background: #f59e0b;
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-warning:hover {
+    background: #d97706;
+}
+
+.warning-icon {
+    font-size: 3rem;
+    color: #f59e0b;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.text-danger {
+    color: var(--danger-color);
+    font-weight: 500;
+    margin-top: 1rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dealer-listings-page {
+        padding: 1rem;
+    }
+
+    .dealer-header {
+        flex-direction: column;
+        padding: 1.25rem;
+        gap: 1.5rem;
+    }
+
+    .dealer-info {
+        width: 100%;
+        gap: 1rem;
+        justify-content: flex-start; /* Align to left */
+    }
+
+    .dealer-avatar img {
+        width: 70px; /* Smaller image for mobile */
+        height: 70px;
+        flex-shrink: 0; /* Prevent image from shrinking */
+    }
+
+    .dealer-details {
+        flex: 1; /* Take remaining space */
+    }
+
+    .dealer-details h1 {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .dealer-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .dealer-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dealer-actions {
+        width: 100%;
+        flex-direction: row; /* Keep buttons in one line */
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .dealer-actions button {
+        flex: 1; /* Make buttons take equal width */
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        justify-content: center;
+    }
+
+    .listings-filter {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .search-box {
+        width: 100%;
+        padding: 0 0.5rem;
+        box-sizing: border-box;
+    }
+
+    .search-box input {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 14px;
+        padding: 0.7rem 1rem 0.7rem 2.3rem;
+    }
+
+    .search-box i {
+        left: 1.2rem;
+    }
+
+    .filter-options {
+        width: 100%;
+        padding: 0 0.5rem;
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .filter-select {
+        width: 100%;
+        font-size: 14px;
+        padding: 0.7rem 0.8rem;
+    }
+
+    .listings-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .listing-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .listing-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .listing-actions {
+        flex-direction: row !important;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .listing-actions button {
+        flex: 1;
+        min-width: unset;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        width: calc(50% - 0.375rem) !important;
+    }
+
+    .modal-content {
+        margin: 1rem;
+    }
+
+    .modal-footer {
+        flex-direction: row !important;
+        justify-content: space-between;
+        padding: 1rem;
+    }
+
+    .modal-footer button {
+        width: calc(50% - 0.5rem) !important;
+        margin: 0 !important;
+    }
+
+    .modal-content {
+        margin: 1rem;
+        width: calc(100% - 2rem);
+        max-width: 500px;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination button {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination button.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.page-numbers {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#removeAllListingsModal .modal-body {
+    text-align: center;
+}
+
+#removeAllListingsModal ul {
+    text-align: left;
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+#removeAllListingsModal ul li {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+/* Delete Listing Modal specific styles */
+#deleteListingModal .listing-title-display {
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background: var(--bg-hover);
+    border-radius: 6px;
+    text-align: center;
+}
+
+#deleteListingModal .warning-icon {
+    color: var(--danger-color);
+    margin-bottom: 1rem;
+}
+
+/* Ensure modal footer buttons are side by side on all screen sizes */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.modal-footer button {
+    min-width: 120px;
+    justify-content: center;
+}
+
+/* Modal responsive styles */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 1rem;
+        width: calc(100% - 2rem);
+    }
+
+    .modal-footer {
+        flex-direction: row !important;
+        justify-content: space-between;
+        padding: 1rem;
+    }
+
+    .modal-footer button {
+        width: calc(50% - 0.5rem) !important;
+        min-width: unset;
+        margin: 0 !important;
+    }
+}
+
+/* Animation for modal */
+.modal {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+/* Add styles for larger screens but not quite desktop */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .listings-filter {
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        flex: 1 1 100%;
+        margin-bottom: 1rem;
+    }
+
+    .filter-options {
+        flex: 1;
+        justify-content: flex-start;
+    }
+}
+
+/* Add styles for medium screens */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .listings-filter {
+        justify-content: space-between;
+    }
+
+    .search-box {
+        width: 250px;
+    }
+
+    .filter-select {
+        width: 130px;
+    }
+}
+
+/* Remove Confirmation Modal specific styles */
+#removeConfirmationModal .listing-to-remove {
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background: var(--bg-hover);
+    border-radius: 6px;
+    text-align: center;
+}
+
+#removeConfirmationModal .warning-icon {
+    color: var(--warning-color);
+    font-size: 2rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+/* Listing Remove Modal Styles */
+#listingRemoveModal .modal-content {
+    max-width: 450px;
+}
+
+#listingRemoveModal .modal-header {
+    background: #fef2f2;
+    color: var(--danger-color);
+}
+
+#listingRemoveModal .modal-header i {
+    margin-right: 8px;
+}
+
+.listing-preview {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-hover);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.listing-preview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.listing-preview-details h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.listing-preview-details p {
+    margin: 0;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.warning-message {
+    text-align: center;
+}
+
+.warning-message p:first-child {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Modal Footer Button Styles */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.modal-footer button {
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .listing-preview {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .listing-preview img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .modal-footer {
+        flex-direction: row !important;
+        justify-content: space-between;
+        padding: 1rem;
+    }
+
+    .modal-footer button {
+        width: calc(50% - 0.5rem) !important;
+        min-width: unset;
+    }
+}
+
+/* Modal Animation */
+.modal {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+/* Animation for new position */
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Add this for the dealers table */
+.dealers-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.dealers-table tr {
+    transition: all 0.3s ease;
+}
+
+/* Add this for smooth reflow */
+.listing-card.removing {
+    opacity: 0;
+    transform: scale(0.9);
+    height: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .listing-card {
+        width: calc((100% - 1.5rem) / 2); /* For 2 cards per row */
+    }
+}
+
+@media (max-width: 768px) {
+    .listing-card {
+        width: 100%; /* Full width on mobile */
+    }
+}
+
+/* Toast Notification Styles */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.toast {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast.success {
+    border-left: 4px solid var(--success-color);
+}
+
+.toast.error {
+    border-left: 4px solid var(--danger-color);
+}
+
+.toast.warning {
+    border-left: 4px solid var(--warning-color);
+}
+
+.toast i {
+    font-size: 1.25rem;
+}
+
+.toast.success i {
+    color: var(--success-color);
+}
+
+.toast.error i {
+    color: var(--danger-color);
+}
+
+.toast.warning i {
+    color: var(--warning-color);
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.toast-message {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .toast-container {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+    }
+
+    .toast {
+        min-width: unset;
+        width: 100%;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+    .listing-actions {
+        gap: 0.5rem;
+    }
+
+    .listing-actions button {
+        padding: 0.625rem 0.375rem;
+        font-size: 0.813rem;
+    }
+}
+
+/* Dealer Actions Styles */
+.dealer-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .dealer-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    /* Make the back button take full width in a new row */
+    .dealer-actions .btn-outline {
+        grid-column: 1 / -1; /* Span all columns */
+        order: 1; /* Push to the bottom */
+    }
+
+    .dealer-actions .btn-warning {
+        order: 0;
+    }
+
+    .dealer-actions .btn-danger {
+        order: 0;
+    }
+
+    .dealer-actions button {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+    .dealer-actions {
+        gap: 0.5rem;
+    }
+
+    .dealer-actions button {
+        padding: 0.625rem 0.5rem;
+        font-size: 0.813rem;
+    }
+} 

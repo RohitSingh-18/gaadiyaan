@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callbacks - Admin Dashboard</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .callbacks-container {
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 1200px;
+            width: 95%;
+        }
+
+        .callback-card {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .callback-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .callback-info {
+            flex: 1;
+            min-width: 250px;
+            padding-right: 20px;
+        }
+
+        .callback-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .callback-number {
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1rem;
+        }
+
+        .copy-icon {
+            cursor: pointer;
+            color: #3498db;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .copy-icon:hover {
+            background-color: #f0f7ff;
+            color: #2980b9;
+        }
+
+        .timestamp {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-left: auto;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .no-callbacks {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .no-callbacks i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #adb5bd;
+        }
+
+        .no-callbacks h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .no-callbacks p {
+            font-size: 1rem;
+            color: #6c757d;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Notification Badge */
+        .nav-notification {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        .content-header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Toast Notification Styles for Callbacks */
+        .callback-toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .callback-toast {
+            background-color: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: callbackSlideIn 0.3s ease, callbackFadeOut 0.3s ease 2s forwards;
+            min-width: 250px;
+        }
+
+        .callback-toast i {
+            color: #4CAF50;
+            font-size: 16px;
+        }
+
+        .callback-toast span {
+            color: white;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes callbackSlideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes callbackFadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .callbacks-container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            .callback-card {
+                padding: 15px;
+            }
+
+            .callback-info {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .status-badge {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .content-header{
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+        <!-- Navigation will be loaded dynamically -->
+
+        
+            <div class="content-header" >
+                <h1>Callback Requests</h1>
+                <div class="header-actions">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="all">All Requests</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+
+           <div class="callbacks-container">
+               <div id="callbacks-list">
+                   <!-- Sample Callback Cards -->
+                   <div class="callback-card">
+                       <div class="callback-info">
+                           <div class="callback-name">John Smith</div>
+                           <div class="callback-number">
+                               +1 (555) 123-4567
+                               <i class="fas fa-copy copy-icon" onclick="copyNumber('+1 (555) 123-4567', this)" title="Copy number"></i>
+                           </div>
+                           <div class="timestamp">Dec 7, 2024 10:15 AM</div>
+                       </div>
+                       <span class="status-badge status-pending">Pending</span>
+                   </div>
+           
+                   <div class="callback-card">
+                       <div class="callback-info">
+                           <div class="callback-name">Sarah Johnson</div>
+                           <div class="callback-number">
+                               +1 (555) 987-6543
+                               <i class="fas fa-copy copy-icon" onclick="copyNumber('+1 (555) 987-6543', this)" title="Copy number"></i>
+                           </div>
+                           <div class="timestamp">Dec 7, 2024 9:30 AM</div>
+                       </div>
+                       <span class="status-badge status-completed">Completed</span>
+                   </div>
+           
+                   <div class="callback-card">
+                       <div class="callback-info">
+                           <div class="callback-name">Michael Brown</div>
+                           <div class="callback-number">
+                               +1 (555) 246-8135
+                               <i class="fas fa-copy copy-icon" onclick="copyNumber('+1 (555) 246-8135', this)" title="Copy number"></i>
+                           </div>
+                           <div class="timestamp">Dec 7, 2024 8:45 AM</div>
+                       </div>
+                       <span class="status-badge status-pending">Pending</span>
+                   </div>
+           
+                   <div class="callback-card">
+                       <div class="callback-info">
+                           <div class="callback-name">Emily Davis</div>
+                           <div class="callback-number">
+                               +1 (555) 369-1470
+                               <i class="fas fa-copy copy-icon" onclick="copyNumber('+1 (555) 369-1470', this)" title="Copy number"></i>
+                           </div>
+                           <div class="timestamp">Dec 6, 2024 5:20 PM</div>
+                       </div>
+                       <span class="status-badge status-completed">Completed</span>
+                   </div>
+           
+                   <div class="callback-card">
+                       <div class="callback-info">
+                           <div class="callback-name">Robert Wilson</div>
+                           <div class="callback-number">
+                               +1 (555) 159-7530
+                               <i class="fas fa-copy copy-icon" onclick="copyNumber('+1 (555) 159-7530', this)" title="Copy number"></i>
+                           </div>
+                           <div class="timestamp">Dec 6, 2024 3:10 PM</div>
+                       </div>
+                       <span class="status-badge status-pending">Pending</span>
+                   </div>
+               </div>
+           </div>
+        
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../assets/js/shared-functions.js"></script>
+    <script>
+        $(function() {
+            $("#nav-placeholder").load("../components/sidebar.html");
+        });
+
+        // Filter functionality
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            const selectedStatus = this.value;
+            const cards = document.querySelectorAll('.callback-card');
+            
+            cards.forEach(card => {
+                const statusBadge = card.querySelector('.status-badge');
+                const status = statusBadge.textContent.toLowerCase();
+                
+                if (selectedStatus === 'all' || status === selectedStatus) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

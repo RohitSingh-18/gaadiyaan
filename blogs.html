@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Welcome to Gaadiyaan</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="HandheldFriendly" content="true">
+    <link rel="stylesheet" href="assets/css/master.css">
+    <link rel="stylesheet" href="./assets/css/search.css">l̥
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style id="swiper-styles"></style>
+    <script src="https://kit.fontawesome.com/2f346a55b2.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/auth-handler.js"></script>
+    
+</head>
+
+<body class="page">
+    
+    
+    <!-- Loader-->
+      <div id="page-preloader"><span class="spinner border-t_second_b border-t_prim_a"></span></div>
+    <!-- Loader end-->
+
+
+   
+
+    
+
+
+
+    <div class="l-theme animated-css animsition" data-header="sticky" data-header-top="200" >
+        <!-- ==========================-->
+        <!-- MOBILE MENU-->
+        <!-- ==========================-->
+        <div data-off-canvas="mobile-slidebar left overlay">
+            <a class="navbar-brand scroll" href="index.html"><img class="scroll-logo" style="height: 179px; width: auto; margin: -24px;" src="./assets/media/general/mobile_logo.png" alt="logo"></a>
+
+            <div class="mobile-callback-btn" style="padding: 10px 15px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <a class="nav-link d-flex align-items-center justify-content-center" href="#" data-toggle="modal" data-target="#callbackModal" style="color: #d01818; white-space: nowrap;">
+                    <i class="ic text-primary icon-call-in" style="margin-right: 8px;"></i>
+                    Request a Call Back
+                </a>
+            </div>
+            
+            <ul class="navbar-nav">
+                <li class="nav-item active"><a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+                <li class="nav-item auth-nav-item">
+                    <!-- This will be dynamically updated by auth-handler.js -->
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#feedbackModal"> Feedback</a></li>
+                <li class="nav-item"><a class="nav-link" href="contacts.html">Contact</a></li>
+                <br>
+                <li><a class="btn btn-primary btn-sm col-auto d-block d-xl-block" href="comingsoon.html">
+                    <i class="fas fa-motorcycle"></i> For Bike Lovers
+                </a></li>
+            </ul>
+
+        </div>
+        <div data-canvas="container">
+           
+            <header class="header">
+                <div class="top-bar d-none d-xl-block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col offset-2">
+                                <div class="top-bar__inner row justify-content-between align-items-center">
+                                    <ul class="top-bar__list list-unstyled col">
+                                        <li class="top-bar__item"><a class="top-bar__link" href="gaadiyaanodisha@gmail.com">gaadiyaanodisha@gmail.com</a></li>
+                                        <li class="top-bar__item">Mon to Fri : 9:00am to 6:00pm</li>
+                                        <li class="top-bar__item">India, Odisha, Cuttack</li>
+                                    </ul>
+                                    <a class="btn btn-primary btn-sm col-auto d-block d-xl-block" href="comingsoon.html">
+                                        <i class="fas fa-motorcycle"></i> For Bike Lovers
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-main">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-2 col-auto">
+                                <a class="navbar-brand scroll" href="index.html"><img class="normal-logo"  src="./assets/media/general/logo.png" alt=""></a>
+                            </div>
+                            <div class="col-lg-auto col">
+                                <div class="header-contacts d-none d-md-block d-lg-none d-xl-block">
+                                    <i class="ic text-primary icon-call-in"></i>
+                                    <span class="header-contacts__inner">Request a Call Back
+                                        <a class="header-contacts__number" href="#" data-toggle="modal" data-target="#callbackModal">Click Here</a>
+                                    </span>
+                                </div>
+                                <!-- Mobile Trigger Start-->
+                                <button class="menu-mobile-button js-toggle-mobile-slidebar toggle-menu-button d-lg-none"><i class="toggle-menu-button-icon"><span></span><span></span><span></span><span></span><span></span><span></span></i></button>
+                                <!-- Mobile Trigger End-->
+                            </div>
+                            <div class="col-lg d-none d-lg-block">
+                                <nav class="navbar navbar-expand-md justify-content-end" id="nav">
+                                    <ul class="yamm main-menu navbar-nav">
+                                        <li class="nav-item active"><a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a></li>
+
+                                        <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+                                        <li class="nav-item auth-nav-item">
+                                            <!-- This will be dynamically updated by auth-handler.js -->
+                                        </li>
+
+                                        <!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown1" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
+                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown1"><a class="dropdown-item" href="typography.html">Typography</a></div>
+                                        </li> -->
+                                        <!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown4" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">News</a>
+                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown4"><a class="dropdown-item" href="blog-main.html">Blog main</a><a class="dropdown-item" href="blog-post.html">Blog post</a></div>
+                                        </li> -->
+                                        <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#feedbackModal"></i> Feedback</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="contacts.html">Contact</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- end .header-->
+          
+            <!-- New blog section -->
+                <!-- Blog Hero Section -->
+                <div style="position: relative; height: 40vh; min-height: 300px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,1)), url('assets/media/content/blog/blog-hero.jpg'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; color: white; margin-bottom: 50px;">
+                    <div style="max-width: 800px; padding: 20px;">
+                        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Gaadiyaan Blog</h1>
+                        <p style="font-size: 1.2rem; opacity: 0.9;">Latest News, Tips & Insights About Cars</p>
+                    </div>
+                </div>
+
+                
+
+                <!-- Blog Posts Grid -->
+                <div class="container">
+                    <div class="row">
+                        <!-- Blog Post Card 1 -->
+                        <div class="col-lg-4 col-md-6" style="margin-bottom: 30px;">
+                            <div style="background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; height: 100%; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                                <img src="assets/media/general/1.jpg" alt="Blog Post" style="width: 100%; height: 200px; object-fit: cover;">
+                                <div style="padding: 25px;">
+                                    <div style="color: #d01818; font-size: 0.9rem; margin-bottom: 10px;">CAR MAINTENANCE • 3 MIN READ</div>
+                                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Essential Car Maintenance Tips for Summer</h3>
+                                    <p style="color: #666; margin-bottom: 20px;">Keep your car running smoothly during the hot summer months with these maintenance tips.</p>
+                                    <a href="#" style="color: #d01818; text-decoration: none; font-weight: 500;">Read More →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post Card 2 -->
+                        <div class="col-lg-4 col-md-6" style="margin-bottom: 30px;">
+                            <div style="background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; height: 100%; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                                <img src="assets/media/content/b-goods/360x260/1.1.jpg" alt="Blog Post" style="width: 100%; height: 200px; object-fit: cover;">
+                                <div style="padding: 25px;">
+                                    <div style="color: #d01818; font-size: 0.9rem; margin-bottom: 10px;">BUYING GUIDE • 4 MIN READ</div>
+                                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Top 10 Used Cars Under 5 Lakhs</h3>
+                                    <p style="color: #666; margin-bottom: 20px;">Discover the best budget-friendly pre-owned cars available in Odisha market.</p>
+                                    <a href="#" style="color: #d01818; text-decoration: none; font-weight: 500;">Read More →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post Card 3 -->
+                        <div class="col-lg-4 col-md-6" style="margin-bottom: 30px;">
+                            <div style="background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; height: 100%; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                                <img src="assets/media/content/b-goods/360x260/1.1.jpg" alt="Blog Post" style="width: 100%; height: 200px; object-fit: cover;">
+                                <div style="padding: 25px;">
+                                    <div style="color: #d01818; font-size: 0.9rem; margin-bottom: 10px;">TIPS & TRICKS • 6 MIN READ</div>
+                                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">How to Negotiate the Best Price</h3>
+                                    <p style="color: #666; margin-bottom: 20px;">Expert tips on getting the best deal when buying a pre-owned vehicle.</p>
+                                    <a href="#" style="color: #d01818; text-decoration: none; font-weight: 500;">Read More →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- More Blog Posts -->
+                        <!-- Repeat the same structure for more posts -->
+                    </div>
+
+                
+                </div>
+            
+
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="text-center">
+                                <div class="footer-logo">
+                                    <a class="footer-logo__link" href="index.html"><img class="img-responsive" style="height: 261px; width: auto; margin: -120px;" src="./assets/media/general/footer_logo.png" alt="Logo"></a>
+                        </div>
+                        <ul class="footer-soc list-unstyled">
+                            <li class="footer-soc__item">
+                                <a class="footer-soc__link" href="https://www.facebook.com/gaadiyaan?mibextid=ZbWKwL" target="_blank" style="background: #1877F2;">
+                                    <i class="ic fab fa-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li class="footer-soc__item">
+                                <a class="footer-soc__link" href="https://www.instagram.com/gaadiyaanodisha/profilecard/?igsh=MXQzb3hkMWR6YWNyMA==" target="_blank" style="background: #E4405F;">
+                                    <i class="ic fab fa-instagram"></i>
+                                </a>
+                            </li>
+                            
+                            <li class="footer-soc__item">
+                                <a class="footer-soc__link" href="https://www.youtube.com/@gaadiyaan" target="_blank" style="background: #FF0000;">
+                                    <i class="ic fab fa-youtube"></i>
+                                </a>
+                            </li>
+                            <li class="footer-soc__item">
+                                <a class="footer-soc__link" href="gaadiyaanodisha@gmail.com" style="background: #EA4335;">
+                                    <i class="ic fas fa-envelope"></i>
+                                </a>
+                            </li>
+                        </ul>
+                                    </div>
+                                    </div>
+                                </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-5">
+                            <div class="footer-section footer-section_info">
+                                <div class="footer-info">At Gaadiyaan we connect buyers in Odisha with trusted, certified pre-owned vehicles through our network of reputable dealerships. Our goal is to make car buying simple, transparent, and reliable. With verified listings, easy-to-use filters, and a focus on customer satisfaction, we're here to help you find your ideal car quickly and confidently. Discover your next vehicle with us!</div>
+                                <div class="footer-contacts">
+                                    <div class="footer-contacts__item"><i class="ic icon-location-pin"></i>Odisha, Cuttack, India</div>
+                                    <div class="footer-contacts__item"><i class="ic icon-envelope"></i><a href="mailto:gaadiyaanodisha@gmail.com">gaadiyaanodisha@gmail.com</a></div>
+                                    <div class="footer-contacts__item"><i class="ic icon-earphones-alt"></i>Phone:
+                                        <a href="tel:+918249393960">+91 82 4939 3960</a>  
+                            </div>
+                                    <div class="footer-contacts__item"><i class="ic icon-earphones-alt"></i>Phone:            
+                                        <a href="tel:+919583528458">+91 95 8352 8458</a>
+                                </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                        <div class="col-lg-4 col-sm-3">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <section class="footer-section footer-section_link">
+                                        <h3 class="footer-section__title">About Us</h3>
+                                        <ul class="footer-list list-unstyled">
+                                            <li><a href="index.html">Home</a></li>
+                                            <li><a href="blogs.html">Blogs</a></li>
+                                            <li><a href="about.html">About us</a></li>
+                                            <li><a href="allcars.html">All Cars</a></li>
+                                            <li><a href="signup.html">Signup</a></li>
+                                            <li><a href="contacts.html">Contact</a></li>
+                                        </ul>
+                                    </section>
+                                    </div>
+                                <div class="col-lg-6">
+                                    <section class="footer-section footer-section_link">
+                                        <h3 class="footer-section__title">Customer Links</h3>
+                                        <ul class="footer-list list-unstyled">
+                                            <li><a href="#">Latest Cars</a></li>
+                                            <li><a href="#">Featured Cars</a></li>
+                                            <li><a href="#">Buy a Car</a></li>
+                                            <li><a href="#">Reviews</a></li>
+                                        </ul>
+            </section>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <section class="footer-section footer-section_subscribe">
+                                <h3 class="footer-section__title">Subscribe Newsletter</h3>
+                                <form class="footer-form">
+                                    <div class="footer-form__info">Get our weekly nwsletter for latest car news exclusive offers and deals and more.</div>
+                                    <div class="form-group">
+                                        <input class="footer-form__input form-control" type="email" placeholder="your email">
+                                </div>
+                                    <button class="btn btn-sm btn-primary">Subscribe</button>
+                                </form>
+            </section>
+                            </div>
+                            </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="footer-copyright">
+                                Copyrights (c) 2024 Gaadiyaan.com. All rights reserved.
+                                <a class="footer-copyright__link" href="privacy-policy.html">Privacy Policy</a>
+                                </div>
+                        </div>
+                    </div><span class="footer__btn-up js-scroll-top"><i class="ic fas fa-angle-up"></i><img src="assets/media/general/go_top.png" alt="go top"></span>
+                    </div>
+            </footer>
+            <!-- .footer-->
+                </div>
+                            </div>
+    <!-- end layout-theme-->
+
+
+    <!-- ++++++++++++-->
+    <!-- MAIN SCRIPTS-->
+    <!-- ++++++++++++-->
+
+    <script src="./assets/js/tutorial.js"></script>
+     
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
+    <!-- Bootstrap-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="assets/libs/bootstrap-select.min.js"></script>
+    <!-- Pop-up window-->
+    <script src="assets/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <!-- Headers scripts-->
+    <script src="assets/plugins/headers/slidebar.js"></script>
+    <script src="assets/plugins/headers/header.js"></script>
+    <!-- Mail scripts-->
+    <script src="assets/plugins/jqBootstrapValidation.js"></script>
+    <script src="assets/plugins/contact_me.js"></script>
+    <!-- Video player-->
+    <script src="assets/plugins/flowplayer/flowplayer.min.js"></script>
+    <!-- Filter and sorting images-->
+    <script src="assets/plugins/isotope/isotope.pkgd.min.js"></script>
+    <script src="assets/plugins/isotope/imagesLoaded.js"></script>
+    <!-- Progress numbers-->
+    <script src="assets/plugins/rendro-easy-pie-chart/jquery.easypiechart.min.js"></script>
+    <script src="assets/plugins/rendro-easy-pie-chart/jquery.waypoints.min.js"></script>
+    <!-- Animations-->
+    <script src="assets/plugins/scrollreveal/scrollreveal.min.js"></script>
+    <!-- Scale images-->
+    <script src="assets/plugins/ofi.min.js"></script>
+    <!-- Main slider-->
+    <script src="assets/plugins/slider-pro/jquery.sliderPro.min.js"></script>
+    <!--Sliders-->
+    <script src="assets/plugins/slick/slick.js"></script>
+    <!-- User customization-->
+    <script src="assets/js/custom.js"></script>
+    <!-- Search-->
+     <script src="./assets/js/search.js"></script>
+
+        <!-- Add this modal HTML right after your header section -->
+        <div class="modal fade" id="callbackModal" tabindex="-1" role="dialog" aria-labelledby="callbackModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="callbackModalLabel">Request a Call Back</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="callbackForm" action="https://submit-form.com/29EBWEFks" method="POST" onsubmit="handleCallbackSubmit(event)">
+                            <div class="form-group">
+                                <label for="name">Name*</label>
+                                <input type="text" class="form-control" id="name" name="name" required 
+                                       placeholder="Enter your name">
+                                <div class="invalid-feedback">Please enter your name</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number*</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required 
+                                       placeholder="Enter your phone number"
+                                       maxlength="10">
+                                <small class="text-muted">Please enter a 10-digit phone number</small>
+                                <div class="invalid-feedback">Please enter a valid 10-digit phone number</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Add this script before the closing body tag -->
+    <script>
+        function handleCallbackSubmit(event) {
+            event.preventDefault();
+            
+            const submitButton = document.querySelector('#callbackForm button[type="submit"]');
+            submitButton.disabled = true;
+    
+            const nameInput = document.getElementById('name');
+            const phoneInput = document.getElementById('phone');
+            
+            // Reset previous error states
+            nameInput.classList.remove('is-invalid');
+            phoneInput.classList.remove('is-invalid');
+            
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
+            
+            // Validate name
+            if (name === '') {
+                nameInput.classList.add('is-invalid');
+                submitButton.disabled = false;
+                return;
+            }
+            
+            // Validate phone number
+            if (phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+                phoneInput.classList.add('is-invalid');
+                submitButton.disabled = false;
+                return;
+            }
+    
+            // Create form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+    
+            // Submit to Formspark
+            fetch("https://submit-form.com/29EBWEFks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Close modal first
+                    $('#callbackModal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    
+                    // Show success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thank You!',
+                        text: `We will call you back shortly on ${phone}`,
+                        confirmButtonColor: '#d01818'
+                    });
+    
+                    // Reset form
+                    document.getElementById('callbackForm').reset();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Please try again later.',
+                    confirmButtonColor: '#d01818'
+                });
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+            });
+        }
+        </script>
+
+    <!-- Add SweetAlert2 for better alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    
+
+    <!-- Add the Feedback Modal before the end of body tag -->
+    <div class="modal feedback-modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true" style="z-index: 99999;">
+        <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 900px;">
+            <div class="modal-content" style="border-radius: 8px; border: none; box-shadow: 0 3px 20px rgba(0,0,0,0.2);">
+                <div class="modal-header" style="background: #D01818; color: white; border-radius: 8px 8px 0 0; padding: 1.5rem;">
+                    <h5 class="modal-title" id="feedbackModalLabel" style="font-weight: 600; font-size: 1.25rem;">Share Your Feedback</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 1.5rem;">
+                    <form id="feedbackForm">
+                        <div class="row feedback-form-row">
+                            <div class="col-lg-4 col-md-12">
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label for="feedbackName">Name</label>
+                                    <input type="text" class="form-control" id="feedbackName" required style="border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem; transition: all 0.3s ease;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label for="feedbackEmail">Email</label>
+                                    <input type="email" class="form-control" id="feedbackEmail" required style="border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem; transition: all 0.3s ease;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label for="feedbackType">Feedback Type</label>
+                                    <select class="form-control" id="feedbackType" required style="border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem; transition: all 0.3s ease;">
+                                        <option value="">Select Type</option>
+                                        <option value="suggestion">Suggestion</option>
+                                        <option value="complaint">Complaint</option>
+                                        <option value="appreciation">Appreciation</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-12">
+                                <div class="form-group message-group" style="height: 100%; display: flex; flex-direction: column;">
+                                    <label for="feedbackMessage">Message</label>
+                                    <textarea class="form-control" id="feedbackMessage" required style="flex-grow: 1; min-height: 120px; border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem; transition: all 0.3s ease;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="file-upload" style="position: relative; display: inline-block; width: 100%;">
+                                    <label class="file-upload-label py-2" style="height: auto; padding: 10px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border: 2px dashed #ddd; border-radius: 6px; cursor: pointer; transition: all 0.3s ease;">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <span class="upload-text" style="margin-left: 8px;">Drop files here or click to upload</span>
+                                        <small class="text-muted upload-hint" style="margin-left: 8px;">(Max: 5MB - jpg, png, pdf)</small>
+                                        <input type="file" class="file-upload-input" id="feedbackAttachment" multiple accept=".jpg,.jpeg,.png,.pdf" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                                    </label>
+                                </div>
+                                <div class="upload-preview" id="uploadPreview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; display: none;"></div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary" style="min-width: 150px; padding: 10px 30px; font-weight: 500; transition: all 0.3s ease;">Submit Feedback</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this script for mobile responsiveness -->
+    <script>
+    function adjustModalForMobile() {
+        const isMobile = window.innerWidth <= 768;
+        const modal = document.querySelector('#feedbackModal');
+        
+        if (isMobile) {
+            modal.querySelector('.modal-dialog').style.margin = '0.5rem';
+            modal.querySelector('.modal-dialog').style.maxWidth = 'calc(100% - 1rem)';
+            modal.querySelector('.modal-content').style.borderRadius = '12px';
+            modal.querySelector('.modal-header').style.padding = '1rem';
+            modal.querySelector('.modal-body').style.padding = '1rem';
+            modal.querySelector('.modal-title').style.fontSize = '1.1rem';
+            
+            // Adjust file upload label for mobile
+            const fileUploadLabel = modal.querySelector('.file-upload-label');
+            fileUploadLabel.style.flexDirection = 'column';
+            fileUploadLabel.style.padding = '0.75rem';
+            fileUploadLabel.style.textAlign = 'center';
+            
+            // Adjust text sizes for mobile
+            modal.querySelector('.upload-text').style.margin = '0.5rem 0';
+            modal.querySelector('.upload-text').style.fontSize = '0.9rem';
+            modal.querySelector('.upload-hint').style.margin = '0';
+            modal.querySelector('.upload-hint').style.fontSize = '0.8rem';
+            
+            // Make button full width on mobile
+            modal.querySelector('.btn-primary').style.width = '100%';
+            modal.querySelector('.btn-primary').style.marginTop = '0.5rem';
+        }
+    }
+
+    // Run on load and resize
+    window.addEventListener('load', adjustModalForMobile);
+    window.addEventListener('resize', adjustModalForMobile);
+    </script>
+
+    <!-- Add this JavaScript before the end of body tag -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileUpload = document.getElementById('feedbackAttachment');
+        const uploadPreview = document.getElementById('uploadPreview');
+        const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+
+        fileUpload.addEventListener('change', function(e) {
+            uploadPreview.innerHTML = '';
+            uploadPreview.style.display = 'none';
+            
+            const files = Array.from(e.target.files);
+            let hasInvalidFile = false;
+
+            files.forEach(file => {
+                if (file.size > maxFileSize) {
+                    alert(`File ${file.name} is too large. Maximum size is 5MB.`);
+                    hasInvalidFile = true;
+                    return;
+                }
+                
+                if (!allowedTypes.includes(file.type)) {
+                    alert(`File ${file.name} is not allowed. Please upload only jpg, png, or pdf files.`);
+                    hasInvalidFile = true;
+                    return;
+                }
+
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    uploadPreview.appendChild(img);
+                } else {
+                    const div = document.createElement('div');
+                    div.textContent = file.name;
+                    uploadPreview.appendChild(div);
+                }
+            });
+
+            if (!hasInvalidFile && files.length > 0) {
+                uploadPreview.style.display = 'block';
+            }
+        });
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Here you would typically send the form data to your server
+            // For now, we'll just show a success message
+            alert('Thank you for your feedback! We will review it shortly.');
+            $('#feedbackModal').modal('hide');
+            this.reset();
+            uploadPreview.innerHTML = '';
+            uploadPreview.style.display = 'none';
+        });
+    });
+    </script>
+
+    <!-- Add this right after the existing feedback modal script -->
+    <script>
+    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+
+        try {
+            // Collect form data
+            const formData = new FormData(this);
+            const files = document.getElementById('feedbackAttachment').files;
+            for (let i = 0; i < files.length; i++) {
+                formData.append('attachments[]', files[i]);
+            }
+
+            // Here you would typically send the data to your server
+            // await fetch('/api/feedback', { method: 'POST', body: formData });
+
+            // Show success message
+            $('#feedbackModal').modal('hide');
+            Swal.fire({
+                icon: 'success',
+                title: 'Thank You!',
+                text: 'Your feedback has been submitted successfully.',
+                confirmButtonColor: '#d01818'
+            });
+
+            // Reset form
+            this.reset();
+            document.getElementById('uploadPreview').style.display = 'none';
+            document.getElementById('uploadPreview').innerHTML = '';
+
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong! Please try again.',
+                confirmButtonColor: '#d01818'
+            });
+        } finally {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Add visual feedback for form validation
+    const inputs = document.querySelectorAll('#feedbackForm input, #feedbackForm textarea, #feedbackForm select');
+    inputs.forEach(input => {
+        input.addEventListener('invalid', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#dc3545';
+            
+            // Add shake animation
+            this.style.animation = 'shake 0.5s';
+            setTimeout(() => this.style.animation = '', 500);
+        });
+        
+        input.addEventListener('input', function() {
+            this.style.borderColor = '#ddd';
+        });
+    });
+    </script>
+
+    <!-- Add this CSS for the shake animation -->
+    <style>
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+    </style>
+
+    <!-- Update the callback modal styles -->
+    <style>
+        /* Modal z-index and mobile/tablet positioning */
+        #callbackModal {
+            z-index: 99999 !important; /* Ensures modal appears above sidebar */
+        }
+
+        /* Mobile and Tablet specific styles */
+        @media (max-width: 991px) {
+            #callbackModal .modal-dialog {
+                width: 90% !important;
+                max-width: 400px !important;
+                margin: 1.75rem auto !important;
+                position: fixed !important;
+                left: 50% !important;
+                top: 50% !important;
+                transform: translate(-50%, -50%) !important;
+            }
+
+            #callbackModal .modal-content {
+                border-radius: 15px !important;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+            }
+
+            #callbackModal .modal-header {
+                padding: 1rem !important;
+                border-radius: 15px 15px 0 0 !important;
+            }
+
+            #callbackModal .modal-body {
+                padding: 1.5rem !important;
+            }
+
+            #callbackModal .form-group {
+                margin-bottom: 1rem !important;
+            }
+
+            #callbackModal input {
+                height: 45px !important;
+                font-size: 16px !important; /* Prevents zoom on iOS */
+            }
+
+            #callbackModal .btn {
+                height: 45px !important;
+                font-size: 16px !important;
+            }
+        }
+
+        /* Ensure modal backdrop is also above sidebar */
+        .modal-backdrop {
+            z-index: 99998 !important;
+        }
+    </style>
+   
+</body>
+
+</html>

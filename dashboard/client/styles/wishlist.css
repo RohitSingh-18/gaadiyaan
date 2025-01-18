@@ -1,0 +1,358 @@
+.wishlist-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.section-title {
+    font-size: 32px;
+    color: #1E293B;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    margin-bottom: 15px !important;
+    letter-spacing: -0.5px;
+}
+
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.car-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.car-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.car-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.car-details {
+    padding: var(--spacing-lg);
+}
+
+.car-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: var(--text-lg);
+    margin-bottom: var(--spacing-xs);
+}
+
+.car-price {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: var(--text-xl);
+    margin-bottom: var(--spacing-md);
+    font-family: var(--font-heading);
+}
+
+.car-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.info-item i {
+    color: var(--primary-color);
+    font-size: var(--text-lg);
+    width: 24px;
+    text-align: center;
+}
+
+.info-item span {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+.card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.action-button {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    font-family: var(--font-heading);
+}
+
+.view-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.remove-btn {
+    background: var(--input-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-secondary);
+    grid-column: 1 / -1;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: -50px;
+}
+
+.empty-state i {
+    font-size: 64px;
+    color: #E2E8F0;
+    margin-bottom: var(--spacing-xl);
+    opacity: 0.2;
+}
+
+.empty-state h3 {
+    font-family: var(--font-heading);
+    color: #1E293B;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--spacing-sm) 0;
+}
+
+.empty-state p {
+    color: #64748B;
+    font-size: 16px;
+    margin: 0;
+    line-height: 1.6;
+    max-width: 300px;
+}
+
+.empty-state .fa-heart-broken {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .wishlist-section {
+        padding: var(--spacing-md);
+    }
+
+    .wishlist-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .car-card {
+        min-width: 0;
+    }
+
+    .car-image {
+        height: 120px;
+    }
+
+    .car-details {
+        padding: var(--spacing-sm);
+    }
+
+    .car-title {
+        font-size: var(--text-sm);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .car-price {
+        font-size: var(--text-base);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .car-info {
+        display: none;
+    }
+
+    .card-actions {
+        flex-direction: row;
+        gap: var(--spacing-xs);
+    }
+
+    .action-button {
+        padding: var(--spacing-xs);
+        font-size: var(--text-xs);
+    }
+
+    .action-button span {
+        display: none;
+    }
+
+    .action-button i {
+        margin: 0;
+        font-size: var(--text-base);
+    }
+
+    .empty-state {
+        min-height: calc(100vh - 150px);
+        top: -30px;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .empty-state h3 {
+        font-size: 24px;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 380px) {
+    .wishlist-grid {
+        gap: 8px;
+    }
+
+    .car-image {
+        height: 100px;
+    }
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 400px;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    font-size: var(--text-lg);
+    margin: 0;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: var(--text-lg);
+    padding: var(--spacing-xs);
+}
+
+.modal-body {
+    padding: var(--spacing-xl);
+    text-align: center;
+}
+
+.warning-icon {
+    font-size: 48px;
+    color: var(--error-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.modal-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+}
+
+.modal-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+.secondary-btn {
+    background: white;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.primary-btn {
+    background: var(--error-color);
+    color: white;
+    border: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 
