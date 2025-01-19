@@ -110,6 +110,9 @@
         .filter-title {
           margin: 0;
           font-size: 1.2rem;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
         }
         
         .filter-close-btn {
@@ -126,55 +129,67 @@
         }
         
         .filter-group {
-          margin-bottom: 20px;
+          margin-bottom: 24px;
         }
         
         .filter-label {
+          font-size: 14px;
           font-weight: 600;
+          color: #333;
           margin-bottom: 10px;
-          color: #2c3e50;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
         
         .filter-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
         }
         
         .filter-tag {
-          display: inline-flex;
+          display: flex;
           align-items: center;
-          padding: 5px 10px;
+          padding: 8px 12px;
           background: #f8f9fa;
-          border-radius: 20px;
+          border-radius: 6px;
           cursor: pointer;
           transition: all 0.2s ease;
+          font-size: 14px;
+          font-weight: 500;
+          color: #555;
         }
         
         .filter-tag:hover {
           background: #e9ecef;
         }
         
-        .filter-tag input {
-          margin-right: 5px;
+        .filter-tag input[type="checkbox"] {
+          margin-right: 8px;
+          width: 16px;
+          height: 16px;
         }
         
         .filter-toggle-btn {
-          background: #d01818 !important;
+          background: linear-gradient(to right, #000000, #d01818) !important;
           color: white !important;
           padding: 10px 20px !important;
           border: none;
-          border-radius: 4px;
-          font-weight: 500;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 14px;
+          letter-spacing: 0.5px;
           display: flex;
           align-items: center;
           gap: 8px;
-          transition: background-color 0.3s ease;
+          transition: all 0.3s ease;
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .filter-toggle-btn:hover {
-          background: #b01515 !important;
+          background: linear-gradient(to right, #1a1a1a, #b01515) !important;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 6px rgba(0,0,0,0.15);
         }
         
         .filter-toggle-btn i {
@@ -186,10 +201,26 @@
         }
         
         /* Custom Select Styling */
-        .custom-select {
+        .custom-select,
+        .ui-select,
+        .selectpicker {
           height: 45px;
-          border: 1px solid #ddd;
-          border-radius: 4px;
+          border: 1px solid #e0e0e0;
+          border-radius: 6px;
+          padding: 8px 12px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #333;
+          background-color: #fff;
+          transition: all 0.3s ease;
+        }
+        
+        .custom-select:focus,
+        .ui-select:focus,
+        .selectpicker:focus {
+          border-color: #d01818;
+          box-shadow: 0 0 0 2px rgba(208, 24, 24, 0.1);
+          outline: none;
         }
         
         /* Price Range Styling */
@@ -200,16 +231,24 @@
         .price-inputs {
           display: flex;
           align-items: center;
-          gap: 10px;
-          margin-top: 10px;
+          gap: 12px;
         }
         
         .price-inputs input {
-          width: 45%;
+          flex: 1;
+          height: 45px;
+          padding: 8px 12px;
+          border: 1px solid #e0e0e0;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #333;
         }
         
         .price-inputs span {
-          color: #999;
+          color: #666;
+          font-weight: 500;
+          font-size: 14px;
         }
         
         /* Button Styling */
@@ -219,6 +258,10 @@
         
         .btn-block {
           padding: 12px;
+          font-size: 14px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
         
         @media (min-width: 992px) {
@@ -396,17 +439,21 @@
         
         /* Additional Filter Styles */
         .filter-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
         
         .filter-label {
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600;
             color: #333;
-            margin-bottom: 8px;
-            display: block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .custom-select {
+        .custom-select,
+        .ui-select,
+        .selectpicker {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -521,6 +568,9 @@
         background-color: #b01515 !important;
     }
     </style>
+
+    <!-- Add before closing </head> tag -->
+    <script src="/assets/js/auth-handler.js"></script>
 </head>
 
 <body class="page">
@@ -555,7 +605,9 @@
                 <li class="nav-item active"><a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
                 <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="/auth/signup.html">Sign Up</a></li>
+                <li class="nav-item auth-nav-item">
+                    <!-- This will be dynamically updated by auth-handler.js -->
+                </li>
                 <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#feedbackModal"> Feedback</a></li>
                 <li class="nav-item"><a class="nav-link" href="contacts.html">Contact</a></li>
@@ -616,7 +668,9 @@
                                         <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
                                         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
                                         <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="/auth/signup.html">Sign Up</a></li>
+                                        <li class="nav-item auth-nav-item">
+                                            <!-- This will be dynamically updated by auth-handler.js -->
+                                        </li>
 
                                         <!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown1" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
                                             <div class="dropdown-menu" aria-labelledby="navbarDropdown1"><a class="dropdown-item" href="typography.html">Typography</a></div>
@@ -680,33 +734,36 @@
                   </select>
                 </div>
 
-                <!-- Vehicle Type -->
+                <!-- Seats -->
                 <div class="filter-group">
-                  <label class="filter-label">Vehicle Type</label>
-                  <div class="filter-tags">
-                    <label class="filter-tag">
-                      <input type="checkbox" name="vehicle_type" value="suv"> SUV
-                    </label>
-                    <label class="filter-tag">
-                      <input type="checkbox" name="vehicle_type" value="sedan"> Sedan
-                    </label>
-                    <label class="filter-tag">
-                      <input type="checkbox" name="vehicle_type" value="hatchback"> Hatchback
-                    </label>
-                    <label class="filter-tag">
-                      <input type="checkbox" name="vehicle_type" value="luxury"> Luxury
-                    </label>
-                  </div>
+                  <label class="filter-label">Seats</label>
+                  <select class="form-control custom-select">
+                    <option value="">Seats</option>
+                    <option>2</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                  </select>
                 </div>
 
-                <!-- Condition -->
+                <!-- Kilometer Driven -->
                 <div class="filter-group">
-                  <label class="filter-label">Condition</label>
+                  <label class="filter-label">Kms</label>
                   <select class="form-control custom-select">
-                    <option value="">Select Condition</option>
-                    <option>New</option>
-                    <option>Used</option>
-                    <option>Certified Pre-owned</option>
+                    <option value="">Kms</option>
+                    <option>0-10000</option>
+                    <option>10000-20000</option>
+                    <option>20000-30000</option>
+                    <option>30000-40000</option>
+                    <option>40000-50000</option>
+                    <option>50000-60000</option>
+                    <option>60000-70000</option>
+                    <option>70000-80000</option>
+                    <option>80000-90000</option>
+                    <option>90000-100000</option>
+                    <option>100000+</option>
                   </select>
                 </div>
 
@@ -977,22 +1034,32 @@
 
                             <!-- Vehicle Type -->
                             <div class="b-filter__row">
-                              <select class="selectpicker" data-width="100%" title="Vehicle Type" data-style="ui-select">
-                                <option value="">Vehicle Type</option>
-                                <option>SUV</option>
-                                <option>Sedan</option>
-                                <option>Hatchback</option>
-                                <option>Luxury</option>
+                              <select class="selectpicker" data-width="100%" title="Seats" data-style="ui-select">
+                                <option value="">Seats</option>
+                                <option>2</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
                               </select>
                             </div>
 
                             <!-- Condition -->
                             <div class="b-filter__row">
-                              <select class="selectpicker" data-width="100%" title="Condition" data-style="ui-select">
-                                <option value="">Select Condition</option>
-                                <option>New</option>
-                                <option>Used</option>
-                                <option>Certified Pre-owned</option>
+                              <select class="selectpicker" data-width="100%" title="Kms" data-style="ui-select">
+                                <option value="">Kms</option>
+                                <option>0-10000</option>
+                                <option>10000-20000</option>
+                                <option>20000-30000</option>
+                                <option>30000-40000</option>
+                                <option>40000-50000</option>
+                                <option>50000-60000</option>
+                                <option>60000-70000</option>
+                                <option>70000-80000</option>
+                                <option>80000-90000</option>
+                                <option>90000-100000</option>
+                                <option>100000+</option>
                               </select>
                             </div>
 

@@ -254,6 +254,12 @@
             
             <nav class="sidebar-nav">
                 <ul>
+                    <li data-page="home">
+                        <a href="../../../index.html" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
                     <li class="active" data-page="listings">
                         <a href="javascript:void(0)" class="nav-link">
                             <i class="fas fa-car"></i>
@@ -353,6 +359,22 @@
             const pageTitle = document.getElementById('pageTitle');
             
             try {
+                // Check authentication before loading page
+                const userProfileStr = localStorage.getItem('userProfile');
+                const isLoggedIn = localStorage.getItem('isLoggedIn');
+                
+                if (!userProfileStr || !isLoggedIn) {
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+
+                const userProfile = JSON.parse(userProfileStr);
+                if (userProfile.userType !== 'dealer') {
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+
                 mainContent.innerHTML = `
                     <div class="loading-container">
                         <div>
@@ -370,7 +392,6 @@
 
                 // Special handling for profile page
                 if (pageName === 'profile') {
-                    // Move generateDealerId to global scope if not already there
                     if (typeof generateDealerId !== 'function') {
                         window.generateDealerId = function() {
                             const year = new Date().getFullYear();
@@ -380,19 +401,15 @@
                             return newId;
                         };
                     }
-
-                    // Initialize profile page functionality
                     initializeProfilePage();
                 }
                 // Special handling for listings page
                 else if (pageName === 'listings') {
-                    // Remove any existing listings.js script
                     const existingScript = document.querySelector('script[src="../js/listings.js"]');
                     if (existingScript) {
                         existingScript.remove();
                     }
 
-                    // Create and append the listings.js script
                     const script = document.createElement('script');
                     script.src = '../js/listings.js';
                     script.defer = true;
@@ -409,13 +426,11 @@
                 }
                 // Special handling for add-listing page
                 else if (pageName === 'add-listing') {
-                    // Remove any existing add-listing.js script
                     const existingScript = document.querySelector('script[src="../js/add-listing.js"]');
                     if (existingScript) {
                         existingScript.remove();
                     }
 
-                    // Create and append the add-listing.js script
                     const script = document.createElement('script');
                     script.src = '../js/add-listing.js';
                     script.defer = true;
@@ -648,7 +663,27 @@
         // Add click handlers to sidebar navigation
         document.querySelectorAll('.sidebar-nav li[data-page]').forEach(li => {
             li.addEventListener('click', () => {
-                loadPage(li.dataset.page);
+                const userProfileStr = localStorage.getItem('userProfile');
+                const isLoggedIn = localStorage.getItem('isLoggedIn');
+                
+                if (!userProfileStr || !isLoggedIn) {
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+
+                try {
+                    const userProfile = JSON.parse(userProfileStr);
+                    if (userProfile.userType !== 'dealer') {
+                        localStorage.clear();
+                        window.location.href = '../../../auth/login.html';
+                        return;
+                    }
+                    loadPage(li.dataset.page);
+                } catch (error) {
+                    console.error('Error parsing user profile:', error);
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                }
             });
         });
 
@@ -666,7 +701,27 @@
 
         // Load default page
         window.addEventListener('DOMContentLoaded', () => {
-            loadPage('listings');
+            const userProfileStr = localStorage.getItem('userProfile');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            
+            if (!userProfileStr || !isLoggedIn) {
+                window.location.href = '../../../auth/login.html';
+                return;
+            }
+
+            try {
+                const userProfile = JSON.parse(userProfileStr);
+                if (userProfile.userType !== 'dealer') {
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+                loadPage('listings');
+            } catch (error) {
+                console.error('Error parsing user profile:', error);
+                localStorage.clear();
+                window.location.href = '../../../auth/login.html';
+            }
         });
 
         // Logout functions

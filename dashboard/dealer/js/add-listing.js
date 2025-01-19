@@ -40,11 +40,23 @@ async function handleButtonClick(e) {
     e.preventDefault();
     e.stopPropagation();
     console.log('Submit button clicked');
+    
+    // Get submit button and add loading state
+    const submitBtn = document.getElementById('submitButton');
+    if (submitBtn) {
+        submitBtn.classList.add('loading');
+    }
+    
     try {
         await handleSubmission();
     } catch (error) {
         console.error('Submission error:', error);
         showNotification(error.message || 'Error submitting form', false);
+    } finally {
+        // Remove loading state regardless of success/failure
+        if (submitBtn) {
+            submitBtn.classList.remove('loading');
+        }
     }
     return false;
 }
@@ -228,11 +240,11 @@ async function handleSubmission() {
     console.log('Starting form submission');
     
     try {
-        // Get the token and user profile from localStorage
-        const token = localStorage.getItem('token');
-        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        // Get the token from userProfile and check authentication
+        const userProfileStr = localStorage.getItem('userProfile');
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
         
-        if (!token || !userProfile) {
+        if (!userProfileStr || !isLoggedIn) {
             showNotification('Please login to create a listing', false);
             setTimeout(() => {
                 window.location.href = '../../../auth/login.html';
@@ -240,11 +252,18 @@ async function handleSubmission() {
             return;
         }
 
-        // Check if user is a dealer
-        if (userProfile.role !== 'dealer') {
+        // Parse user profile and check if dealer
+        const userProfile = JSON.parse(userProfileStr);
+        if (userProfile.userType !== 'dealer') {
             showNotification('Only dealers can create listings', false);
+            setTimeout(() => {
+                window.location.href = '../../../auth/login.html';
+            }, 2000);
             return;
         }
+
+        // Get submit button reference
+        const submitBtn = document.getElementById('submitButton');
 
         // Validate form data
         const data = collectFormData();
@@ -252,6 +271,9 @@ async function handleSubmission() {
         
         if (!validateFormData(data)) {
             console.log('Form validation failed');
+            if (submitBtn) {
+                submitBtn.classList.remove('loading');
+            }
             return;
         }
 
@@ -298,7 +320,7 @@ async function handleSubmission() {
         const response = await fetch(`${API_BASE_URL}/vehicles`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${userProfile.token}`,
                 'Accept': 'application/json'
             },
             body: formData,

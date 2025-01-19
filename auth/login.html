@@ -19,6 +19,33 @@
             z-index: 1000;
         }
 
+        /* Loading button styles */
+        .auth-button.loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.8;
+            color: transparent !important;
+        }
+
+        .auth-button.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: buttonLoader 0.8s linear infinite;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes buttonLoader {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
         .modal-content {
             position: relative;
             background-color: #fff;
@@ -146,6 +173,26 @@
     </div>
 
     <script type="module" src="login.js"></script>
+    <script>
+        // Handle loading state for login button
+        const loginForm = document.getElementById('loginForm');
+        const loginButton = loginForm.querySelector('button[type="submit"]');
+        const resetButton = document.getElementById('sendResetLink');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', function() {
+                loginButton.classList.add('loading');
+                loginButton.disabled = true;
+            });
+        }
+
+        if (resetButton) {
+            resetButton.addEventListener('click', function() {
+                resetButton.classList.add('loading');
+                resetButton.disabled = true;
+            });
+        }
+    </script>
 </body>
 </html>
 

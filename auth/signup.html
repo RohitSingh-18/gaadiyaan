@@ -16,6 +16,33 @@
             display: none;
         }
         
+        /* Loading button styles */
+        .auth-button.loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.8;
+            color: transparent !important;
+        }
+
+        .auth-button.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: buttonLoader 0.8s linear infinite;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes buttonLoader {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
         .success-message p {
             margin: 5px 0;
             color: #28a745;
@@ -95,5 +122,24 @@
         </div>
     </div>
     <script type="module" src="signup.js"></script>
+    <script>
+        // Handle loading states for buttons
+        const buyerBtn = document.getElementById('buyerBtn');
+        const dealerBtn = document.getElementById('dealerBtn');
+
+        if (buyerBtn) {
+            buyerBtn.addEventListener('click', function() {
+                buyerBtn.classList.add('loading');
+                dealerBtn.disabled = true;
+            });
+        }
+
+        if (dealerBtn) {
+            dealerBtn.addEventListener('click', function() {
+                dealerBtn.classList.add('loading');
+                buyerBtn.disabled = true;
+            });
+        }
+    </script>
 </body>
 </html> 

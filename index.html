@@ -699,6 +699,43 @@
         max-width: 90%;
     }
 }
+
+        /* Loading button styles */
+        .btn-primary .btn-loading {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn-primary .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: btnSpin 0.8s linear infinite;
+        }
+
+        .btn-primary.loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-primary.loading .btn-text {
+            visibility: hidden;
+        }
+
+        .btn-primary.loading .btn-loading {
+            display: block !important;
+        }
+
+        @keyframes btnSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 
     <!-- Add Firebase SDK -->
@@ -729,6 +766,9 @@
 
     <!-- Add this in the head section -->
     <script src="assets/js/auth-check.js"></script>
+
+    <!-- Add before closing </head> tag -->
+    <script src="/assets/js/auth-handler.js"></script>
 </head>
 
 <body class="page">
@@ -796,8 +836,8 @@
                 <li class="nav-item active"><a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
                 <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                <li class="nav-item">
-                    <a href="javascript:void(0)" onclick="handleMyAccountClick()">My Account</a>
+                <li class="nav-item auth-nav-item">
+                    <!-- This will be dynamically updated by auth-handler.js -->
                 </li>
                 <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#feedbackModal"> Feedback</a></li>
@@ -860,8 +900,8 @@
                                         <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
                                         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
                                         <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
-                                        <li class="nav-item">
-                                            <a href="javascript:void(0)" onclick="handleMyAccountClick()">My Account</a>
+                                        <li class="nav-item auth-nav-item">
+                                            <!-- This will be dynamically updated by auth-handler.js -->
                                         </li>
 
                                         <!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown1" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
@@ -1299,18 +1339,16 @@
                                 </div>
                                 <div class="b-goods-f__main">
                                     <div class="b-goods-f__descrip">
-                                        <div class="b-goods-f__title"><span>Bolero 2018</span>
+                                        <div class="b-goods-f__title"><span>Mahindra Bolero<br>2010-2024</span>
                                         </div>
-                                        <div class="b-goods-f__info">Magna aliqua enim aduas veniam quis nostrud exercitation ullam laboris aliquip.</div>
                                         <ul class="b-goods-f__list list-unstyled">
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">35,000km</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">2018</span></li>
+                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Used</span></li>
                                             <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Manual</span></li>
                                             <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Petrol</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li>
+                                            <!-- <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li> -->
                                         </ul>
                                     </div>
-                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹8.2 Lakhs</span></span>
+                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹2 Lakhs - ₹10 Lakhs</span></span>
                                         </span>
                                     </div>
                                 </div>
@@ -1320,122 +1358,118 @@
                         <li class="b-isotope-grid__item grid-item col-6 col-lg-4 col-md-6 col-sm-6 web bmw">
                             <div class="b-goods-f b-goods-f_dark">
                                 <div class="b-goods-f__media">
-                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.2.jpg" alt="foto" /></a>
+                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.2.webp" alt="foto" /></a>
                                 </div>
                                 <div class="b-goods-f__main">
                                     <div class="b-goods-f__descrip">
-                                        <div class="b-goods-f__title"><span class="b-goods-f__label bg-primary">NEW</span><span>Suzuki Wagon R</span>
+                                        <div class="b-goods-f__title"><span>Suzuki Wagon R <br>2010-2024</span>
                                         </div>
-                                        <div class="b-goods-f__info">Magna aliqua enim aduas veniam quis nostrud exercitation ullam laboris aliquip.</div>
                                         <ul class="b-goods-f__list list-unstyled">
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">35,000km</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">2016</span></li>
+                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Used</span></li>
+                                            
                                             <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Manual</span></li>
                                             <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Petrol</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li>
+                                            <!-- <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li> -->
                                         </ul>
                                     </div>
-                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹3.6 Lakhs</span></span>
+                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹1 Lakhs - ₹4 Lakhs</span></span>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <!-- end .b-goods-->
                         </li>
-                        <li class="b-isotope-grid__item grid-item col-6 col-lg-4 col-md-6 col-sm-6 web honda">
+                        <li class="b-isotope-grid__item grid-item col-6 col-lg-4 col-md-6 col-sm-6 web bmw">
                             <div class="b-goods-f b-goods-f_dark">
                                 <div class="b-goods-f__media">
-                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.3.jpg" alt="foto" /></a>
+                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.3.webp" alt="foto" /></a>
                                 </div>
                                 <div class="b-goods-f__main">
                                     <div class="b-goods-f__descrip">
-                                        <div class="b-goods-f__title"><span>Bolero 2016</span>
+                                        <div class="b-goods-f__title"><span> Mahindra Scorpio<br>2010-2024</span>
                                         </div>
-                                        <div class="b-goods-f__info">Magna aliqua enim aduas veniam quis nostrud exercitation ullam laboris aliquip.</div>
                                         <ul class="b-goods-f__list list-unstyled">
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">35,000km</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">2016</span></li>
+                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Used</span></li>
+                                            
                                             <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Manual</span></li>
                                             <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Petrol</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li>
+                                            <!-- <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li> -->
                                         </ul>
                                     </div>
-                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹6.7 Lakhs</span></span>
+                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹3 Lakhs - ₹11 Lakhs</span></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end .b-goods-->
+                            <li class="b-isotope-grid__item grid-item col-6 col-lg-4 col-md-6 col-sm-6 web bmw">
+                                <div class="b-goods-f b-goods-f_dark">
+                                    <div class="b-goods-f__media">
+                                        <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.6.webp" alt="foto" /></a>
+                                    </div>
+                                    <div class="b-goods-f__main">
+                                        <div class="b-goods-f__descrip">
+                                            <div class="b-goods-f__title"><span>Hyundai Verna <br>2010-2024</span>
+                                            </div>
+                                            <ul class="b-goods-f__list list-unstyled">
+                                                <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Used</span></li>
+                                                
+                                                <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Manual</span></li>
+                                                <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Petrol</span></li>
+                                                <!-- <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li> -->
+                                            </ul>
+                                        </div>
+                                        <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹3 Lakhs - ₹8 Lakhs</span></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                        </li>
+                        <li class="b-isotope-grid__item grid-item col-6 col-lg-4 col-md-6 col-sm-6 web bmw">
+                            <div class="b-goods-f b-goods-f_dark">
+                                <div class="b-goods-f__media">
+                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.4.webp" alt="foto" /></a>
+                                </div>
+                                <div class="b-goods-f__main">
+                                    <div class="b-goods-f__descrip">
+                                        <div class="b-goods-f__title"><span>Suzuki Swift Dzire <br>2010-2024</span>
+                                        </div>
+                                        <ul class="b-goods-f__list list-unstyled">
+                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Used</span></li>
+                                            
+                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Manual</span></li>
+                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Petrol</span></li>
+                                            <!-- <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li> -->
+                                        </ul>
+                                    </div>
+                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹1.5 Lakhs - ₹6 Lakhs</span></span>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <!-- end .b-goods-->
                         </li>
-                        <li class="b-isotope-grid__item grid-item col-6 col-lg-4 col-md-6 col-sm-6 web rover">
-                            <div class="b-goods-f b-goods-f_dark">
-                                <div class="b-goods-f__media">
-                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.4.jpg" alt="foto" /></a>
-                                </div>
-                                <div class="b-goods-f__main">
-                                    <div class="b-goods-f__descrip">
-                                        <div class="b-goods-f__title"><span>Bolero 2010</span>
-                                        </div>
-                                        <div class="b-goods-f__info">Magna aliqua enim aduas veniam quis nostrud exercitation ullam laboris aliquip.</div>
-                                        <ul class="b-goods-f__list list-unstyled">
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">35,000km</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">2010</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Manual</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Petrol</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹2.9 Lakhs</span></span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
                             <!-- end .b-goods-->
                         </li>
-                        <li class="b-isotope-grid__item grid-item col-6 col-lg-4 col-md-6 col-sm-6 web mercedes">
+                        <li class="b-isotope-grid__item grid-item col-6 col-lg-4 col-md-6 col-sm-6 web bmw">
                             <div class="b-goods-f b-goods-f_dark">
                                 <div class="b-goods-f__media">
-                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.5.jpg" alt="foto" /></a>
+                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.5.webp" alt="foto" /></a>
                                 </div>
                                 <div class="b-goods-f__main">
                                     <div class="b-goods-f__descrip">
-                                        <div class="b-goods-f__title"><span>Bolero 2016</span>
+                                        <div class="b-goods-f__title"><span>Suzuki Ertiga<br>2010-2024</span>
                                         </div>
                                         <div class="b-goods-f__info">Magna aliqua enim aduas veniam quis nostrud exercitation ullam laboris aliquip.</div>
                                         <ul class="b-goods-f__list list-unstyled">
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">35,000km</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">2016</span></li>
+                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Used</span></li>
+                                            
                                             <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Manual</span></li>
                                             <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Petrol</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li>
+                                            <!-- <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li> -->
                                         </ul>
                                     </div>
-                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹6 Lakhs</span></span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end .b-goods-->
-                        </li>
-                        <li class="b-isotope-grid__item grid-item  col-6 col-lg-4 col-md-6 col-sm-6 web bmw">   
-                            <div class="b-goods-f b-goods-f_dark">
-                                <div class="b-goods-f__media">
-                                    <a href="#"><img class="b-goods-f__img img-scale" src="assets/media/content/b-goods/360x260/1.6.jpg" alt="foto" /></a>
-                                </div>
-                                <div class="b-goods-f__main">
-                                    <div class="b-goods-f__descrip">
-                                        <div class="b-goods-f__title"><span>Bolero 2017</span>
-                                        </div>
-                                        <div class="b-goods-f__info">Magna aliqua enim aduas veniam quis nostrud exercitation ullam laboris aliquip.</div>
-                                        <ul class="b-goods-f__list list-unstyled">
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">35,000km</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">2017</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Manual</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">Petrol</span></li>
-                                            <li class="b-goods-f__list-item"><span class="b-goods-f__list-info">160 hp</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹7.8 Lakhs</span></span>
+                                    <div class="b-goods-f__sidebar"><span class="b-goods-f__price-group"><span class="b-goods-f__price"><span class="b-goods-f__price-numb">₹3 Lakhs - ₹9 Lakhs</span></span>
                                         </span>
                                     </div>
                                 </div>
@@ -1471,13 +1505,13 @@
                             </div>
                         </div>
                         <div class="col-xl-6">
-                            <div class="b-bnr__second"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#dealerRegistrationModal">get rigistered</a>
-                                <!-- <div class="b-bnr-contacts">
-                                    <div class="b-bnr-contacts__info">Give us a call for Registration</div><a class="b-bnr-contacts__phone" href="tel:+919583528458"><i class="ic icon-call-end text-primary"></i>+91 95 8352 8458</a>
-                                </div>
-                                <div class="b-bnr-contacts">
-                                    <a class="b-bnr-contacts__phone" href="tel:+918249393960"><i class="ic icon-call-end text-primary"></i>+91 82 4939 3960</a>
-                                </div> -->
+                            <div class="b-bnr__second">
+                                <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#callbackModal">
+                                    <span class="btn-text">Get call back</span>
+                                    <span class="btn-loading d-none">
+                                        <span class="spinner"></span>
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -2526,7 +2560,7 @@
         }
 
         // First check for admin role
-        if (userProfile.role === 'admin') {
+        if (userProfile.userType === 'admin') {
             window.location.href = '/dashboard/admin/pages/portal.html';
         }
         // Then check other user types
@@ -2540,6 +2574,29 @@
             window.location.href = '/auth/login.html';
         }
     }
+    </script>
+
+    <script>
+        // Handle get registered button loading state
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerBtn = document.querySelector('.b-bnr__second .btn-primary');
+            if (registerBtn) {
+                registerBtn.addEventListener('click', function(e) {
+                    // Add loading state
+                    this.classList.add('loading');
+                    
+                    // Remove loading state after modal is shown
+                    $('#callbackModal').on('shown.bs.modal', function () {
+                        registerBtn.classList.remove('loading');
+                    });
+                    
+                    // Also remove loading if modal fails to show
+                    setTimeout(() => {
+                        registerBtn.classList.remove('loading');
+                    }, 1000);
+                });
+            }
+        });
     </script>
 </body>
 

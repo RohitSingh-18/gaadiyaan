@@ -4188,3 +4188,19 @@ html, body {
       width: auto;
   }
 }
+
+/* Rounded corners for vehicle listing cards */
+.b-goods-f {
+    border-radius: 15px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.b-goods-f .b-goods-f__media {
+    border-radius: 15px 15px 0 0 !important;
+    overflow: hidden;
+}
+
+.b-goods-f .b-goods-f__main {
+    border-radius: 0 0 15px 15px !important;
+}

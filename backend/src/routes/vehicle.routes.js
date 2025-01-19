@@ -6,6 +6,9 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../config/db.config');
 
+// Get base URL from environment variable or use Render.com URL
+const BASE_URL = process.env.BASE_URL || 'https://gaadiyaan-api.onrender.com';
+
 // Ensure uploads directory exists with absolute path
 const uploadDir = path.join(__dirname, '../../../uploads/vehicles');
 if (!fs.existsSync(uploadDir)) {
@@ -219,7 +222,7 @@ router.post('/', upload.array('vehicleImages', 10), handleMulterError, async (re
         
         // Process uploaded files and ensure we have the full URLs
         const imageUrls = req.files && req.files.length > 0 
-            ? req.files.map(file => `http://localhost:3000/uploads/vehicles/${file.filename}`)
+            ? req.files.map(file => `${BASE_URL}/uploads/vehicles/${file.filename}`)
             : [];
         
         console.log('Generated image URLs:', imageUrls);
@@ -361,8 +364,8 @@ router.post('/test', async (req, res) => {
             specifications: [],
             features: {},
             images: JSON.stringify([
-                "http://localhost:3000/uploads/vehicles/test1.jpg",
-                "http://localhost:3000/uploads/vehicles/test2.jpg"
+                `${BASE_URL}/uploads/vehicles/test1.jpg`,
+                `${BASE_URL}/uploads/vehicles/test2.jpg`
             ])
         };
 

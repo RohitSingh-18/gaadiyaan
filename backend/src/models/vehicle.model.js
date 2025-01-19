@@ -1,6 +1,5 @@
 const db = require('../config/db.config');
 
-const dropTableQuery = `DROP TABLE IF EXISTS vehicle_listings`;
 const createTableQuery = `
   CREATE TABLE IF NOT EXISTS vehicle_listings (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -28,8 +27,7 @@ const createTableQuery = `
   )`;
 
 // Initialize table
-db.query(dropTableQuery)
-  .then(() => db.query(createTableQuery))
+db.query(createTableQuery)
   .then(() => console.log('Vehicle listings table initialized'))
   .catch(err => console.error('Error creating vehicle listings table:', err));
 

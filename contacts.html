@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style id="swiper-styles"></style>
     <script src="https://kit.fontawesome.com/2f346a55b2.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/auth-handler.js"></script>
     
 </head>
 
@@ -52,8 +53,10 @@
                 <li class="nav-item active"><a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
                 <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="/auth/signup.html">Sign Up</a></li>
                 <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+                <li class="nav-item auth-nav-item">
+                    <!-- This will be dynamically updated by auth-handler.js -->
+                </li>
                 <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#feedbackModal"> Feedback</a></li>
                 <li class="nav-item"><a class="nav-link" href="contacts.html">Contact</a></li>
                 <br>
@@ -113,7 +116,9 @@
                                         <li class="nav-item"><a class="nav-link" href="allcars.html">All Cars</a></li>
                                         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
                                         <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="/auth/signup.html">Sign Up</a></li>
+                                        <li class="nav-item auth-nav-item">
+                                            <!-- This will be dynamically updated by auth-handler.js -->
+                                        </li>
 
                                         <!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown1" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
                                             <div class="dropdown-menu" aria-labelledby="navbarDropdown1"><a class="dropdown-item" href="typography.html">Typography</a></div>

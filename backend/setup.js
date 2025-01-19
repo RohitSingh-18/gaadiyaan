@@ -17,6 +17,22 @@ async function setup() {
         // Use the database
         await connection.query(`USE ${process.env.DB_NAME}`);
 
+        // Create dealer_info table
+        await connection.query(`
+            CREATE TABLE IF NOT EXISTS dealer_info (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                full_name VARCHAR(255) NOT NULL,
+                dealership_name VARCHAR(255),
+                phone VARCHAR(20),
+                dealer_id VARCHAR(20) UNIQUE,
+                user_type ENUM('dealer', 'buyer', 'admin') NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )
+        `);
+        console.log('Dealer info table created or already exists');
+
         // Create vehicle_listings table
         await connection.query(`
             CREATE TABLE IF NOT EXISTS vehicle_listings (

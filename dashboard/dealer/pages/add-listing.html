@@ -10,6 +10,37 @@
     <script src="../js/add-listing.js" defer></script>
 </head>
 <body>
+    <script>
+        // Check authentication before loading page
+        function checkAuth() {
+            const userProfileStr = localStorage.getItem('userProfile');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            
+            if (!userProfileStr || !isLoggedIn) {
+                console.log('No user profile or not logged in, redirecting to login...');
+                window.location.href = '../../../auth/login.html';
+                return;
+            }
+
+            try {
+                const userProfile = JSON.parse(userProfileStr);
+                if (userProfile.userType !== 'dealer') {
+                    console.log('Not a dealer, redirecting to login...');
+                    localStorage.clear();
+                    window.location.href = '../../../auth/login.html';
+                    return;
+                }
+            } catch (error) {
+                console.error('Error parsing user profile:', error);
+                localStorage.clear();
+                window.location.href = '../../../auth/login.html';
+            }
+        }
+
+        // Check authentication when page loads
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
+
     <div class="add-listing-container">
         <form id="addListingForm" class="add-listing-form" enctype="multipart/form-data" onsubmit="return false;">
             <div class="form-section">
@@ -646,6 +677,36 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        /* Loading indicator styles */
+        .btn-primary.loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-primary.loading i {
+            visibility: hidden;
+        }
+
+        .btn-primary.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: buttonLoader 0.8s linear infinite;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes buttonLoader {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
     </style>
     <script>
