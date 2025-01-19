@@ -56,11 +56,7 @@ body {
 .ui-title {
   color: #222222;
   font: 700 40px Montserrat;
-<<<<<<< HEAD
   margin-bottom: 45px;
-=======
-  /* margin-bottom: 45px; */
->>>>>>> 834aed9 (arrow btn for cards)
 }
 
 .ui-title-sm {
@@ -2809,7 +2805,7 @@ html, body {
     padding-bottom: 30px;
     padding-top: 30px;
 }
-}
+
 
 .b-post-full .entry-blockquote__cite {
   font: 15px/1 Montserrat;
