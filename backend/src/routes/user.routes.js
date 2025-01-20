@@ -11,6 +11,11 @@ router.put('/profile', async (req, res) => {
             dealership_name,
             phone,
             dealer_id,
+            business_address,
+            city,
+            state,
+            pincode,
+            gst_number,
             userType
         } = req.body;
 
@@ -38,17 +43,18 @@ router.put('/profile', async (req, res) => {
         }
 
         // Check if dealer exists
-        const [existingDealers] = await db.query(
+        const [existingDealer] = await db.query(
             'SELECT * FROM dealer_info WHERE email = ?',
             [email]
         );
 
-        if (existingDealers.length === 0) {
-            // Create new dealer if doesn't exist
+        if (existingDealer.length === 0) {
+            // Create new dealer
             const [result] = await db.query(
-                `INSERT INTO dealer_info (email, full_name, dealership_name, phone, dealer_id, user_type) 
-                 VALUES (?, ?, ?, ?, ?, ?)`,
-                [email, full_name, dealership_name, phone, dealer_id, userType]
+                `INSERT INTO dealer_info 
+                (email, full_name, dealership_name, phone, dealer_id, business_address, city, state, pincode, gst_number, user_type) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [email, full_name, dealership_name, phone, dealer_id, business_address, city, state, pincode, gst_number, userType || 'dealer']
             );
 
             const [newDealer] = await db.query(
@@ -64,26 +70,50 @@ router.put('/profile', async (req, res) => {
         }
 
         // Update existing dealer
-        await db.query(
-            `UPDATE dealer_info 
-             SET full_name = ?, 
-                 dealership_name = ?, 
-                 phone = ?, 
-                 dealer_id = ?, 
-                 user_type = ?
-             WHERE email = ?`,
-            [full_name, dealership_name, phone, dealer_id, userType, email]
-        );
+        console.log('Raw request body:', req.body);
+        
+        // Create direct update query with values
+        const updateQuery = `
+            UPDATE dealer_info 
+            SET full_name = '${full_name}',
+                dealership_name = '${dealership_name}',
+                phone = '${phone}',
+                dealer_id = '${dealer_id}',
+                business_address = '${business_address}',
+                city = '${city}',
+                state = '${state}',
+                pincode = '${pincode}',
+                gst_number = '${gst_number}',
+                user_type = '${userType || 'dealer'}'
+            WHERE email = '${email}'
+        `;
+        
+        console.log('Executing update query:', updateQuery);
+        
+        const [updateResult] = await db.query(updateQuery);
 
-        const [updatedDealer] = await db.query(
+        console.log('Update query result:', updateResult);
+
+        if (updateResult.affectedRows === 0) {
+            throw new Error('Update failed - no rows were updated');
+        }
+
+        // Verify what was actually saved
+        const [verifyUpdate] = await db.query(
             'SELECT * FROM dealer_info WHERE email = ?',
             [email]
         );
+        
+        if (!verifyUpdate || verifyUpdate.length === 0) {
+            throw new Error('Could not verify update - dealer not found');
+        }
+        
+        console.log('Data actually saved in database:', verifyUpdate[0]);
 
         res.json({
             success: true,
             message: 'Dealer profile updated successfully',
-            user: updatedDealer[0]
+            user: verifyUpdate[0]
         });
 
     } catch (error) {

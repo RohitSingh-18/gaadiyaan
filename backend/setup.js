@@ -26,6 +26,11 @@ async function setup() {
                 dealership_name VARCHAR(255),
                 phone VARCHAR(20),
                 dealer_id VARCHAR(20) UNIQUE,
+                business_address TEXT,
+                city VARCHAR(100),
+                state VARCHAR(100),
+                pincode VARCHAR(10),
+                gst_number VARCHAR(20),
                 user_type ENUM('dealer', 'buyer', 'admin') NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

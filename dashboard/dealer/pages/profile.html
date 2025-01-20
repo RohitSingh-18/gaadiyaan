@@ -81,7 +81,7 @@
             </div>
 
             <!-- Business Information -->
-            <div class="form-section">
+            <!-- <div class="form-section">
                 <h2>Business Information</h2>
                 <div class="form-grid">
                     <div class="form-group full-width">
@@ -105,7 +105,7 @@
                         <input type="text" id="gstNumber" name="gstNumber" required>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Password Change -->
             <!-- <div class="form-section">
@@ -338,17 +338,23 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Error parsing user data:', e);
     }
 
-    // Fill in the form fields
+    // Fill in all form fields with existing data
     const fields = {
         'dealerEmail': userData.email || '',
         'dealerName': userData.full_name || '',
-        'dealershipName': userData.dealership_name || ''
+        'dealershipName': userData.dealership_name || '',
+        'dealerPhone': userData.phone || '',
+        'dealerAddress': userData.business_address || '',
+        'dealerCity': userData.city || '',
+        'dealerState': userData.state || '',
+        'dealerPincode': userData.pincode || '',
+        'gstNumber': userData.gst_number || ''
     };
 
     // Update each field if it exists
     Object.entries(fields).forEach(([id, value]) => {
         const element = document.getElementById(id);
-        if (element && element.tagName === 'INPUT') {
+        if (element) {
             element.value = value;
         }
     });
@@ -385,6 +391,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Save button click handler
     saveBtn.addEventListener('click', async function() {
         try {
+            // Check only required personal information fields
+            const requiredFields = {
+                'dealerName': 'Full Name',
+                'dealerEmail': 'Email',
+                'dealershipName': 'Dealership Name',
+                'dealerPhone': 'Phone Number'
+            };
+
+            // Validate only required personal information fields
+            for (const [fieldId, fieldName] of Object.entries(requiredFields)) {
+                const field = document.getElementById(fieldId);
+                if (!field || !field.value.trim()) {
+                    alert(`Please fill in ${fieldName} before saving`);
+                    if (field) field.focus();
+                    return;
+                }
+            }
+
             const newId = dealerIdElement.textContent;
             
             // Get current form values
@@ -392,9 +416,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = document.getElementById('dealerEmail').value;
             const dealershipName = document.getElementById('dealershipName').value;
             const phone = document.getElementById('dealerPhone').value;
+            
+            // Get business info (optional)
+            const businessAddress = document.getElementById('dealerAddress')?.value || '';
+            const city = document.getElementById('dealerCity')?.value || '';
+            const state = document.getElementById('dealerState')?.value || '';
+            const pincode = document.getElementById('dealerPincode')?.value || '';
+            const gstNumber = document.getElementById('gstNumber')?.value || '';
 
-            // Update database using profile endpoint
-            const token = localStorage.getItem('token');
+            // Get token from both possible sources
+            const userProfileStr = localStorage.getItem('userProfile');
+            const userProfile = JSON.parse(userProfileStr || '{}');
+            const token = localStorage.getItem('token') || userProfile.uid;
+            
             if (!token) {
                 throw new Error('No authentication token found');
             }
@@ -411,30 +445,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     dealership_name: dealershipName,
                     phone: phone,
                     dealer_id: newId,
-                    userType: 'dealer'  // Add userType as dealer
+                    business_address: businessAddress,
+                    city: city,
+                    state: state,
+                    pincode: pincode,
+                    gst_number: gstNumber,
+                    userType: 'dealer'
                 })
             });
 
             const data = await response.json();
-            console.log('API Response:', data); // Debug log
+            console.log('API Response:', data);
 
             if (response.ok) {
                 console.log('Dealer ID saved successfully');
                 // Update localStorage with all the returned data
                 if (data.user) {
-                    localStorage.setItem('userProfile', JSON.stringify(data.user));
-                    userData = data.user; // Update the userData variable
-                } else {
-                    // If no user data in response, update only what we know
-                    userData = {
-                        ...userData,
+                    const updatedProfile = {
+                        ...userProfile,  // Keep existing data like uid
+                        ...data.user,    // Update with new data
                         dealer_id: newId,
-                        full_name: username,
-                        email: email,
-                        dealership_name: dealershipName,
-                        phone: phone
+                        userType: 'dealer'
                     };
-                    localStorage.setItem('userProfile', JSON.stringify(userData));
+                    localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+                    localStorage.setItem('isLoggedIn', 'true');
+                    userData = updatedProfile;
                 }
                 
                 // Update UI
@@ -443,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 alert('Dealer ID saved successfully!');
             } else {
-                console.error('API Error Response:', data); // Debug log
+                console.error('API Error Response:', data);
                 throw new Error(data.message || 'Failed to save dealer ID');
             }
         } catch (error) {
@@ -505,32 +540,41 @@ document.addEventListener('DOMContentLoaded', function() {
     async function updateProfile(event) {
         event.preventDefault();
         
-        const token = localStorage.getItem('token');
+        // Get token from both possible sources
+        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        const token = localStorage.getItem('token') || userProfile.uid;
+        
         if (!token) {
             alert('Please log in again');
             return;
         }
 
-        // Get current values
-        const username = document.getElementById('dealerName').value;
-        const email = document.getElementById('dealerEmail').value;
-        const dealershipName = document.getElementById('dealershipName').value;
-        const phone = document.getElementById('dealerPhone').value;
-
-        // Validate inputs
-        if (!username) {
-            alert('Username cannot be empty');
-            return;
-        }
-
+        // Get all form values
         const formData = {
-            username,
-            email,
-            dealershipName,
-            phone
+            full_name: document.getElementById('dealerName').value.trim(),
+            email: document.getElementById('dealerEmail').value.trim(),
+            dealership_name: document.getElementById('dealershipName').value.trim(),
+            phone: document.getElementById('dealerPhone').value.trim(),
+            dealer_id: document.getElementById('dealerId').textContent.trim(),
+            business_address: document.getElementById('dealerAddress').value.trim(),
+            city: document.getElementById('dealerCity').value.trim(),
+            state: document.getElementById('dealerState').value.trim(),
+            pincode: document.getElementById('dealerPincode').value.trim(),
+            gst_number: document.getElementById('gstNumber').value.trim(),
+            userType: 'dealer'
         };
 
-        console.log('Sending profile update:', formData);
+        // Debug log
+        console.log('Sending form data:', formData);
+
+        // Validate all required fields
+        const requiredFields = Object.entries(formData);
+        for (const [key, value] of requiredFields) {
+            if (!value && key !== 'dealer_id') {  // dealer_id can be empty initially
+                alert(`Please fill in ${key.replace(/_/g, ' ')}`);
+                return;
+            }
+        }
 
         try {
             const response = await fetch('https://gaadiyaan-api.onrender.com/api/users/profile', {
@@ -546,22 +590,33 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Profile update response:', result);
 
             if (response.ok) {
-                // Success
-                document.getElementById('successModal').classList.add('show');
-                console.log('Profile updated successfully:', result);
+                // Update local storage with the new data
+                const updatedProfile = {
+                    ...userProfile,  // Keep existing data like uid
+                    ...result.user,  // Update with new data
+                    userType: 'dealer'
+                };
+                localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
                 
-                // Optional: Update local storage or UI elements
-                if (result.user) {
-                    localStorage.setItem('userProfile', JSON.stringify(result.user));
-                }
+                // Show success modal
+                document.getElementById('successModal').classList.add('show');
+                
+                // Update form with new values
+                Object.entries(result.user).forEach(([key, value]) => {
+                    const element = document.getElementById(`dealer${key.charAt(0).toUpperCase() + key.slice(1)}`);
+                    if (element) {
+                        element.value = value || '';
+                    }
+                });
+
+                // Debug log
+                console.log('Updated profile in localStorage:', updatedProfile);
             } else {
-                // Error
-                console.error('Profile update error:', result);
-                alert(result.message || 'Profile update failed: ' + JSON.stringify(result));
+                throw new Error(result.message || 'Failed to update profile');
             }
         } catch (error) {
-            console.error('Network or unexpected error:', error);
-            alert('An unexpected error occurred: ' + error.message);
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile: ' + error.message);
         }
     }
 

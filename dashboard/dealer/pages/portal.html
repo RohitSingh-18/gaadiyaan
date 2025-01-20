@@ -502,13 +502,19 @@
             const fields = {
                 'dealerEmail': userData.email || '',
                 'dealerName': userData.full_name || '',
-                'dealershipName': userData.dealership_name || ''
+                'dealershipName': userData.dealership_name || '',
+                'dealerPhone': userData.phone || '',
+                'dealerAddress': userData.business_address || '',
+                'dealerCity': userData.city || '',
+                'dealerState': userData.state || '',
+                'dealerPincode': userData.pincode || '',
+                'gstNumber': userData.gst_number || ''
             };
 
             // Update each field if it exists
             Object.entries(fields).forEach(([id, value]) => {
                 const element = document.getElementById(id);
-                if (element && element.tagName === 'INPUT') {
+                if (element) {
                     element.value = value;
                 }
             });
@@ -545,6 +551,24 @@
             // Save button click handler
             saveBtn.addEventListener('click', async function() {
                 try {
+                    // Check only required personal information fields
+                    const requiredFields = {
+                        'dealerName': 'Full Name',
+                        'dealerEmail': 'Email',
+                        'dealershipName': 'Dealership Name',
+                        'dealerPhone': 'Phone Number'
+                    };
+
+                    // Validate only required personal information fields
+                    for (const [fieldId, fieldName] of Object.entries(requiredFields)) {
+                        const field = document.getElementById(fieldId);
+                        if (!field || !field.value.trim()) {
+                            alert(`Please fill in ${fieldName} before saving`);
+                            if (field) field.focus();
+                            return;
+                        }
+                    }
+
                     const newId = dealerIdElement.textContent;
                     
                     // Get current form values
@@ -552,11 +576,18 @@
                     const email = document.getElementById('dealerEmail').value;
                     const dealershipName = document.getElementById('dealershipName').value;
                     const phone = document.getElementById('dealerPhone').value;
+                    
+                    // Get business info (optional)
+                    const businessAddress = document.getElementById('dealerAddress')?.value || '';
+                    const city = document.getElementById('dealerCity')?.value || '';
+                    const state = document.getElementById('dealerState')?.value || '';
+                    const pincode = document.getElementById('dealerPincode')?.value || '';
+                    const gstNumber = document.getElementById('gstNumber')?.value || '';
 
-                    // Get existing user profile
+                    // Get token from both possible sources
                     const userProfileStr = localStorage.getItem('userProfile');
                     const userProfile = JSON.parse(userProfileStr || '{}');
-                    const token = userProfile.uid;
+                    const token = localStorage.getItem('token') || userProfile.uid;
                     
                     if (!token) {
                         throw new Error('No authentication token found');
@@ -574,6 +605,11 @@
                             dealership_name: dealershipName,
                             phone: phone,
                             dealer_id: newId,
+                            business_address: businessAddress,
+                            city: city,
+                            state: state,
+                            pincode: pincode,
+                            gst_number: gstNumber,
                             userType: 'dealer'
                         })
                     });
@@ -582,7 +618,7 @@
                     console.log('API Response:', data);
 
                     if (response.ok) {
-                        console.log('Dealer ID saved successfully');
+                        console.log('Profile updated successfully');
                         // Update localStorage with all the returned data
                         if (data.user) {
                             const updatedProfile = {
@@ -594,33 +630,20 @@
                             localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
                             localStorage.setItem('isLoggedIn', 'true');
                             userData = updatedProfile;
-                        } else {
-                            const updatedProfile = {
-                                ...userProfile,
-                                dealer_id: newId,
-                                full_name: username,
-                                email: email,
-                                dealership_name: dealershipName,
-                                phone: phone,
-                                userType: 'dealer'
-                            };
-                            localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
-                            localStorage.setItem('isLoggedIn', 'true');
-                            userData = updatedProfile;
                         }
                         
                         // Update UI
                         saveBtn.style.display = 'none';
                         copyBtn.style.display = 'flex';
                         
-                        alert('Dealer ID saved successfully!');
+                        alert('Profile updated successfully!');
                     } else {
                         console.error('API Error Response:', data);
-                        throw new Error(data.message || 'Failed to save dealer ID');
+                        throw new Error(data.message || 'Failed to update profile');
                     }
                 } catch (error) {
-                    console.error('Error saving dealer ID:', error);
-                    alert('Failed to save dealer ID. Please try again. Error: ' + error.message);
+                    console.error('Error updating profile:', error);
+                    alert('Failed to update profile: ' + error.message);
                 }
             });
 
