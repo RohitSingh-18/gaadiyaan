@@ -152,7 +152,8 @@ function handleImageUpload(files) {
                 const removeButton = document.createElement('button');
                 removeButton.className = 'remove-image';
                 removeButton.innerHTML = '×';
-                removeButton.addEventListener('click', function() {
+                removeButton.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Stop event from bubbling up
                     previewDiv.classList.add('removing');
                     setTimeout(() => {
                         previewDiv.remove();
