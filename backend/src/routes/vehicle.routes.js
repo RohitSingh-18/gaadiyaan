@@ -64,12 +64,18 @@ router.get('/', async (req, res) => {
             search,
             sortBy,
             page = 1,
-            limit = 10
+            limit = 10,
+            dealer_id
         } = req.query;
 
         // Build WHERE clause
         let whereClause = [];
         let params = [];
+
+        if (dealer_id) {
+            whereClause.push('dealer_id = ?');
+            params.push(dealer_id);
+        }
 
         if (minPrice) {
             whereClause.push('price >= ?');
@@ -227,8 +233,14 @@ router.post('/', upload.array('vehicleImages', 10), handleMulterError, async (re
         
         console.log('Generated image URLs:', imageUrls);
         
+        // Get dealer_id from request body
+        if (!req.body.dealer_id) {
+            throw new Error('dealer_id is required');
+        }
+        
         // Parse numeric values
         const vehicleData = {
+            dealer_id: req.body.dealer_id,
             carTitle: req.body.carTitle,
             price: parseFloat(req.body.price),
             year: parseInt(req.body.year),

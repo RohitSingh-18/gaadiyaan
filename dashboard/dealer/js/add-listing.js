@@ -286,7 +286,7 @@ async function handleSubmission() {
         });
         
         // Add dealer ID
-        formData.append('dealerId', userProfile.uid);
+        formData.append('dealer_id', userProfile.dealer_id);
 
         // Add images
         const previewContainer = document.getElementById('imagePreviewContainer');

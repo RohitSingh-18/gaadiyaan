@@ -44,12 +44,15 @@ const VehicleModel = {
   create: async (vehicleData) => {
     try {
         console.log('\n--- Database Create Operation ---');
-        const dealerId = await VehicleModel.generateDealerId();
-        console.log('Generated dealer ID:', dealerId);
+        
+        // Use the provided dealer_id instead of generating a new one
+        if (!vehicleData.dealer_id) {
+            throw new Error('dealer_id is required');
+        }
         
         // Convert camelCase to snake_case and ensure proper data types
         const formattedData = {
-            dealer_id: dealerId,
+            dealer_id: vehicleData.dealer_id,  // Use the provided dealer_id
             car_title: vehicleData.carTitle,
             price: parseFloat(vehicleData.price),
             year: parseInt(vehicleData.year),
@@ -105,7 +108,7 @@ const VehicleModel = {
         try {
             const [result] = await db.query(sql, [formattedData]);
             console.log('\nDatabase insert result:', result);
-            return { ...result, dealer_id: dealerId };
+            return { ...result, dealer_id: vehicleData.dealer_id };
         } catch (dbError) {
             console.error('\nDatabase Error:', {
                 code: dbError.code,

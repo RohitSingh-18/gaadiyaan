@@ -111,17 +111,36 @@ async function loadListings() {
     try {
         container.innerHTML = '<div class="loading">Loading...</div>';
         
+        // Get dealer ID from localStorage
+        const userProfileStr = localStorage.getItem('userProfile');
+        if (!userProfileStr) {
+            throw new Error('User profile not found. Please login again.');
+        }
+
+        const userProfile = JSON.parse(userProfileStr);
+        console.log('User Profile:', userProfile); // Debug log
+        
+        const dealer_id = userProfile.dealer_id;
+        if (!dealer_id) {
+            throw new Error('Dealer ID not found. Please set up your dealer profile first.');
+        }
+
+        console.log('Using dealer_id:', dealer_id); // Debug log
+
         // Build query parameters
         const params = new URLSearchParams({
             page: currentPage,
             limit: 12,
+            dealer_id,
             ...currentFilters
         });
         
+        console.log('API Request URL:', `/vehicles?${params}`); // Debug log
         const data = await apiCall(`/vehicles?${params}`);
+        console.log('API Response:', data); // Debug log
 
         if (!data.success) {
-            throw new Error(data.message);
+            throw new Error(data.message || 'Failed to load listings');
         }
         
         // Update total count
@@ -141,7 +160,7 @@ async function loadListings() {
             `;
             return;
         }
-        
+
         container.innerHTML = data.data.map(listing => createListingCard(listing)).join('');
         
         // Setup pagination
