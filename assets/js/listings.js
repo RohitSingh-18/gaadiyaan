@@ -8,6 +8,8 @@ let currentFilters = {};
 let isLoading = false;
 let totalPages = 0;
 let currentSort = 'newest';
+let isMobile = window.innerWidth <= 576;
+let isLoadingMore = false;
 
 // DOM Elements
 const listingsContainer = document.getElementById('listingsContainer');
@@ -16,6 +18,19 @@ const noResultsMessage = document.getElementById('noResultsMessage');
 const resultsInfo = document.getElementById('resultsInfo');
 const pagination = document.getElementById('pagination');
 const sortSelect = document.querySelector('.b-filter-goods__select select');
+
+// Add this at the top level of the file
+window.handlePageChange = async function(newPage) {
+    if (!isNaN(newPage) && newPage !== currentPage) {
+        currentPage = newPage;
+        await initListings();
+        window.scrollTo({
+            top: listingsContainer.offsetTop - 100,
+            behavior: 'smooth'
+        });
+    }
+    return false;
+};
 
 // Fetch listings with filters and pagination
 async function fetchListings(page = 1, filters = {}, sort = currentSort) {
@@ -95,14 +110,23 @@ function formatPrice(price) {
 }
 
 // Update the listings container with new data
-function updateListings(listings) {
+function updateListings(listings, append = false) {
     if (!listings || listings.length === 0) {
         listingsContainer.innerHTML = '<div class="col-12 text-center py-5">No vehicles found matching your criteria.</div>';
         return;
     }
 
-    const cardsHTML = listings.map(listing => createListingCard(listing)).join('');
-    listingsContainer.innerHTML = cardsHTML;
+    if (append) {
+        appendListings(listings);
+    } else {
+        const cardsHTML = listings.map(listing => createListingCard(listing)).join('');
+        listingsContainer.innerHTML = cardsHTML;
+    }
+
+    // Setup infinite scroll for mobile
+    if (isMobile) {
+        setupInfiniteScroll();
+    }
 }
 
 // Update loading state
@@ -113,6 +137,16 @@ function updateLoadingState() {
     if (listingsContainer) {
         listingsContainer.style.opacity = isLoading ? '0.5' : '1';
     }
+
+    // Handle infinite scroll loading indicator
+    const existingIndicator = document.querySelector('.loading-indicator');
+    if (isMobile && isLoadingMore) {
+        if (!existingIndicator) {
+            listingsContainer.insertAdjacentElement('afterend', loadingIndicator);
+        }
+    } else if (existingIndicator) {
+        existingIndicator.remove();
+    }
 }
 
 // Show error message
@@ -121,115 +155,6 @@ function showError(message) {
         noResultsMessage.textContent = message;
         noResultsMessage.style.display = 'block';
     }
-}
-
-// Update pagination UI
-function updatePagination(paginationData) {
-    if (!pagination) return;
-
-    const { currentPage, totalPages } = paginationData;
-    let paginationHTML = '';
-
-    // Previous button
-    paginationHTML += `
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-    `;
-
-    // Page numbers
-    for (let i = 1; i <= totalPages; i++) {
-        if (
-            i === 1 || // First page
-            i === totalPages || // Last page
-            (i >= currentPage - 2 && i <= currentPage + 2) // Pages around current page
-        ) {
-            paginationHTML += `
-                <li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <a class="page-link" href="#" data-page="${i}">${i}</a>
-                </li>
-            `;
-        } else if (
-            (i === currentPage - 3 && currentPage > 4) ||
-            (i === currentPage + 3 && currentPage < totalPages - 3)
-        ) {
-            paginationHTML += `
-                <li class="page-item disabled">
-                    <span class="page-link">...</span>
-                </li>
-            `;
-        }
-    }
-
-    // Next button
-    paginationHTML += `
-        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    `;
-
-    pagination.innerHTML = paginationHTML;
-
-    // Add click handlers
-    pagination.querySelectorAll('.page-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const page = parseInt(e.target.closest('.page-link').dataset.page);
-            if (!isNaN(page) && page !== currentPage) {
-                currentPage = page;
-                initListings();
-            }
-        });
-    });
-}
-
-// Update results info
-function updateResultsInfo(paginationData) {
-    if (!resultsInfo) return;
-
-    const { total, currentPage, limit } = paginationData;
-    const start = (currentPage - 1) * limit + 1;
-    const end = Math.min(currentPage * limit, total);
-
-    resultsInfo.innerHTML = `Showing results <strong>${start} to ${end}</strong> of total <strong>${total}</strong>`;
-}
-
-// Initialize listings
-async function initListings() {
-    const data = await fetchListings(currentPage, currentFilters, currentSort);
-    if (data) {
-        updateListings(data.data);
-    }
-}
-
-// Handle filter form submission
-function handleFilterSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    
-    currentFilters = {
-        minPrice: formData.get('minPrice'),
-        maxPrice: formData.get('maxPrice'),
-        year: formData.get('year'),
-        fuelType: formData.get('fuel_type'),
-        transmission: formData.get('transmission'),
-        search: formData.get('search')
-    };
-
-    // Reset to first page when applying new filters
-    currentPage = 1;
-    initListings();
-}
-
-// Handle sort change
-function handleSortChange(value) {
-    currentSort = value;
-    currentPage = 1; // Reset to first page when sorting changes
-    initListings();
 }
 
 // Add these styles to the page
@@ -366,6 +291,90 @@ const cardStyles = `
     .text-muted {
         color: #6c757d !important;
     }
+
+    /* Pagination Styles */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin: 20px 0;
+        padding: 0 10px;
+        user-select: none;
+    }
+
+    .page-item {
+        margin: 0 2px;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .page-link {
+        min-width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        border-radius: 4px !important;
+        border: 1px solid #dee2e6;
+        color: #333;
+        background-color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        text-decoration: none !important;
+    }
+
+    .page-item.active .page-link {
+        background-color: #d01818;
+        border-color: #d01818;
+        color: #fff !important;
+        pointer-events: none;
+    }
+
+    .page-item.disabled .page-link {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+        color: #6c757d !important;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .page-link:hover:not(.disabled) {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        color: #d01818;
+    }
+
+    /* Mobile Pagination Styles */
+    @media (max-width: 576px) {
+        .pagination {
+            gap: 3px;
+        }
+
+        .page-link {
+            min-width: 35px;
+            height: 35px;
+            padding: 0 8px;
+            font-size: 13px;
+        }
+
+        .page-item.mobile-hide {
+            display: none;
+        }
+
+        .page-item {
+            margin: 0;
+            padding: 5px;
+        }
+
+        .page-link {
+            position: relative;
+            z-index: 1;
+        }
+    }
 </style>
 `;
 
@@ -397,4 +406,191 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof $.fn.selectpicker !== 'undefined') {
         $('.selectpicker').selectpicker('refresh');
     }
-}); 
+});
+
+// Update pagination UI
+function updatePagination({ currentPage: page, totalPages }) {
+    if (!pagination) return;
+    
+    // Hide pagination on mobile
+    if (isMobile) {
+        pagination.style.display = 'none';
+        return;
+    }
+
+    pagination.style.display = 'flex';
+    let paginationHTML = '';
+
+    // Previous button
+    paginationHTML += `
+        <li class="page-item ${page === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="javascript:void(0)" onclick="return handlePageChange(${page - 1})" aria-label="Previous" ${page === 1 ? 'disabled' : ''}>
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+    `;
+
+    // Determine visible pages for desktop
+    const range = 2;
+
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        const isFirstPage = i === 1;
+        const isLastPage = i === totalPages;
+        const isWithinRange = i >= page - range && i <= page + range;
+        const showEllipsis = !isWithinRange && (i === page - range - 1 || i === page + range + 1);
+
+        if (isFirstPage || isLastPage || isWithinRange) {
+            paginationHTML += `
+                <li class="page-item ${i === page ? 'active' : ''}">
+                    <a class="page-link" href="javascript:void(0)" onclick="return handlePageChange(${i})">${i}</a>
+                </li>
+            `;
+        } else if (showEllipsis) {
+            paginationHTML += `
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            `;
+        }
+    }
+
+    // Next button
+    paginationHTML += `
+        <li class="page-item ${page === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="javascript:void(0)" onclick="return handlePageChange(${page + 1})" aria-label="Next" ${page === totalPages ? 'disabled' : ''}>
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    `;
+
+    pagination.innerHTML = paginationHTML;
+}
+
+// Add resize listener to update pagination on screen size change
+window.addEventListener('resize', () => {
+    if (currentPage) {
+        updatePagination({ currentPage, totalPages });
+    }
+});
+
+// Initialize listings
+async function initListings() {
+    const data = await fetchListings(currentPage, currentFilters, currentSort);
+    if (data) {
+        updateListings(data.data, false);
+    }
+}
+
+// Handle filter form submission
+function handleFilterSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    
+    currentFilters = {
+        minPrice: formData.get('minPrice'),
+        maxPrice: formData.get('maxPrice'),
+        year: formData.get('year'),
+        fuelType: formData.get('fuel_type'),
+        transmission: formData.get('transmission'),
+        search: formData.get('search')
+    };
+
+    // Reset to first page when applying new filters
+    currentPage = 1;
+    initListings();
+}
+
+// Handle sort change
+function handleSortChange(value) {
+    currentSort = value;
+    currentPage = 1; // Reset to first page when sorting changes
+    initListings();
+}
+
+// Update results info
+function updateResultsInfo(paginationData) {
+    if (!resultsInfo) return;
+
+    const { total, currentPage, limit } = paginationData;
+    const start = (currentPage - 1) * limit + 1;
+    const end = Math.min(currentPage * limit, total);
+
+    resultsInfo.innerHTML = `Showing results <strong>${start} to ${end}</strong> of total <strong>${total}</strong>`;
+}
+
+// Add infinite scroll for mobile
+function setupInfiniteScroll() {
+    if (!isMobile) return;
+
+    const observer = new IntersectionObserver(
+        async (entries) => {
+            const target = entries[0];
+            if (target.isIntersecting && !isLoadingMore && currentPage < totalPages) {
+                isLoadingMore = true;
+                currentPage++;
+                const data = await fetchListings(currentPage, currentFilters, currentSort);
+                if (data && data.data.length > 0) {
+                    appendListings(data.data);
+                }
+                isLoadingMore = false;
+            }
+        },
+        {
+            root: null,
+            rootMargin: '100px',
+            threshold: 0.1
+        }
+    );
+
+    // Observe the last item
+    const observeLastItem = () => {
+        const items = listingsContainer.children;
+        if (items.length > 0) {
+            observer.observe(items[items.length - 1]);
+        }
+    };
+
+    // Initial observation
+    observeLastItem();
+
+    // Return the observer and callback for cleanup
+    return { observer, observeLastItem };
+}
+
+// Append new listings for infinite scroll
+function appendListings(listings) {
+    const newListingsHTML = listings.map(listing => createListingCard(listing)).join('');
+    listingsContainer.insertAdjacentHTML('beforeend', newListingsHTML);
+}
+
+// Handle window resize
+function handleResize() {
+    const wasMobile = isMobile;
+    isMobile = window.innerWidth <= 576;
+
+    // If mobile state changed, reset and reinitialize
+    if (wasMobile !== isMobile) {
+        currentPage = 1;
+        initListings();
+    }
+}
+
+// Add resize listener
+window.addEventListener('resize', handleResize);
+
+// Add loading indicator for infinite scroll
+const loadingIndicator = document.createElement('div');
+loadingIndicator.className = 'text-center py-3 loading-indicator';
+loadingIndicator.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>';
+
+// Update results info
+function updateResultsInfo(paginationData) {
+    if (!resultsInfo) return;
+
+    const { total, currentPage, limit } = paginationData;
+    const start = (currentPage - 1) * limit + 1;
+    const end = Math.min(currentPage * limit, total);
+
+    resultsInfo.innerHTML = `Showing results <strong>${start} to ${end}</strong> of total <strong>${total}</strong>`;
+} 
