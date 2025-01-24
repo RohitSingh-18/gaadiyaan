@@ -498,11 +498,19 @@
                 console.error('Error parsing user data:', e);
             }
 
+            // Define required fields
+            const requiredFields = {
+                'dealerName': 'Full Name',
+                'dealerEmail': 'Email',
+                'dealershipName': 'Dealership Name',
+                'dealerPhone': 'Phone Number'
+            };
+
             // Fill in the form fields
             const fields = {
                 'dealerEmail': userData.email || '',
-                'dealerName': userData.full_name || '',
-                'dealershipName': userData.dealership_name || '',
+                'dealerName': userData.full_name || userData.fullName || userData.name || userData.username || '',
+                'dealershipName': userData.dealership_name || userData.dealershipName || '',
                 'dealerPhone': userData.phone || '',
                 'dealerAddress': userData.business_address || '',
                 'dealerCity': userData.city || '',
@@ -511,13 +519,45 @@
                 'gstNumber': userData.gst_number || ''
             };
 
+            console.log('Fields to be populated:', fields);
+
             // Update each field if it exists
             Object.entries(fields).forEach(([id, value]) => {
                 const element = document.getElementById(id);
                 if (element) {
+                    console.log(`Setting ${id} to:`, value);
                     element.value = value;
+                    // Force a change event to ensure the value is set
+                    const event = new Event('change', { bubbles: true });
+                    element.dispatchEvent(event);
+                } else {
+                    console.log(`Element not found: ${id}`);
                 }
             });
+
+            // Check if all required fields are filled and dealer ID exists
+            const isProfileComplete = Object.keys(requiredFields).every(fieldId => {
+                const element = document.getElementById(fieldId);
+                return element && element.value.trim() !== '';
+            }) && userData.dealer_id;
+
+            // If profile is complete, disable all fields
+            if (isProfileComplete) {
+                Object.keys(requiredFields).forEach(fieldId => {
+                    const element = document.getElementById(fieldId);
+                    if (element) {
+                        element.disabled = true;
+                        element.style.backgroundColor = '#f5f5f5';
+                        element.style.cursor = 'not-allowed';
+                    }
+                });
+
+                // Disable dealer ID related buttons
+                generateBtn.disabled = true;
+                saveBtn.disabled = true;
+                generateBtn.style.cursor = 'not-allowed';
+                saveBtn.style.cursor = 'not-allowed';
+            }
 
             // Check if dealer ID exists
             if (userData.dealer_id) {
@@ -601,6 +641,7 @@
                         },
                         body: JSON.stringify({
                             full_name: username,
+                            name: username,
                             email: email,
                             dealership_name: dealershipName,
                             phone: phone,
@@ -624,6 +665,8 @@
                             const updatedProfile = {
                                 ...userProfile,  // Keep existing data like uid
                                 ...data.user,    // Update with new data
+                                name: username,
+                                full_name: username,
                                 dealer_id: newId,
                                 userType: 'dealer'
                             };
@@ -635,6 +678,22 @@
                         // Update UI
                         saveBtn.style.display = 'none';
                         copyBtn.style.display = 'flex';
+                        
+                        // Disable all form fields after successful save
+                        Object.keys(requiredFields).forEach(fieldId => {
+                            const element = document.getElementById(fieldId);
+                            if (element) {
+                                element.disabled = true;
+                                element.style.backgroundColor = '#f5f5f5';
+                                element.style.cursor = 'not-allowed';
+                            }
+                        });
+
+                        // Also disable dealer ID related buttons
+                        generateBtn.disabled = true;
+                        saveBtn.disabled = true;
+                        generateBtn.style.cursor = 'not-allowed';
+                        saveBtn.style.cursor = 'not-allowed';
                         
                         alert('Profile updated successfully!');
                     } else {
