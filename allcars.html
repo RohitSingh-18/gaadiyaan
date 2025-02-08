@@ -623,6 +623,155 @@
 
     <!-- Add before closing </head> tag -->
     <script src="/assets/js/auth-handler.js"></script>
+
+    <!-- Add these styles for the price range dropdown -->
+    <style>
+    .price-range-dropdown {
+        position: relative;
+        width: 100%;
+    }
+
+    .price-range-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .price-range-header:hover {
+        background-color: #f8f9fa;
+    }
+
+    .price-range-options {
+        display: none;
+        position: absolute;
+        top: auto; /* Changed from bottom: 100% */
+        bottom: calc(100% + 5px); /* Position above with 5px gap */
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        z-index: 9999; /* Increased z-index */
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    /* Ensure the dropdown stays visible */
+    .price-range-dropdown.active .price-range-options {
+        display: block;
+    }
+
+    .price-checkbox {
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.2s;
+    }
+
+    .price-checkbox:hover {
+        background-color: #f8f9fa;
+    }
+
+    .price-checkbox input[type="checkbox"] {
+        margin-right: 8px;
+    }
+
+    .price-checkbox label {
+        margin: 0;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    /* Add a transform to flip the chevron icon */
+    .price-range-header .fas.fa-chevron-down {
+        transition: transform 0.3s ease;
+    }
+
+    .price-range-dropdown.active .fas.fa-chevron-down {
+        transform: rotate(180deg);
+    }
+
+    /* Ensure proper stacking context */
+    .filter-group {
+        position: relative;
+        z-index: 1;
+    }
+
+    .filter-group:hover {
+        z-index: 1000;
+    }
+    </style>
+
+    <!-- Add these styles for the make dropdown -->
+    <style>
+    /* Style for all dropdowns including make selection */
+    select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23333' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 12px;
+    }
+
+    /* Style for the dropdown options */
+    select option {
+        padding: 8px 12px;
+        background-color: white;
+        color: #333;
+    }
+
+    /* Add scrolling for long dropdown lists */
+    select[size] {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    /* Style for the dropdown when open */
+    select:focus {
+        outline: none;
+        border-color: #666;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    /* Ensure dropdown options are visible */
+    select option:checked {
+        background-color: #f8f9fa;
+    }
+
+    /* Add hover effect */
+    select option:hover {
+        background-color: #f8f9fa;
+    }
+
+    /* Ensure proper z-index */
+    .filter-group {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Fix for mobile devices */
+    @media (max-width: 768px) {
+        select {
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+    }
+    </style>
 </head>
 
 <body class="page">
@@ -761,65 +910,55 @@
             <div class="filter-sidebar-content">
               <form class="b-filter">
                 <!-- Make -->
-                <div class="filter-group">
-                  <label class="filter-label">Select Make</label>
-                  <select class="form-control custom-select">
-                    <option value="">Select Make</option>
-                    <option>Toyota</option>
-                    <option>Honda</option>
-                    <option>BMW</option>
-                    <option>Mercedes</option>
-                    <option>Audi</option>
-                  </select>
+                <div class="b-filter__row">
+                    <select name="make" class="selectpicker" data-width="100%" title="Select Make" data-style="ui-select">
+                        <option value="">Select Make</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
                 </div>
 
                 <!-- Model -->
-                <div class="filter-group">
-                  <label class="filter-label">Select Model</label>
-                  <select class="form-control custom-select">
-                    <option value="">Select Model</option>
-                    <option>Camry</option>
-                    <option>Civic</option>
-                    <option>3 Series</option>
-                    <option>C-Class</option>
-                    <option>A4</option>
-                  </select>
+                <div class="b-filter__row">
+                    <select name="model" class="selectpicker" data-width="100%" title="Select Model" data-style="ui-select">
+                        <option value="">Select Model</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
                 </div>
 
                 <!-- Seats -->
                 <div class="filter-group">
                   <label class="filter-label">Seats</label>
-                  <select class="form-control custom-select">
+                  <select name="seats" class="selectpicker" data-width="100%" title="Seats" data-style="ui-select">
                     <option value="">Seats</option>
-                    <option>2</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
                   </select>
                 </div>
 
                 <!-- Kilometer Driven -->
                 <div class="filter-group">
                   <label class="filter-label">Kms</label>
-                  <select class="form-control custom-select">
+                  <select name="kmsRange" class="selectpicker" data-width="100%" title="Kms" data-style="ui-select">
                     <option value="">Kms</option>
-                    <option>0-10000</option>
-                    <option>10000-20000</option>
-                    <option>20000-30000</option>
-                    <option>30000-40000</option>
-                    <option>40000-50000</option>
-                    <option>50000-60000</option>
-                    <option>60000-70000</option>
-                    <option>70000-80000</option>
-                    <option>80000-90000</option>
-                    <option>90000-100000</option>
-                    <option>100000+</option>
+                    <option value="0-10000">0-10000</option>
+                    <option value="10000-20000">10000-20000</option>
+                    <option value="20000-30000">20000-30000</option>
+                    <option value="30000-40000">30000-40000</option>
+                    <option value="40000-50000">40000-50000</option>
+                    <option value="50000-60000">50000-60000</option>
+                    <option value="60000-70000">60000-70000</option>
+                    <option value="70000-80000">70000-80000</option>
+                    <option value="80000-90000">80000-90000</option>
+                    <option value="90000-100000">90000-100000</option>
+                    <option value="100000+">100000+</option>
                   </select>
                 </div>
 
-                <!-- Year Range -->
+                <!-- Year Range
                 <div class="filter-group">
                   <label class="filter-label">Year Range</label>
                   <div class="row">
@@ -844,47 +983,37 @@
                       </select>
                     </div>
                   </div>
-                </div>
+                </div> -->
 
                 <!-- Transmission -->
                 <div class="filter-group">
                   <label class="filter-label">Transmission</label>
-                  <select class="form-control custom-select">
+                  <select name="transmission" class="selectpicker" data-width="100%" title="Transmission" data-style="ui-select">
                     <option value="">Select Transmission</option>
-                    <option>Automatic</option>
-                    <option>Manual</option>
-                    <option>CVT</option>
+                    <option value="automatic">Automatic</option>
+                    <option value="manual">Manual</option>
                   </select>
                 </div>
 
                 <!-- Fuel Type -->
                 <div class="filter-group">
                   <label class="filter-label">Fuel Type</label>
-                  <div class="filter-tags">
-                    <label class="filter-tag">
-                      <input type="checkbox" name="fuel_type" value="petrol"> Petrol
-                    </label>
-                    <label class="filter-tag">
-                      <input type="checkbox" name="fuel_type" value="diesel"> Diesel
-                    </label>
-                    <label class="filter-tag">
-                      <input type="checkbox" name="fuel_type" value="electric"> Electric
-                    </label>
-                    <label class="filter-tag">
-                      <input type="checkbox" name="fuel_type" value="hybrid"> Hybrid
-                    </label>
-                  </div>
+                  <select name="fuelType" class="selectpicker" data-width="100%" title="Fuel Type" data-style="ui-select">
+                    <option value="">Select Fuel Type</option>
+                    <option value="petrol">Petrol</option>
+                    <option value="diesel">Diesel</option>
+                    <option value="electric">Electric</option>
+                    <option value="hybrid">Hybrid</option>
+                  </select>
                 </div>
 
                 <!-- Location Filter -->
                 <div class="filter-group">
                   <label class="filter-label">Location</label>
-                  <div class="location-search">
-                    <input type="text" class="form-control" id="locationSearch" placeholder="Search location in Odisha..." style="margin-bottom: 10px;">
-                    <div class="location-results" id="locationResults" style="display: none; max-height: 200px; overflow-y: auto; background: white; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
-                  </div>
-                  <div class="selected-locations" id="selectedLocations" style="margin-top: 10px;"></div>
+                  <select name="location" class="selectpicker" data-width="100%" title="Select Location" data-style="ui-select">
+                    <option value="">Select Location</option>
+                    <!-- Options will be populated dynamically -->
+                  </select>
                 </div>
 
                 <style>
@@ -1017,20 +1146,132 @@
                 <!-- Price Range -->
                 <div class="filter-group">
                   <label class="filter-label">Price Range</label>
-                  <div class="price-range">
-                    <div class="price-inputs">
-                      <input type="number" class="form-control" placeholder="₹ 2,000" min="2000">
-                      <span>-</span>
-                      <input type="number" class="form-control" placeholder="₹ 45,000" max="45000">
-                    </div>
+                  <div class="price-range-dropdown">
+                      <div class="price-range-header" onclick="toggleDesktopPriceDropdown()">
+                          <span id="selectedPriceRangesDesktop">Select Price Range</span>
+                          <i class="fas fa-chevron-down"></i>
+                      </div>
+                      <div class="price-range-options" id="priceRangeOptionsDesktop">
+                          <div class="price-checkbox">
+                              <input type="checkbox" id="under2Desktop" name="price_range" value="under2">
+                              <label for="under2Desktop">Under ₹2 Lakh</label>
+                          </div>
+                          <div class="price-checkbox">
+                              <input type="checkbox" id="2to3Desktop" name="price_range" value="2to3">
+                              <label for="2to3Desktop">₹2 - ₹3 Lakh</label>
+                          </div>
+                          <div class="price-checkbox">
+                              <input type="checkbox" id="3to5Desktop" name="price_range" value="3to5">
+                              <label for="3to5Desktop">₹3 - ₹5 Lakh</label>
+                          </div>
+                          <div class="price-checkbox">
+                              <input type="checkbox" id="5to8Desktop" name="price_range" value="5to8">
+                              <label for="5to8Desktop">₹5 - ₹8 Lakh</label>
+                          </div>
+                          <div class="price-checkbox">
+                              <input type="checkbox" id="8to10Desktop" name="price_range" value="8to10">
+                              <label for="8to10Desktop">₹8 - ₹10 Lakh</label>
+                          </div>
+                          <div class="price-checkbox">
+                              <input type="checkbox" id="above10Desktop" name="price_range" value="above10">
+                              <label for="above10Desktop">Above ₹10 Lakh</label>
+                          </div>
+                      </div>
                   </div>
-                </div>
+              </div>
+                <style>
+                .price-range-dropdown {
+                    position: relative;
+                    width: 100%;
+                }
+
+                .price-range-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 12px;
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+
+                .price-range-header:hover {
+                    background-color: #f8f9fa;
+                }
+
+                .price-range-options {
+                    display: none;
+                    position: absolute;
+                    top: auto; /* Changed from bottom: 100% */
+                    bottom: calc(100% + 5px); /* Position above with 5px gap */
+                    left: 0;
+                    right: 0;
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+                    z-index: 9999; /* Increased z-index */
+                    max-height: 300px;
+                    overflow-y: auto;
+                }
+
+                /* Ensure the dropdown stays visible */
+                .price-range-dropdown.active .price-range-options {
+                    display: block;
+                }
+
+                .price-checkbox {
+                    padding: 8px 12px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    transition: background-color 0.2s;
+                }
+
+                .price-checkbox:hover {
+                    background-color: #f8f9fa;
+                }
+
+                .price-checkbox input[type="checkbox"] {
+                    margin-right: 8px;
+                }
+
+                .price-checkbox label {
+                    margin: 0;
+                    cursor: pointer;
+                    flex: 1;
+                }
+
+                /* Add a transform to flip the chevron icon */
+                .price-range-header .fas.fa-chevron-down {
+                    transition: transform 0.3s ease;
+                }
+
+                .price-range-dropdown.active .fas.fa-chevron-down {
+                    transform: rotate(180deg);
+                }
+
+                /* Ensure proper stacking context */
+                .filter-group {
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .filter-group:hover {
+                    z-index: 1000;
+                }
+                </style>
 
                 <!-- Filter Actions -->
                 <div class="filter-actions">
                   <button type="button" class="btn btn-outline-secondary btn-block mb-3" onclick="resetFilters()">Reset Filters</button>
                   <button type="submit" class="btn btn-primary btn-block">Show Results</button>
                 </div>
+
+                <!-- Add this inside your filter form -->
+                
               </form>
             </div>
           </div>
@@ -1062,56 +1303,48 @@
                           <div class="b-filter__main">
                             <!-- Make -->
                             <div class="b-filter__row">
-                              <select class="selectpicker" data-width="100%" title="Select Make" data-style="ui-select">
-                                <option value="">Select Make</option>
-                                <option>Toyota</option>
-                                <option>Honda</option>
-                                <option>BMW</option>
-                                <option>Mercedes</option>
-                                <option>Audi</option>
-                              </select>
+                                <select name="make" class="selectpicker" data-width="100%" title="Select Make" data-style="ui-select">
+                                    <option value="">Select Make</option>
+                                    <!-- Options will be populated dynamically -->
+                                </select>
                             </div>
 
                             <!-- Model -->
                             <div class="b-filter__row">
-                              <select class="selectpicker" data-width="100%" title="Select Model" data-style="ui-select">
-                                <option value="">Select Model</option>
-                                <option>Camry</option>
-                                <option>Civic</option>
-                                <option>3 Series</option>
-                                <option>C-Class</option>
-                                <option>A4</option>
-                              </select>
+                                <select name="model" class="selectpicker" data-width="100%" title="Select Model" data-style="ui-select">
+                                    <option value="">Select Model</option>
+                                    <!-- Options will be populated dynamically -->
+                                </select>
                             </div>
 
                             <!-- Vehicle Type -->
                             <div class="b-filter__row">
-                              <select class="selectpicker" data-width="100%" title="Seats" data-style="ui-select">
+                              <select name="seats" class="selectpicker" data-width="100%" title="Seats" data-style="ui-select">
                                 <option value="">Seats</option>
-                                <option>2</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
                               </select>
                             </div>
 
                             <!-- Condition -->
                             <div class="b-filter__row">
-                              <select class="selectpicker" data-width="100%" title="Kms" data-style="ui-select">
+                              <select name="kmsRange" class="selectpicker" data-width="100%" title="Kms" data-style="ui-select">
                                 <option value="">Kms</option>
-                                <option>0-10000</option>
-                                <option>10000-20000</option>
-                                <option>20000-30000</option>
-                                <option>30000-40000</option>
-                                <option>40000-50000</option>
-                                <option>50000-60000</option>
-                                <option>60000-70000</option>
-                                <option>70000-80000</option>
-                                <option>80000-90000</option>
-                                <option>90000-100000</option>
-                                <option>100000+</option>
+                                <option value="0-10000">0-10000</option>
+                                <option value="10000-20000">10000-20000</option>
+                                <option value="20000-30000">20000-30000</option>
+                                <option value="30000-40000">30000-40000</option>
+                                <option value="40000-50000">40000-50000</option>
+                                <option value="50000-60000">50000-60000</option>
+                                <option value="60000-70000">60000-70000</option>
+                                <option value="70000-80000">70000-80000</option>
+                                <option value="80000-90000">80000-90000</option>
+                                <option value="90000-100000">90000-100000</option>
+                                <option value="100000+">100000+</option>
                               </select>
                             </div>
 
@@ -1141,33 +1374,31 @@
 
                             <!-- Transmission -->
                             <div class="b-filter__row">
-                              <select class="selectpicker" data-width="100%" title="Transmission" data-style="ui-select">
+                              <select name="transmission" class="selectpicker" data-width="100%" title="Transmission" data-style="ui-select">
                                 <option value="">Select Transmission</option>
-                                <option>Automatic</option>
-                                <option>Manual</option>
-                                <option>CVT</option>
+                                <option value="automatic">Automatic</option>
+                                <option value="manual">Manual</option>
                               </select>
                             </div>
 
                             <!-- Fuel Type -->
                             <div class="b-filter__row">
-                              <select class="selectpicker" data-width="100%" title="Fuel Type" data-style="ui-select">
+                              <select name="fuelType" class="selectpicker" data-width="100%" title="Fuel Type" data-style="ui-select">
                                 <option value="">Select Fuel Type</option>
-                                <option>Petrol</option>
-                                <option>Diesel</option>
-                                <option>Electric</option>
-                                <option>Hybrid</option>
+                                <option value="petrol">Petrol</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="electric">Electric</option>
+                                <option value="hybrid">Hybrid</option>
                               </select>
                             </div>
 
                             <!-- Location Filter Desktop -->
-                            <div class="b-filter__row">
-                              <div class="filter-label mb-2">Location</div>
-                              <div class="location-search-desktop">
-                                <input type="text" class="ui-select" id="locationSearchDesktop" placeholder="Search location in Odisha...">
-                                <div class="location-results" id="locationResultsDesktop"></div>
-                              </div>
-                              <div class="selected-locations" id="selectedLocationsDesktop"></div>
+                            <div class="filter-group">
+                              <label class="filter-label">Location</label>
+                              <select name="location" class="selectpicker" data-width="100%" title="Select Location" data-style="ui-select">
+                                <option value="">Select Location</option>
+                                <!-- Options will be populated dynamically -->
+                              </select>
                             </div>
 
                             <style>
@@ -1324,20 +1555,19 @@
                             </script>
 
                           </div>
-                          <div class="b-filter-slider ui-filter-slider">
-                            <div class="b-filter-slider__title">Price Range</div>
-                            <div class="b-filter-slider__main">
-                              <div id="filterPrice"></div>
-                              <div class="b-filter__row row">
-                                <div class="b-filter__item col-md-6 col-lg-12 col-xl-6">
-                                  <input class="ui-select" id="input-with-keypress-0" placeholder="₹ 2,00,000"/>
-                                </div>
-                                <div class="b-filter__item col-md-6 col-lg-12 col-xl-6">
-                                  <input class="ui-select" id="input-with-keypress-1" placeholder="₹ 10,00,000"/>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          <!-- desktop -->
+                          <div class="filter-group">
+                            <label class="filter-label">Price Range</label>
+                            <select class="form-control" id="priceRangeSelect" name="price_range">
+                                <option value="">Select Price Range</option>
+                                <option value="under2">Under ₹2 Lakh</option>
+                                <option value="2to3">₹2 - ₹3 Lakh</option>
+                                <option value="3to5">₹3 - ₹5 Lakh</option>
+                                <option value="5to8">₹5 - ₹8 Lakh</option>
+                                <option value="8to10">₹8 - ₹10 Lakh</option>
+                                <option value="above10">Above ₹10 Lakh</option>
+                            </select>
+                        </div>
 
                           <!-- Action Buttons -->
                           <button class="b-filter__reset btn btn-default w-100 mb-3" type="button">Reset Filters</button>
@@ -1399,6 +1629,35 @@
                     </nav>
                       </div>
                       </div>
+
+                <!-- Add this right after your listings container -->
+                <div class="text-center mt-4 mb-4" id="loadMoreContainer">
+                    <button id="loadMoreBtn" class="btn btn-primary" onclick="loadMore()">
+                        Load More Vehicles
+                    </button>
+                </div>
+
+                <style>
+                    #loadMoreBtn {
+                        padding: 12px 30px;
+                        font-size: 16px;
+                        border-radius: 4px;
+                        background: transparent;
+                        border: 2px solid #d01818;
+                        color: #d01818;
+                        transition: all 0.3s ease;
+                    }
+
+                    #loadMoreBtn:hover {
+                        background: #d01818;
+                        color: white;
+                    }
+
+                    #loadMoreBtn:disabled {
+                        opacity: 0.7;
+                        cursor: not-allowed;
+                    }
+                </style>
 
                 <!-- Add script reference -->
                 <script src="assets/js/listings.js"></script>
