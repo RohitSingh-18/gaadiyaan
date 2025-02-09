@@ -772,6 +772,37 @@
         }
     }
     </style>
+
+    <!-- Add this CSS in the style section -->
+    <style>
+        /* Loader styles */
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .custom-loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #d01818;  /* Red color matching your theme */
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 
 <body class="page">
@@ -1570,7 +1601,7 @@
                         </div>
 
                           <!-- Action Buttons -->
-                          <button class="b-filter__reset btn btn-default w-100 mb-3" type="button">Reset Filters</button>
+                          <button class="b-filter__reset btn btn-default w-100 mb-3" type="button" onclick="resetFilters()">Reset Filters</button>
                           <button class="btn btn-primary w-100">Show Results</button>
                         </form>
                       </div>
@@ -1602,12 +1633,12 @@
                       </div>
                 <!-- end .b-filter-goods-->
                         
-                <!-- Loading Spinner -->
+                <!-- Replace the existing Loading Spinner section with this -->
                 <div id="loadingSpinner" class="text-center py-5" style="display: none;">
-                  <div class="spinner-border text-primary" role="status">
-                    <span class="sr-only">Loading...</span>
-                      </div>
+                    <div class="loader-container">
+                        <div class="custom-loader"></div>
                     </div>
+                </div>
 
                 <!-- No Results Message -->
                 <div id="noResultsMessage" class="alert alert-info text-center my-5" style="display: none;">
@@ -1631,11 +1662,11 @@
                       </div>
 
                 <!-- Add this right after your listings container -->
-                <div class="text-center mt-4 mb-4" id="loadMoreContainer">
+                <!-- <div class="text-center mt-4 mb-4" id="loadMoreContainer">
                     <button id="loadMoreBtn" class="btn btn-primary" onclick="loadMore()">
                         Load More Vehicles
                     </button>
-                </div>
+                </div> -->
 
                 <style>
                     #loadMoreBtn {
@@ -1971,20 +2002,16 @@
         lastScrollTop = st <= 0 ? 0 : st;
     }, false);
 
+    // Update the resetFilters function for desktop
     function resetFilters() {
-        // Reset all select elements
-        const selects = document.querySelectorAll('#filterPanel select');
-        selects.forEach(select => select.selectedIndex = 0);
-        
-        // Reset all input elements
-        const inputs = document.querySelectorAll('#filterPanel input');
-        inputs.forEach(input => {
-            if(input.type === 'number') {
-                input.value = '';
-            } else if(input.type === 'checkbox') {
-                input.checked = false;
-            }
-        });
+        // Refresh the page
+        window.location.reload();
+    }
+
+    // Update the mobile resetFilters function
+    function resetFilters() {
+        // Refresh the page
+        window.location.reload();
     }
     </script>
        <script>
