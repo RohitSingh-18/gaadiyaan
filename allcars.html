@@ -1616,14 +1616,14 @@
                 <div class="b-filter-goods">
                   <div class="row justify-content-between align-items-center">
                     <div class="b-filter-goods__wrap col-auto">
-                      <div class="b-filter-goods__select">
+                      <!-- <div class="b-filter-goods__select">
                         <select class="selectpicker" data-width="100%" title="Newest First" multiple="multiple" data-max-options="1" data-style="ui-select">
                           <option value="newest">Newest First</option>
                           <option value="oldest">Oldest First</option>
                           <option value="price_low">Price: Low to High</option>
                           <option value="price_high">Price: High to Low</option>
                         </select>
-                      </div>
+                      </div> -->
                     </div>
                     <div class="b-filter-goods__info col-auto">
                       <!-- This will be updated dynamically -->
@@ -2509,6 +2509,58 @@
       }
   }
 </style>
+
+<script>
+// Add this right after your existing DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('allcars.html loaded');
+    
+    // Wait for Bootstrap Select Picker to initialize
+    $(document).ready(function() {
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Apply make filter
+        if (urlParams.has('make')) {
+            const make = urlParams.get('make');
+            $('select[name="make"]').val(make);
+            $('select[name="make"]').selectpicker('refresh');
+        }
+        
+        // Apply price filter
+        if (urlParams.has('price')) {
+            const price = urlParams.get('price');
+            // For checkbox price filter
+            const checkbox = document.getElementById(price + 'Desktop');
+            if (checkbox) {
+                checkbox.checked = true;
+                document.getElementById('selectedPriceRangesDesktop').textContent = 
+                    checkbox.nextElementSibling.textContent;
+            }
+            // For dropdown price filter
+            $('select[name="price_range"]').val(price);
+            $('select[name="price_range"]').selectpicker('refresh');
+        }
+        
+        // Apply location filter
+        if (urlParams.has('location')) {
+            const location = urlParams.get('location');
+            $('select[name="location"]').val(location);
+            $('select[name="location"]').selectpicker('refresh');
+        }
+        
+        // If any filter was applied, trigger the search
+        if (urlParams.has('make') || urlParams.has('price') || urlParams.has('location')) {
+            setTimeout(() => {
+                const searchForm = document.querySelector('.b-filter');
+                if (searchForm) {
+                    searchForm.dispatchEvent(new Event('submit'));
+                }
+            }, 500);
+        }
+    });
+});
+</script>
 </body>
 
 </html>

@@ -989,106 +989,54 @@
                 <h4 style="color: #d01818; font-size: 24px; font-weight: 600; text-transform: uppercase;">FIND YOUR PERFECT CAR</h4>
             </div>
             
-            <form class="b-search__form" id="carSearchForm">
+            <form class="b-search__form" id="carSearchForm" onsubmit="handleHomeSearch(event)">
                 <div class="mobile-search-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
                     <!-- Brand Selection -->
                     <div class="search-item" style="background: #f8f9fa; border-radius: 8px; padding: 12px; position: relative;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <i class="fas fa-car" style="color: #d01818; font-size: 18px; min-width: 20px;"></i>
-                            <select style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
-                                <option value="" disabled selected>Select By Make</option>
-                                <option value="toyota">Toyota</option>
-                                <option value="honda">Honda</option>
-                                <option value="bmw">BMW</option>
+                            <select name="make" class="selectpicker" data-width="100%" title="Select Make" data-style="ui-select" style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
+                                <option value="">Select Make</option>
+                                <!-- Options will be populated dynamically -->
                             </select>
                             <i class="fas fa-chevron-down" style="color: #666; font-size: 12px; position: absolute; right: 12px; pointer-events: none;"></i>
                         </div>
                     </div>
-
-                  
 
                     <!-- Budget Range -->
                     <div class="search-item" style="background: #f8f9fa; border-radius: 8px; padding: 12px; position: relative;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <i class="fa-solid fa-indian-rupee-sign" style="color: #d01818; font-size: 18px; min-width: 20px;"></i>
-                            <select style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
-                                <option value="" disabled selected>Budget Range</option>
-                                <option value="0-500000">Under 5L</option>
-                                <option value="500000-1000000">5L - 10L</option>
-                                <option value="1000000-2000000">10L - 20L</option>
-                                <option value="2000000+">Above 20L</option>
+                            <select name="price_range" class="selectpicker" data-width="100%" title="Select Price Range" data-style="ui-select" style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
+                                <option value="">Select Price Range</option>
+                                <option value="under2">Under ₹2 Lakh</option>
+                                <option value="2to3">₹2 - ₹3 Lakh</option>
+                                <option value="3to5">₹3 - ₹5 Lakh</option>
+                                <option value="5to8">₹5 - ₹8 Lakh</option>
+                                <option value="8to10">₹8 - ₹10 Lakh</option>
+                                <option value="above10">Above ₹10 Lakh</option>
                             </select>
                             <i class="fas fa-chevron-down" style="color: #666; font-size: 12px; position: absolute; right: 12px; pointer-events: none;"></i>
                         </div>
                     </div>
 
-                    <!-- Fuel Type -->
+                    <!-- Location -->
                     <div class="search-item" style="background: #f8f9fa; border-radius: 8px; padding: 12px; position: relative;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <i class="fas fa-location-dot" style="color: #d01818; font-size: 18px; min-width: 20px;"></i>
-                            <select style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
-                                <option value="" disabled selected>Location</option>
-                                <option value="petrol">Petrol</option>
-                                <option value="diesel">Diesel</option>
-                                <option value="electric">Electric</option>
-                                <option value="hybrid">Hybrid</option>
+                            <select name="location" class="selectpicker" data-width="100%" title="Select Location" data-style="ui-select" style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
+                                <option value="">Select Location</option>
+                                <!-- Options will be populated dynamically -->
                             </select>
                             <i class="fas fa-chevron-down" style="color: #666; font-size: 12px; position: absolute; right: 12px; pointer-events: none;"></i>
                         </div>
                     </div>
-
-                    <!-- Year From -->
-                    <!-- <div class="search-item" style="background: #f8f9fa; border-radius: 8px; padding: 12px; position: relative;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-calendar" style="color: #d01818; font-size: 18px; min-width: 20px;"></i>
-                            <select style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
-                                <option value="" disabled selected>Year From</option>
-                                <option value="2023">2023</option>
-                                <option value="2022">2022</option>
-                                <option value="2021">2021</option>
-                            </select>
-                            <i class="fas fa-chevron-down" style="color: #666; font-size: 12px; position: absolute; right: 12px; pointer-events: none;"></i>
-                        </div>
-                    </div> -->
-
-                    <!-- Year To -->
-                    <!-- <div class="search-item" style="background: #f8f9fa; border-radius: 8px; padding: 12px; position: relative;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-calendar-alt" style="color: #d01818; font-size: 18px; min-width: 20px;"></i>
-                            <select style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
-                                <option value="" disabled selected>Year To</option>
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                                <option value="2022">2022</option>
-                            </select>
-                            <i class="fas fa-chevron-down" style="color: #666; font-size: 12px; position: absolute; right: 12px; pointer-events: none;"></i>
-                        </div>
-                    </div> -->
-
-                    <!-- Transmission -->
-                    <!-- <div class="search-item" style="background: #f8f9fa; border-radius: 8px; padding: 12px; position: relative;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-cog" style="color: #d01818; font-size: 18px; min-width: 20px;"></i>
-                            <select style="width: 100%; border: none; background: transparent; outline: none; color: #333; font-size: 14px; appearance: none; padding-right: 24px;">
-                                <option value="" disabled selected>Transmission</option>
-                                <option value="manual">Manual</option>
-                                <option value="automatic">Automatic</option>
-                                <option value="cvt">CVT</option>
-                            </select>
-                            <i class="fas fa-chevron-down" style="color: #666; font-size: 12px; position: absolute; right: 12px; pointer-events: none;"></i>
-                        </div>
-                    </div> -->
-
-                    <!-- Find Cars Button -->
-                    <div style="grid-column: 1 / -1;">
-                        <button type="submit" style="width: 100%; background: #d01818; color: white; border: none; border-radius: 8px; padding: 15px; font-size: 16px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                            <i class="fas fa-search"></i>
-                            Find Cars
-                        </button>
-                    </div>
+                    <button type="submit" class="b-search__btn btn btn-primary">
+                        <i class="fas fa-search"></i> Search Cars
+                    </button>
                 </div>
 
-               
+                
             </form>
         </div>
     </div>
@@ -2611,6 +2559,118 @@
                 });
             }
         });
+    </script>
+
+    <!-- Add this script before the closing body tag -->
+    <script>
+    function handleHomeSearch(event) {
+        event.preventDefault();
+        console.log('Form submitted');
+        
+        // Get form values
+        const make = document.querySelector('select[name="make"]').value;
+        const priceRange = document.querySelector('select[name="price_range"]').value;
+        const location = document.querySelector('select[name="location"]').value;
+        
+        // Create URL parameters
+        const params = new URLSearchParams();
+        if (make) params.append('make', make);
+        if (priceRange) params.append('price', priceRange);
+        if (location) params.append('location', location);
+        
+        // Redirect to allcars.html with parameters
+        window.location.href = `allcars.html?${params.toString()}`;
+    }
+    </script>
+
+    <script>
+    // Add this script to populate filters
+    document.addEventListener('DOMContentLoaded', async function() {
+        const API_BASE_URL = 'https://gaadiyaan-api.onrender.com';
+        
+        // Fetch all vehicles and extract makes and locations
+        async function fetchVehiclesData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/vehicles?limit=1000`);
+                if (!response.ok) throw new Error('Failed to fetch vehicles');
+                const data = await response.json();
+                return data.data || [];
+            } catch (error) {
+                console.error('Error fetching vehicles:', error);
+                return [];
+            }
+        }
+
+        // Extract unique makes from vehicles data
+        async function populateMakeDropdown() {
+            const vehicles = await fetchVehiclesData();
+            const makeSelect = document.querySelector('select[name="make"]');
+            
+            // Extract unique makes
+            const uniqueMakes = [...new Set(vehicles.map(vehicle => 
+                vehicle.make?.trim()
+            ).filter(Boolean))].sort();
+            
+            // Add options to select
+            uniqueMakes.forEach(make => {
+                const option = document.createElement('option');
+                option.value = make.toLowerCase();
+                option.textContent = make;
+                makeSelect.appendChild(option);
+            });
+            
+            $(makeSelect).selectpicker('refresh');
+        }
+
+        // Extract unique locations from vehicles data
+        async function populateLocationDropdown() {
+            const vehicles = await fetchVehiclesData();
+            const locationSelect = document.querySelector('select[name="location"]');
+            
+            // Extract unique locations
+            const uniqueLocations = [...new Set(vehicles.map(vehicle => 
+                vehicle.location?.trim()
+            ).filter(Boolean))].sort();
+            
+            // Add options to select
+            uniqueLocations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location.toLowerCase();
+                option.textContent = location;
+                locationSelect.appendChild(option);
+            });
+            
+            $(locationSelect).selectpicker('refresh');
+        }
+
+        // Initialize filters
+        await Promise.all([
+            populateMakeDropdown(),
+            populateLocationDropdown()
+        ]);
+    });
+
+    // Update handleHomeSearch function to use URL parameters
+    function handleHomeSearch(event) {
+        event.preventDefault();
+        // console.log('Form submitted');
+        
+        // const make = document.querySelector('select[name="make"]').value;
+        // const price = document.querySelector('select[name="price_range"]').value;
+        // const location = document.querySelector('select[name="location"]').value;
+        
+        // console.log('Search data:', { make, price, location });
+        
+        // // Build URL with parameters
+        // const params = new URLSearchParams();
+        // if (make) params.append('make', make);
+        // if (price) params.append('price', price);
+        // if (location) params.append('location', location);
+        
+        // Redirect to allcars.html with parameters
+        // window.location.href = `allcars.html?${params.toString()}`;
+        window.location.href = `allcars.html`;
+    }
     </script>
 </body>
 
