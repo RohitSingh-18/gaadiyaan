@@ -278,14 +278,14 @@
               <span>My Appointments</span>
             </a>
           </li> -->
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="fas fa-heart"></i>
               <span>My Wishlist</span>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
-            <a href="#" class="nav-link" data-page="settings">
+            <a href="#" class="nav-link active" data-page="settings">
               <i class="fas fa-cog"></i>
               <span>Account Settings</span>
             </a>
@@ -797,7 +797,7 @@
         // Show loading bar
         document.body.classList.remove('loaded');
         
-        loadPage('wishlist').then(() => {
+        loadPage('settings').then(() => {
           initializeWishlistFunctionality();
           // Hide loading bar after content is loaded
           setTimeout(() => {

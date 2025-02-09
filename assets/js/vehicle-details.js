@@ -159,9 +159,11 @@ function displayVehicleDetails(vehicle) {
                     <i class="fas fa-calendar-alt"></i>
                     Book Appointment
                 </button>
+                <!-- Commented out wishlist button
                 <button class="wishlist-btn" onclick="toggleWishlist(this)">
                     <i class="far fa-heart"></i>
                 </button>
+                -->
             </div>
         </div>
 
