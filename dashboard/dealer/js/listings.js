@@ -1,6 +1,6 @@
 // Global configuration
-window.API_BASE_URL = 'https://gaadiyaan-api.onrender.com/api';
-window.ASSETS_BASE_URL = 'https://gaadiyaan-api.onrender.com';
+window.API_BASE_URL = 'https://gaadiyaan-api-x18f.onrender.com/api';
+window.ASSETS_BASE_URL = 'https://gaadiyaan-api-x18f.onrender.com';
 
 // Module variables
 let currentView = 'grid';

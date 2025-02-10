@@ -64,7 +64,7 @@ loginForm.addEventListener('submit', async (e) => {
         // If user is a dealer, fetch additional info from MySQL
         if (userData.userType === 'dealer') {
             try {
-                const response = await fetch(`https://gaadiyaan-api.onrender.com/api/users/dealer/${encodeURIComponent(user.email)}`);
+                const response = await fetch(`https://gaadiyaan-api-x18f.onrender.com/api/users/dealer/${encodeURIComponent(user.email)}`);
                 const dealerData = await response.json();
                 
                 if (dealerData.success && dealerData.dealer) {

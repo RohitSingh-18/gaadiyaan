@@ -7,10 +7,14 @@ const fs = require('fs');
 const db = require('../config/db.config');
 
 // Get base URL from environment variable or use Render.com URL
-const BASE_URL = process.env.BASE_URL || 'https://gaadiyaan-api.onrender.com';
+const BASE_URL = process.env.BASE_URL || 'https://gaadiyaan-api-x18f.onrender.com';
+
+// Use Render's persistent disk storage path
+const uploadDir = process.env.RENDER_DISK_PATH ? 
+    path.join(process.env.RENDER_DISK_PATH, 'uploads/vehicles') : 
+    path.join(__dirname, '../../../uploads/vehicles');
 
 // Ensure uploads directory exists with absolute path
-const uploadDir = path.join(__dirname, '../../../uploads/vehicles');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }

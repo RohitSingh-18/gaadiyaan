@@ -571,7 +571,7 @@
             generateBtn.addEventListener('click', async function() {
                 console.log('Generate button clicked');
                 try {
-                    const response = await fetch('https://gaadiyaan-api.onrender.com/api/users/generate-dealer-id');
+                    const response = await fetch('https://gaadiyaan-api-x18f.onrender.com/api/users/generate-dealer-id');
                     const data = await response.json();
                     
                     if (response.ok && data.dealer_id) {
@@ -633,7 +633,7 @@
                         throw new Error('No authentication token found');
                     }
 
-                    const response = await fetch('https://gaadiyaan-api.onrender.com/api/users/profile', {
+                    const response = await fetch('https://gaadiyaan-api-x18f.onrender.com/api/users/profile', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',

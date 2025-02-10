@@ -4,7 +4,7 @@ const config = {
         API_BASE_URL: 'http://localhost:3000/api'
     },
     production: {
-        API_BASE_URL: 'https://gaadiyaan-api.onrender.com/api'
+        API_BASE_URL: 'https://gaadiyaan-api-x18f.onrender.com/api'
     }
 };
 

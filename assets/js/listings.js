@@ -1,5 +1,5 @@
 // Configuration
-const API_BASE_URL = 'https://gaadiyaan-api.onrender.com';
+const API_BASE_URL = 'https://gaadiyaan-api-x18f.onrender.com';
 const ITEMS_PER_PAGE = 12;
 
 // State management

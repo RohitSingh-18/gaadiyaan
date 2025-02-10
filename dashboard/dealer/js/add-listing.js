@@ -1,5 +1,5 @@
 // Constants
-const API_BASE_URL = 'https://gaadiyaan-api.onrender.com/api';
+const API_BASE_URL = 'https://gaadiyaan-api-x18f.onrender.com/api';
 
 // Global state
 let specifications = [];

@@ -1,5 +1,5 @@
 // Constants
-const API_BASE_URL = 'https://gaadiyaan-api.onrender.com';
+const API_BASE_URL = 'https://gaadiyaan-api-x18f.onrender.com';
 const FALLBACK_IMAGE = '/assets/media/content/b-goods/375x300/3.jpg';
 const DEFAULT_THUMBNAIL = '/assets/media/content/b-goods/375x300/3.jpg';
 
