@@ -446,9 +446,3 @@ Content-Type: multipart/form-data
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-- Technical Support: support@gaadiyaan.com
-- Bug Reports: GitHub Issues
-- Feature Requests: GitHub Discussions
-- Documentation: [docs.gaadiyaan.com](https://docs.gaadiyaan.com)
