@@ -38,20 +38,13 @@ const staticFileOptions = {
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Determine uploads directory path based on environment
-const uploadsPath = process.env.RENDER_DISK_PATH ? 
-    process.env.RENDER_DISK_PATH : 
-    path.join(__dirname, '../../uploads');
-
+// Serve static files from uploads directory
+const uploadsPath = path.join(__dirname, '../../uploads');
 console.log('Uploads directory path:', uploadsPath);
-
-// Ensure uploads directory exists
 if (!fs.existsSync(uploadsPath)) {
     fs.mkdirSync(uploadsPath, { recursive: true });
 }
-
-// Serve static files from uploads directory with CORS options
-app.use('/uploads', express.static(uploadsPath, staticFileOptions));
+app.use('/uploads', express.static(uploadsPath));
 
 // Routes
 const vehicleRoutes = require('./routes/vehicle.routes');
